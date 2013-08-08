@@ -22,7 +22,7 @@ To work through this tutorial you'll need a few things:
 
 ## The Home of Repositories in your Application Architecture
 
-TBD Where Data Driven services sit in the Life Preserver diagram to be added.
+TBD Where Repositories sit in the Life Preserver diagram to be added.
 
 Repositories are an integration between the external, persistent storage engines and your core application. As such Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the above diagram [1]
 
