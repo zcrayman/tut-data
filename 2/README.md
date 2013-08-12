@@ -1,4 +1,4 @@
- 
-## Step 1: Building a Relational Model based Repository using JPA
 
-TBD A CRUD service for Menus
+## Building a Document Model based Repository using Mongo
+
+TBD A CRUD service for Menu data, plus a few canned queries.

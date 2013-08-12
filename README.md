@@ -38,11 +38,11 @@ That's enough on the design constraints placed on the components that implement 
 
 The rest of this tutorial is spread out over the following pages:
 
-* [Step 1: Modelling RESTful Service Domain](1/)
-* [Step 2: Building Your First RESTful Service](2/)
-* [Step 3: Wiring Up and Deploying your Service](3/)
-* [Step 4: Testing your Service using RESTTemplate](4/)
-* [Step 5: Securing your Service with Spring Security](5/)
-* [Step 6: Make your Service Discoverable using Spring HATEOAS](6/)
+* [Step 1: Understanding your Data Model and Modelling the Persistence Domain](1/)
+* [Step 2: Building a Document Model based Repository using Mongo](2/)
+* [Step 3: Building a Relational Model based Repository using JPA](3/)
+* [Step 4: Building a Query Service](4/)
+* [Step 5: Building an Object Store Repository using Gemfire](5/)
+* [Step 6: Extending the Persistence Domain to Send Events](6/)
 * [Recap and Where to go Next?](7/)
 
