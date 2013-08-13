@@ -1,9 +1,8 @@
 package com.yummynoodlebar.core.domain;
 
-import com.yummynoodlebar.core.events.orders.OrderStatusDetails;
+import com.yummynoodlebar.events.orders.OrderStatusDetails;
 
 import java.util.Date;
-import java.util.UUID;
 
 public class OrderStatus {
 

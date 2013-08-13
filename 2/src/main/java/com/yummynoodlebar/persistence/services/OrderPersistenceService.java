@@ -1,11 +1,8 @@
-package com.yummynoodlebar.core.services;
+package com.yummynoodlebar.persistence.services;
 
 import com.yummynoodlebar.events.orders.*;
 
-//TODOCUMENT THis is an event driven service.
-// Used to interact with the core domain.
-//All methods are guaranteed to return something, null will never be returned.
-public interface OrderService {
+public interface OrderPersistenceService {
 
   public AllOrdersEvent requestAllOrders(RequestAllOrdersEvent requestAllCurrentOrdersEvent);
 
@@ -15,7 +12,10 @@ public interface OrderService {
 
   public OrderCreatedEvent createOrder(CreateOrderEvent event);
 
+  public OrderStatusEvent setOrderStatus(SetOrderStatusEvent event);
+
   public OrderUpdatedEvent setOrderPayment(SetOrderPaymentEvent setOrderPaymentEvent);
 
   public OrderDeletedEvent deleteOrder(DeleteOrderEvent deleteOrderEvent);
+
 }
