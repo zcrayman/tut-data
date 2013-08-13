@@ -1,90 +1,71 @@
 package com.yummynoodlebar.core.services;
 
 import com.yummynoodlebar.core.domain.Order;
-import com.yummynoodlebar.core.domain.OrderStatus;
-import com.yummynoodlebar.core.repository.OrdersMemoryRepository;
-import com.yummynoodlebar.core.events.orders.*;
-import com.yummynoodlebar.core.repository.OrdersRepository;
+import com.yummynoodlebar.events.orders.*;
+import com.yummynoodlebar.persistence.services.OrderPersistenceService;
 
-import java.util.*;
+import java.util.Date;
 
 public class OrderEventHandler implements OrderService {
 
-  private final OrdersRepository ordersRepository;
+  private final OrderPersistenceService ordersPersistenceService;
 
-  public OrderEventHandler(final OrdersRepository ordersRepository) {
-    this.ordersRepository = ordersRepository;
+  public OrderEventHandler(final OrderPersistenceService ordersPersistenceService) {
+    this.ordersPersistenceService = ordersPersistenceService;
   }
 
   @Override
   public OrderCreatedEvent createOrder(CreateOrderEvent createOrderEvent) {
+
     Order order = Order.fromOrderDetails(createOrderEvent.getDetails());
 
-    order.addStatus(new OrderStatus(new Date(), "Order Created"));
+    //TODO,add validation in here.
 
-    order = ordersRepository.save(order);
+    OrderCreatedEvent event = ordersPersistenceService.createOrder(createOrderEvent);
 
-    return new OrderCreatedEvent(order.getKey(), order.toOrderDetails());
+    //TODO, where should this go?
+    OrderStatusEvent orderStatusEvent = ordersPersistenceService.setOrderStatus(new SetOrderStatusEvent(order.getKey(), new OrderStatusDetails(new Date(), "Order Created")));
+
+    return event;
   }
 
   @Override
   public AllOrdersEvent requestAllOrders(RequestAllOrdersEvent requestAllCurrentOrdersEvent) {
-    List<OrderDetails> generatedDetails = new ArrayList<OrderDetails>();
-    for (Order order : ordersRepository.findAll()) {
-      generatedDetails.add(order.toOrderDetails());
-    }
-    return new AllOrdersEvent(generatedDetails);
+    return ordersPersistenceService.requestAllOrders(requestAllCurrentOrdersEvent);
   }
 
   @Override
   public OrderDetailsEvent requestOrderDetails(RequestOrderDetailsEvent requestOrderDetailsEvent) {
-
-    Order order = ordersRepository.findById(requestOrderDetailsEvent.getKey());
-
-    if (order == null) {
-      return OrderDetailsEvent.notFound(requestOrderDetailsEvent.getKey());
-    }
-
-    return new OrderDetailsEvent(
-            requestOrderDetailsEvent.getKey(),
-            order.toOrderDetails());
+    return ordersPersistenceService.requestOrderDetails(requestOrderDetailsEvent);
   }
 
   @Override
   public OrderUpdatedEvent setOrderPayment(SetOrderPaymentEvent setOrderPaymentEvent) {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    return ordersPersistenceService.setOrderPayment(setOrderPaymentEvent);
   }
 
   @Override
   public OrderDeletedEvent deleteOrder(DeleteOrderEvent deleteOrderEvent) {
 
-    Order order = ordersRepository.findById(deleteOrderEvent.getKey());
+    OrderDetailsEvent orderDetailsEvent = ordersPersistenceService.requestOrderDetails(new RequestOrderDetailsEvent(deleteOrderEvent.getKey()));
 
-    if (order == null) {
+    if (!orderDetailsEvent.isEntityFound()) {
       return OrderDeletedEvent.notFound(deleteOrderEvent.getKey());
     }
 
-    OrderDetails details = order.toOrderDetails();
-
-    //TODOCUMENT This contains some specific domain logic, not exposed to the outside world, and not part of the
-    //persistence rules.
+    Order order = Order.fromOrderDetails(orderDetailsEvent.getOrderDetails());
 
     if (!order.canBeDeleted()) {
-      return OrderDeletedEvent.deletionForbidden(deleteOrderEvent.getKey(), details);
+      return OrderDeletedEvent.deletionForbidden(deleteOrderEvent.getKey(), order.toOrderDetails());
     }
 
-    ordersRepository.delete(deleteOrderEvent.getKey());
-    return new OrderDeletedEvent(deleteOrderEvent.getKey(), details);
+    ordersPersistenceService.deleteOrder(deleteOrderEvent);
+
+    return new OrderDeletedEvent(deleteOrderEvent.getKey(), order.toOrderDetails());
   }
 
   @Override
   public OrderStatusEvent requestOrderStatus(RequestOrderStatusEvent requestOrderDetailsEvent) {
-    Order order = ordersRepository.findById(requestOrderDetailsEvent.getKey());
-
-    if (order == null) {
-      return OrderStatusEvent.notFound(requestOrderDetailsEvent.getKey());
-    }
-
-    return new OrderStatusEvent(requestOrderDetailsEvent.getKey(), order.getStatus().toStatusDetails());
+    return ordersPersistenceService.requestOrderStatus(requestOrderDetailsEvent);
   }
 }

@@ -59,3 +59,26 @@ To manage this friction you need to create concepts and components in the Persis
 ## Understanding differing data models and their implementations
 
 TODO, describe document, relational and key store and some of their properties.
+
+Relational
+
+    Summarise the relational model
+    
+Document
+    
+    Summarise the Document data model
+
+Key / Value
+
+     Attempt to summarise the Gemfire data model....
+
+
+
+
+
+
+
+
+
+
+

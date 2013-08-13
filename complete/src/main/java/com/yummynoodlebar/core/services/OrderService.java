@@ -1,6 +1,6 @@
 package com.yummynoodlebar.core.services;
 
-import com.yummynoodlebar.core.events.orders.*;
+import com.yummynoodlebar.events.orders.*;
 
 //TODOCUMENT THis is an event driven service.
 // Used to interact with the core domain.

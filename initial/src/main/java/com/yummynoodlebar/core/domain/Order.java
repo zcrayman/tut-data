@@ -1,6 +1,6 @@
 package com.yummynoodlebar.core.domain;
 
-import com.yummynoodlebar.core.events.orders.OrderDetails;
+import com.yummynoodlebar.events.orders.OrderDetails;
 import org.springframework.beans.BeanUtils;
 
 import java.util.*;

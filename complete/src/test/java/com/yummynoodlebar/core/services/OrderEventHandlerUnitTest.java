@@ -1,8 +1,8 @@
 package com.yummynoodlebar.core.services;
 
 import com.yummynoodlebar.core.domain.Order;
-import com.yummynoodlebar.core.repository.OrdersMemoryRepository;
-import com.yummynoodlebar.core.events.orders.*;
+import com.yummynoodlebar.persistence.repository.OrdersMemoryRepository;
+import com.yummynoodlebar.events.orders.*;
 import org.junit.Before;
 import org.junit.Test;
 

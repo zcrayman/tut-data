@@ -42,7 +42,7 @@ The rest of this tutorial is spread out over the following pages:
 * [Step 2: Building a Document Model based Repository using Mongo](2/)
 * [Step 3: Building a Relational Model based Repository using JPA](3/)
 * [Step 4: Building a Query Service](4/)
-* [Step 5: Building an Object Store Repository using Gemfire](5/)
+* [Step 5: Building an Key Value Repository using Gemfire](5/)
 * [Step 6: Extending the Persistence Domain to Send Events](6/)
 * [Recap and Where to go Next?](7/)
 

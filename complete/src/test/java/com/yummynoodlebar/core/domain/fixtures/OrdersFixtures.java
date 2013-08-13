@@ -1,7 +1,7 @@
 package com.yummynoodlebar.core.domain.fixtures;
 
 import com.yummynoodlebar.core.domain.Order;
-import com.yummynoodlebar.core.events.orders.OrderDetails;
+import com.yummynoodlebar.events.orders.OrderDetails;
 
 import java.util.Collections;
 import java.util.Date;
