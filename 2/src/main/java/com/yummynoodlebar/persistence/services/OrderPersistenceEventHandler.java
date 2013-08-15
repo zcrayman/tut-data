@@ -3,6 +3,7 @@ package com.yummynoodlebar.persistence.services;
 import com.yummynoodlebar.events.orders.*;
 import com.yummynoodlebar.persistence.domain.Order;
 import com.yummynoodlebar.persistence.domain.OrderStatus;
+import com.yummynoodlebar.persistence.repository.OrderStatusRepository;
 import com.yummynoodlebar.persistence.repository.OrdersRepository;
 
 import java.util.ArrayList;
@@ -11,18 +12,23 @@ import java.util.List;
 public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
   private final OrdersRepository orderRepository;
+  private final OrderStatusRepository orderStatusRepository;
 
-  public OrderPersistenceEventHandler(final OrdersRepository orderRepository) {
+  public OrderPersistenceEventHandler(
+      final OrdersRepository orderRepository,
+      final OrderStatusRepository orderStatusRepository) {
     this.orderRepository = orderRepository;
+    this.orderStatusRepository = orderStatusRepository;
   }
 
   @Override
   public OrderStatusEvent setOrderStatus(SetOrderStatusEvent event) {
+
     OrderStatus status = OrderStatus.fromStatusDetails(event.getOrderStatus());
 
-    //TODO, implement this against some repo.
+    status = orderStatusRepository.save(status);
 
-    return null;
+    return new OrderStatusEvent(status.getId(), status.toStatusDetails());
   }
 
   @Override

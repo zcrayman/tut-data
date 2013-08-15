@@ -1,11 +1,9 @@
-package com.yummynoodlebar.persistence.services;
+package com.yummynoodlebar.core.services;
 
 import com.yummynoodlebar.events.menu.*;
 
-public interface MenuPersistenceService {
-
+public interface MenuService {
   AllMenuItemsEvent requestAllMenuItems(RequestAllMenuItemsEvent requestAllMenuItemsEvent);
   MenuItemDetailsEvent requestMenuItemDetails(RequestMenuItemDetailsEvent requestMenuItemDetailsEvent);
   MenuItemDetailsEvent createMenuItem(CreateMenuItemEvent createMenuItemEvent);
-
 }
