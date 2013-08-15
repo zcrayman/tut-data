@@ -2,7 +2,6 @@ package com.yummynoodlebar.persistence.repository;
 
 import com.yummynoodlebar.persistence.domain.Order;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface OrdersRepository {
@@ -13,5 +12,5 @@ public interface OrdersRepository {
 
   Order findById(UUID key);
 
-  List<Order> findAll();
+  Iterable<Order> findAll();
 }

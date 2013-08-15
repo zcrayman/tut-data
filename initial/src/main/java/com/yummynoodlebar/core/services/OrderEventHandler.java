@@ -5,6 +5,7 @@ import com.yummynoodlebar.events.orders.*;
 import com.yummynoodlebar.persistence.services.OrderPersistenceService;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class OrderEventHandler implements OrderService {
 
@@ -19,12 +20,16 @@ public class OrderEventHandler implements OrderService {
 
     Order order = Order.fromOrderDetails(createOrderEvent.getDetails());
 
-    //TODO,add validation in here.
+    //TODO, add validation of menu items
+    //TODO, add order total calculation
+    //TODO, add order time estimate calculation
 
     OrderCreatedEvent event = ordersPersistenceService.createOrder(createOrderEvent);
 
     //TODO, where should this go?
-    OrderStatusEvent orderStatusEvent = ordersPersistenceService.setOrderStatus(new SetOrderStatusEvent(order.getKey(), new OrderStatusDetails(new Date(), "Order Created")));
+    OrderStatusEvent orderStatusEvent = ordersPersistenceService.setOrderStatus(
+        new SetOrderStatusEvent(order.getKey(), new OrderStatusDetails(order.getKey(),
+        UUID.randomUUID(), new Date(), "Order Created")));
 
     return event;
   }

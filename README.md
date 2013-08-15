@@ -1,5 +1,5 @@
 
-# Designing and Building Persistence Repositories with Spring
+In this tutorial you'll use Spring to store data in multiple data stores.
 
 ## Persistence and Storage
 
@@ -11,14 +11,22 @@ Since you're reading this tutorial, it's likely that you are considering impleme
 
 TBD
 
+## What you'll build
+
+Yummy Noodle Bar is going global.  As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
+You will extend Yumm Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire.
+
+![Yummy Noodle Bar](images/yummynoodle.jpg)
+
 
 ## What you'll need
 To work through this tutorial you'll need a few things:
 
 * About an hour of your time to complete the tutorial.
-* An installation of the [Gradle](http://www.gradle.org) build tool, version 1.6 or above.
 * A copy of the code (TODO - downloadable as Zip and/or git clone).
 * An IDE of your choice; we recommend [SpringSource Tool Suite](http://www.springsource.org/sts) which is available as a [free download](http://www.springsource.org/sts).
+* An installation of [MongoDB](http://www.mongodb.org/)
+* An installation of [MySQL](http://www.mysql.org) - confirm if this is best.
 
 ## The Home of Repositories in your Application Architecture
 
@@ -39,10 +47,10 @@ That's enough on the design constraints placed on the components that implement 
 The rest of this tutorial is spread out over the following pages:
 
 * [Step 1: Understanding your Data Model and Modelling the Persistence Domain](1/)
-* [Step 2: Building a Document Model based Repository using Mongo](2/)
-* [Step 3: Building a Relational Model based Repository using JPA](3/)
+* [Step 2: Storing Menu Data Using MongoDB](2/)
+* [Step 3: Storing Order Data Using JPA](3/)
 * [Step 4: Building a Query Service](4/)
-* [Step 5: Building an Key Value Repository using Gemfire](5/)
+* [Step 5: Storing Order Statuses using Gemfire](5/)
 * [Step 6: Extending the Persistence Domain to Send Events](6/)
 * [Recap and Where to go Next?](7/)
 
