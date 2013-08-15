@@ -521,7 +521,7 @@ This class references two javascript functions, the mapper and the reducer, resp
 
 Create 2 new javascript files, in the src/main/resources directory
 
-*ingredientsmap.js*
+**ingredientsmap.js**
 
 ```javascript
 function() {
@@ -531,7 +531,7 @@ function() {
 }
 ```
 
-*ingredientsreduce.js
+**ingredientsreduce.js**
 ```javascript
 function(name, current) {
     var red = 0;
