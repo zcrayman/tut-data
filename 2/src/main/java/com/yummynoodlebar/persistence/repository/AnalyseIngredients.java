@@ -6,5 +6,4 @@ public interface AnalyseIngredients {
 
   public Map<String, Integer> analyseIngredientsByPopularity();
 
-
 }

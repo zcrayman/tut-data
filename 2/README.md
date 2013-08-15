@@ -357,21 +357,198 @@ Spring Data has generated an implementation of this method, doing what we wanted
 
 ### Extend the Repository with Map/ Reduce
 
-A more esoteric requriement.  Users want to know the ingredients used in the most dishes.
+A more esoteric requirement.  Users want to know the ingredients used in the most dishes.
 
 MongoDB provides a system to perform this kind of analysis, Map/ Reduce (/ Filter).
 
-To use Map/Reduce, we need to gain access to the MongoTemplate directly.
+To use Map/Reduce, we need to gain access to the MongoTemplate directly and add this into the Repository that
+Spring Data is currently managing.
 
-Create a new interface `
+Create a new interface `com.yummynoodlebar.persistence.repository.AnalyseIngredients`
 
-TODO
+```java
+package com.yummynoodlebar.persistence.repository;
+
+import java.util.Map;
+
+public interface AnalyseIngredients {
+
+  public Map<String, Integer> analyseIngredientsByPopularity();
+
+}
+```
+
+Next, update `MenuItemRepository` to include the `AnalyseIngredients` interface. This indicates to Spring Data that
+it should look for an implementation of that interface for extension.
 
 ```java
 
+public interface MenuItemRepository extends CrudRepository<MenuItem, String>, AnalyseIngredients {
+
+  public List<MenuItem> findByIngredientsNameIn(String... name);
+
+}
 ```
 
+We can now write an implementation of this new interface. Before doing that though, you must write a test for the new behaviour.
+Create a test class `com.yummynoodlebar.persistence.integration.MenuItemRepositoryAnalyseIngredientsIntegrationTests`
 
+```java
+package com.yummynoodlebar.persistence.integration;
+
+
+import com.yummynoodlebar.config.MongoConfiguration;
+import com.yummynoodlebar.persistence.repository.MenuItemRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.Map;
+
+import static com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture.eggFriedRice;
+import static com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture.standardItem;
+import static junit.framework.TestCase.assertEquals;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {MongoConfiguration.class})
+public class MenuItemRepositoryAnalyseIngredientsIntegrationTests {
+
+  @Autowired
+  MenuItemRepository menuItemRepository;
+
+  @Autowired
+  MongoOperations mongo;
+
+  @Before
+  public void setup() throws Exception {
+    mongo.dropCollection("menu");
+  }
+
+  @After
+  public void teardown() {
+    mongo.dropCollection("menu");
+  }
+
+  @Test
+  public void thatIngredientsAnalysisWorks() throws Exception {
+
+    menuItemRepository.save(standardItem());
+    menuItemRepository.save(standardItem());
+    menuItemRepository.save(standardItem());
+    menuItemRepository.save(eggFriedRice());
+    menuItemRepository.save(eggFriedRice());
+
+    Map<String, Integer> ingredients = menuItemRepository.analyseIngredientsByPopularity();
+
+    assertEquals(4, ingredients.size());
+    assertEquals(5, (int)ingredients.get("Egg"));
+    assertEquals(3, (int)ingredients.get("Noodles"));
+    assertEquals(3, (int)ingredients.get("Peanuts"));
+    assertEquals(2, (int)ingredients.get("Rice"));
+  }
+}
+
+```
+
+This sets up some known test data and calls the analysis method, expecting certain ingredients in known relative quantities.
+
+Lastly, create an implementation of this interface `com.yummynoodlebar.persistence.repository.MenuItemRepositoryImpl`.
+The name of this class `MenuItemRepositoryImpl` is very important! This marks it out as an *extension* of the repository
+named `MenuItemRepository`, and is automatically component scanned, instantiated and used as a delegate by Spring Data.
+
+```java
+package com.yummynoodlebar.persistence.repository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.mapreduce.MapReduceResults;
+import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@Component
+public class MenuItemRepositoryImpl implements AnalyseIngredients {
+
+  @Autowired
+  private MongoTemplate mongoTemplate;
+
+  @Override
+  public Map<String, Integer> analyseIngredientsByPopularity() {
+    MapReduceResults<IngredientAnalysis> results = mongoTemplate.mapReduce("menu",
+        "classpath:ingredientsmap.js",
+        "classpath:ingredientsreduce.js",
+        IngredientAnalysis.class);
+
+    Map<String, Integer> analysis = new HashMap<String, Integer>();
+
+    for(IngredientAnalysis ingredientAnalysis: results) {
+      analysis.put(ingredientAnalysis.getId(), ingredientAnalysis.getValue());
+    }
+
+    return analysis;
+  }
+
+  private static class IngredientAnalysis {
+    private String id;
+    private int value;
+
+    private void setId(String name) {
+      this.id = name;
+    }
+
+    private void setValue(int count) {
+      this.value = count;
+    }
+
+    public String getId() {
+      return id;
+    }
+
+    public int getValue() {
+      return value;
+    }
+  }
+}
+```
+
+This class references two javascript functions, the mapper and the reducer, respectively.
+
+Create 2 new javascript files, in the src/main/resources directory
+
+*ingredientsmap.js*
+
+```javascript
+function() {
+    for (var idx=0; idx < this.ingredients.length; idx++) {
+        emit(this.ingredients[idx].name, 1);
+    }
+}
+```
+
+*ingredientsreduce.js
+```javascript
+function(name, current) {
+    var red = 0;
+
+    for (var idx = 0; idx < current.length; idx++) {
+        red++
+    }
+    return red;
+}
+
+```
+
+The test should now pass successfully.
+
+Congratulations! You have created a custom data analysis task against MongoDB.
+
+### Next Steps
 
 Now that the Menu data is safely stored in Mongo, its time to turn your attention to the core of the system, Orders
 
