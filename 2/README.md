@@ -1,5 +1,5 @@
 
-## Step 2: Building a Document Model based Repository using MongoDB
+## Step 2: Storing Menu Data Using MongoDB
 
 It's time to write your first Repository for the Yummy Noodle Bar, managing Menu data.
 
@@ -357,4 +357,17 @@ Spring Data has generated an implementation of this method, doing what we wanted
 
 ### Extend the Repository with Map/ Reduce
 
-TODO..
+A more esoteric requriement.  Users want to know the ingredients used in the most dishes.
+
+MongoDB provides a system to perform this kind of analysis, Map/ Reduce (/ Filter).
+
+To use Map/Reduce, we need to gain access to the MongoTemplate directly.
+
+Create a new interface `
+
+```java
+
+
+Now that the Menu data is safely stored in Mongo, its time to turn your attention to the core of the system, Orders
+
+[Next… Storing Order Data using JPA](../3/)

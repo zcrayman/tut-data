@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 
 @Configuration
 @EnableMongoRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
-      includeFilters = @ComponentScan.Filter(value = MenuItemRepository.class, type = FilterType.ASSIGNABLE_TYPE))
+      includeFilters = @ComponentScan.Filter(value = {MenuItemRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 public class MongoConfiguration {
 
   public @Bean
@@ -24,5 +24,4 @@ public class MongoConfiguration {
   public @Bean Mongo mongo() throws UnknownHostException {
     return new Mongo("localhost");
   }
-
 }
