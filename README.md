@@ -50,7 +50,7 @@ The rest of this tutorial is spread out over the following pages:
 * [Step 2: Storing Menu Data Using MongoDB](2/)
 * [Step 3: Storing Order Data Using JPA](3/)
 * [Step 4: Building a Query Service](4/)
-* [Step 5: Storing Order Statuses using Gemfire](5/)
+* [Step 5: Storing the Order Status in Gemfire using Spring Data Gemfire](5/)
 * [Step 6: Extending the Persistence Domain to Send Events](6/)
 * [Recap and Where to go Next?](7/)
 

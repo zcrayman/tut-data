@@ -1,4 +1,5 @@
  
-## Building an Object Store Repository using Gemfire
+## Storing the Order Status in Gemfire using Spring Data Gemfire
 
-TBD A CRUD service for orders, optionally replacing the JPA version, and providing the same interface.
+TODO, A CRUD service for Order Status in Gemfire, with some rationale
+

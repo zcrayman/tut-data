@@ -1,23 +1,10 @@
 
 ## Step 2: Storing Menu Data Using MongoDB
 
-It's time to write your first Repository for the Yummy Noodle Bar, managing Menu data.
-
-### Import Spring Data MongoDB
-
-Import spring-data-mongodb into your project, add to build.gradle
-
-```groovy
-  compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
-  compile 'cglib:cglib:2.2.2'
-```
-
-### Set the scene (need better section name)
-
 The Yummy Noodle Bar application core has been implemented, and you are tasked with extending it to
 be able to store data.
 
-We create a new persistence domain (life presever pic).
+We work within the Persistence domain to add this functionality. (life presever pic).
 
 In that domain we have a representation of MenuItem optimised for persistence.
 
@@ -26,6 +13,36 @@ and the repository `MenuItemRepository` whose responsibility is to persist and r
 
 You will implement `MenuItemRepository` using Spring Data MongoDB and integrate this with the `MenuPersistenceEventHandler`
 
+### Install MongoDB
+
+Before continuing, ensure that you have MongoDB installed correctly.
+
+If you don't have it installed already, visit the [Mongo DB Project](http://www.mongodb.org] and follow the intructions to install MongoDB.  
+
+Do not set up any authentication.
+
+You should be able to run the command on your local machine
+
+    mongo
+ 
+And see the response 
+
+    MongoDB shell version: 2.0.8
+    connecting to: test
+    >
+
+### Import Spring Data MongoDB
+
+Import spring-data-mongodb into your project, adding to build.gradle
+
+```groovy
+dependencies {
+   ...
+  compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
+  compile 'cglib:cglib:2.2.2'
+  ...
+}
+```
 
 ### Start with a (failing) test, introducing MongoTemplate
 
