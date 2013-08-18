@@ -5,7 +5,7 @@ TODO Discuss CQRS and the need for seperate queries that are disconnected from t
 
 ....
 
-### Understand the place of the Q in CQRS
+### Understanding the Q in CQRS
 
 TODO Through our tests, we have proven the structure of the data in the data stores, and so we can safely create code that reads and processes these formats, and converts it into different representations.
 
