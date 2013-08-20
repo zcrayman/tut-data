@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,12 +29,9 @@ public class OrdersRepositoryIntegrationTests {
   @Autowired
   OrdersRepository ordersRepository;
 
-  @Autowired
-  EntityManager entityManager;
-
   @Test
   public void thatItemIsInsertedIntoRepoWorks() throws Exception {
-    UUID key = UUID.randomUUID();
+    String key = UUID.randomUUID().toString();
 
     Order order = new Order();
     order.setDateTimeOfSubmission(new Date());
@@ -51,7 +47,7 @@ public class OrdersRepositoryIntegrationTests {
 
     ordersRepository.save(order);
 
-    Order retrievedOrder = entityManager.find(Order.class, key);
+    Order retrievedOrder = ordersRepository.findById(key);
 
     assertNotNull(retrievedOrder);
     assertEquals(key, retrievedOrder.getId());

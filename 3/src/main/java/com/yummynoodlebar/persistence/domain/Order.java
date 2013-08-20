@@ -14,9 +14,9 @@ public class Order {
   @Column(name = "SUBMISSION_DATETIME")
   private Date dateTimeOfSubmission;
 
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
   @JoinTable(name="ORDER_ORDER_ITEMS", joinColumns=@JoinColumn(name="ID"))
-  @MapKeyColumn(name="ORDER_ITEM_ID")
+  @MapKeyColumn(name="MENU_ID")
   @Column(name="VALUE")
   private Map<String, Integer> orderItems;
 
@@ -25,9 +25,9 @@ public class Order {
 
   @Id
   @Column(name = "ORDER_ID")
-  private UUID id;
+  private String id;
 
-  public void setId(UUID id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -47,7 +47,7 @@ public class Order {
     return dateTimeOfSubmission;
   }
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
@@ -66,7 +66,7 @@ public class Order {
   public OrderDetails toOrderDetails() {
     OrderDetails details = new OrderDetails();
 
-    details.setKey(this.id);
+    details.setKey(UUID.fromString(this.id));
     details.setDateTimeOfSubmission(this.dateTimeOfSubmission);
     details.setOrderItems(this.getOrderItems());
 
@@ -76,7 +76,7 @@ public class Order {
   public static Order fromOrderDetails(OrderDetails orderDetails) {
     Order order = new Order();
 
-    order.id = orderDetails.getKey();
+    order.id = orderDetails.getKey().toString();
     order.dateTimeOfSubmission = orderDetails.getDateTimeOfSubmission();
     order.orderItems = orderDetails.getOrderItems();
 

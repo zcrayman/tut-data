@@ -2,10 +2,10 @@ package com.yummynoodlebar.persistence.domain.fixture;
 
 import com.yummynoodlebar.persistence.domain.Ingredient;
 import com.yummynoodlebar.persistence.domain.MenuItem;
+import com.yummynoodlebar.persistence.domain.Order;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 public class PersistenceFixture {
 
@@ -38,5 +38,38 @@ public class PersistenceFixture {
     return item;
   }
 
+  public static Order standardOrder() {
+    String key = UUID.randomUUID().toString();
+
+    Order order = new Order();
+    order.setDateTimeOfSubmission(new Date());
+    order.setId(key);
+
+    Map<String, Integer> items = new HashMap<String, Integer>();
+
+    items.put("yummy1", 15);
+    items.put("yummy3", 12);
+    items.put("yummy5", 7);
+
+    order.setOrderItems(items);
+
+    return order;
+  }
+
+  public static Order yummy16Order() {
+    String key = UUID.randomUUID().toString();
+
+    Order order = new Order();
+    order.setDateTimeOfSubmission(new Date());
+    order.setId(key);
+
+    Map<String, Integer> items = new HashMap<String, Integer>();
+
+    items.put("yummy16", 22);
+
+    order.setOrderItems(items);
+
+    return order;
+  }
 
 }
