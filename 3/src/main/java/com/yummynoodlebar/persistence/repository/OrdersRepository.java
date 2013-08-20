@@ -1,16 +1,10 @@
 package com.yummynoodlebar.persistence.repository;
 
 import com.yummynoodlebar.persistence.domain.Order;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.UUID;
 
-public interface OrdersRepository {
-
-  Order save(Order order);
-
-  void delete(UUID key);
-
+public interface OrdersRepository extends CrudRepository<Order, UUID> {
   Order findById(UUID key);
-
-  Iterable<Order> findAll();
 }

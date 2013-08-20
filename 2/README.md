@@ -205,7 +205,7 @@ public class MenuItemRepositoryIntegrationTests {
 
 ```
 
-This will fall in a heap, with the correct error that the Application Context cannot be initialised.
+This will fail.
 
 
 Open `com.yummynoodlebar.persistence.repository.MenuItemRepository`

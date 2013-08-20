@@ -4,3 +4,4 @@ build
 *.iml
 classes
 .directory
+.DS_Store

@@ -37,7 +37,7 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
     order = orderRepository.save(order);
 
-    return new OrderCreatedEvent(order.getKey(), order.toOrderDetails());
+    return new OrderCreatedEvent(order.getId(), order.toOrderDetails());
   }
 
   @Override
@@ -73,7 +73,7 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
     //TODO, handling payment details...
 
-    return new OrderUpdatedEvent(order.getKey(), order.toOrderDetails());
+    return new OrderUpdatedEvent(order.getId(), order.toOrderDetails());
   }
 
   @Override

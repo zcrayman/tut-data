@@ -1,5 +1,7 @@
 apply plugin: 'java'
 
+println "PROJECT=" + project.name
+
 repositories {
   mavenCentral()
 }

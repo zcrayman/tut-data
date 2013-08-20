@@ -2,6 +2,7 @@ package com.yummynoodlebar.persistence.integration;
 
 
 import com.mongodb.Mongo;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -13,8 +14,6 @@ import static com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture.s
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(classes = {CoreConfig.class, MVCConfig.class})
 public class MenuItemMappingIntegrationTests {
 
   MongoOperations mongo;
@@ -26,10 +25,10 @@ public class MenuItemMappingIntegrationTests {
     mongo.dropCollection("menu");
   }
 
-//  @After
-//  public void teardown() {
-//    mongo.dropCollection("menu");
-//  }
+  @After
+  public void teardown() {
+    mongo.dropCollection("menu");
+  }
 
   @Test
   public void thatItemIsInsertedIntoCollectionHasCorrectIndexes() throws Exception {
