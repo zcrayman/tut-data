@@ -26,7 +26,6 @@ To work through this tutorial you'll need a few things:
 * A copy of the code (TODO - downloadable as Zip and/or git clone).
 * An IDE of your choice; we recommend [SpringSource Tool Suite](http://www.springsource.org/sts) which is available as a [free download](http://www.springsource.org/sts).
 * An installation of [MongoDB](http://www.mongodb.org/)
-* An installation of [MySQL](http://www.mysql.org) - confirm if this is best.
 
 ## The Home of Repositories in your Application Architecture
 
