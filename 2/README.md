@@ -13,6 +13,14 @@ and the repository `MenuItemRepository` whose responsibility is to persist and r
 
 You will implement `MenuItemRepository` using Spring Data MongoDB and integrate this with the `MenuPersistenceEventHandler`
 
+MongoDB is a document oriented database that stores data natively in a document format called BSON (Binary JSON). This is similar in structure to JSON, and is ultimately derived from it.
+
+It does not enforce a schema or document structure beyond the concept of the *Collection*, whcih contains a set of documents.
+
+Querying can be performed over the whole document structure, although Joins between Collections is not part of the document model.
+
+Large scale data transformation and analysis is a native part of MongoDB, and can be performed either declaratively, or via JavaScript functions as part of a Map Reduce implementation.
+
 ### Install MongoDB
 
 Before continuing, ensure that you have MongoDB installed correctly.

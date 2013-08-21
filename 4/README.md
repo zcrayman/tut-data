@@ -1,13 +1,11 @@
  
 ## Storing the Order Status in Gemfire using Spring Data Gemfire
 
-brief description of the gemfire architecture, direct to main docs for more information.
+Gemfire is a high performance distributed data grid.  It scales from a small embedded cache implementation to large scale wide area network implementations with data residency and access control.
 
-### Run a Gemfire Cache Server
+Spring Data allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
 
-say that a cache server can be started using the gemfire-server project in this repo on the default port 40404
-
-describe that project? link to the spring xml setup?
+You will see here the creation of a Spring Data interface to a Gemfire server. The next section of the tutorial shows the extension of this functionality to cover the use of Continuous Queries and how to integrate those into the Yummy Noodle application.
 
 ### Import Spring Data Gemfire
 
@@ -28,9 +26,89 @@ dependencies {
 
 The springsource repo is required to access the gemfire libraries, which are not available from maven central.
 
+### Run a Gemfire Cache Server
+
+In order to run the tests and perform Gemfire development, it is necessary to have access to a Gemfire server.
+
+While it would be possible to download a full distribution, configure and run that, for the purposes of this tutorial, it is preferable to set up a server within this project.
+
+In build.gradle, add to the end of the file
+
+```groovy
+task run(type: JavaExec) {
+  description = 'Runs a simple Gemfire Cache Server'
+  main = "com.yummynoodlebar.persistence.services.LocalGemfireServer"
+  classpath = sourceSets.main.runtimeClasspath
+  standardInput = System.in
+}
+```
+
+Create a new XML file in src/main/resources/server
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:gfe="http://www.springframework.org/schema/gemfire"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:gfe-data="http://www.springframework.org/schema/data/gemfire"
+	xsi:schemaLocation="http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
+		http://www.springframework.org/schema/data/gemfire http://www.springframework.org/schema/data/gemfire/spring-data-gemfire.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    
+    <gfe:cache properties-ref="gemfire-props"/>
+    
+    <util:properties id="gemfire-props">
+        <prop key="log-level">warning</prop>
+    </util:properties>
+     
+    <gfe:cache-server/>
+     
+    <gfe:replicated-region id="YummyNoodleOrder">
+    </gfe:replicated-region>
+</beans>
+```
+
+This configures a basic Gemfire server, and creates a *Region*, a logical partition within Gemfire, that we have named 'YummyNoodleOrder'.
+
+Lastly, create the driving class `com.yummynoodlebar.persistence.services.LocalGemfireServer`
+
+```java
+package com.yummynoodlebar.persistence.services;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.io.IOException;
+
+public class LocalGemfireServer {
+  @SuppressWarnings("unchecked")
+  public static void main(String[] args) throws IOException,
+      InterruptedException {
+    ApplicationContext context = new ClassPathXmlApplicationContext("server/cache-config.xml");
+
+    System.out.println("Press <ENTER> to terminate the cache server");
+    System.in.read();
+    System.exit(0);
+  }
+}
+```
+
+You may now start a Gemfire server (on port 40404) by running 
+
+    ./gradlew run
+
+This server will have access to all of the classpath of the project, most notably the OrderStatus class.  It is necessary for the Gemfire server to have access to this class if we want to persist it within the grid.  When you create a standalone Gemfire grid, you will need to provide any classes you wish to persist within a jar file on the classpath of every gemfire server.
+
 ### Start with a (failing) test, introducing Gemfire Template
 
-create GemfireConfiguration, empty
+
 
 ```java
 package com.yummynoodlebar.persistence.integration;
