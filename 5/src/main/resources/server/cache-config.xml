@@ -22,6 +22,6 @@
      
     <gfe:cache-server/>
      
-    <gfe:local-region id="YummyNoodleOrder">
-    </gfe:local-region>
+    <gfe:replicated-region id="YummyNoodleOrder">
+    </gfe:replicated-region>
 </beans>

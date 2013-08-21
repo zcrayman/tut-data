@@ -30,7 +30,7 @@ public class MenuPersistenceEventHandler implements MenuPersistenceService {
 
   @Override
   public MenuItemDetailsEvent requestMenuItemDetails(RequestMenuItemDetailsEvent requestMenuItemDetailsEvent) {
-    MenuItem item = menuItemRepository.findById(requestMenuItemDetailsEvent.getId());
+    MenuItem item = menuItemRepository.findOne(requestMenuItemDetailsEvent.getId());
 
     if (item == null) {
       return MenuItemDetailsEvent.notFound(requestMenuItemDetailsEvent.getId());

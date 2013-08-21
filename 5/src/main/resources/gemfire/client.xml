@@ -22,14 +22,10 @@
         <property name="region" ref="YummyNoodleOrder"/>
     </bean>
 
-    <gfe:transaction-manager id="transactionManager"/>
+    <gfe:transaction-manager/>
 
-    <!--<gfe-data:json-region-autoproxy/>   -->
-    <!--<gfe:cq-listener-container>-->
-        <!--<gfe:listener ref="cqListener"-->
-                      <!--query="select * from /Order where customerId = 2" />-->
-    <!--</gfe:cq-listener-container>-->
-
-    <!--<bean id="cqListener" class="org.springframework.data.gemfire.examples.CQListener" />-->
+    <gfe:cq-listener-container id="transactionManager">
+        <gfe:listener ref="statusUpdateListener" query="SELECT * from /YummyNoodleOrder" />
+    </gfe:cq-listener-container>
 
 </beans>

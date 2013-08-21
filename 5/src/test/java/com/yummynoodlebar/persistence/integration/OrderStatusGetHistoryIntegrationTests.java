@@ -3,6 +3,7 @@ package com.yummynoodlebar.persistence.integration;
 import com.yummynoodlebar.config.GemfireConfiguration;
 import com.yummynoodlebar.persistence.domain.OrderStatus;
 import com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture;
+import com.yummynoodlebar.persistence.integration.fakecore.FakeCoreConfiguration;
 import com.yummynoodlebar.persistence.repository.OrderStatusRepository;
 import org.junit.After;
 import org.junit.Before;
@@ -20,7 +21,7 @@ import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {GemfireConfiguration.class})
+@ContextConfiguration(classes = {FakeCoreConfiguration.class, GemfireConfiguration.class})
 public class OrderStatusGetHistoryIntegrationTests {
 
   @Autowired
