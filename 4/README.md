@@ -1,6 +1,11 @@
  
 ## Storing the Order Status in Gemfire using Spring Data Gemfire
 
+In the Yummy Noodle Bar application, the statuses of Orders will be stored in Gemfire.
+These statuses will be coming into the application from the kitchen and order processing side of the business, as opposed to the orders themselves that will come from the system that accepts orders from clients.
+
+### About Gemfire
+
 Gemfire is a high performance distributed data grid.  It scales from a small embedded cache implementation to large scale wide area network implementations with data residency and access control.
 
 Spring Data allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
@@ -104,11 +109,17 @@ You may now start a Gemfire server (on port 40404) by running
 
     ./gradlew run
 
-This server will have access to all of the classpath of the project, most notably the OrderStatus class.  It is necessary for the Gemfire server to have access to this class if we want to persist it within the grid.  When you create a standalone Gemfire grid, you will need to provide any classes you wish to persist within a jar file on the classpath of every gemfire server.
+This server will have access to the classpath of the project, most notably the OrderStatus class.  It is necessary for the Gemfire server to have access to this class if we want to persist it within the grid.  When you create a standalone Gemfire grid, you will need to provide any classes you wish to persist within a jar file on the classpath of every gemfire server.
+
+This tutorial does not show how to set up an embedded Gemfire node.  While it would be possible to run much of this section of the tutorial using an embedded node, the next section requires the use of a seperate Gemfire server.
 
 ### Start with a (failing) test, introducing Gemfire Template
 
+In a similar way as with MongoDB and JPA, the first test you will write is to check that OrderStatus can be correctly persisted into Gemfire.
 
+Firstly, create a new empty class `com.yummynoodlebar.config.GemfireConfiguration`. This is a placeholder for the configuration until we have written a test.
+
+Create a new test `com.yummynoodlebar.persistence.integration.OrderStatusMappingIntegrationTests` with the content.
 
 ```java
 package com.yummynoodlebar.persistence.integration;
@@ -174,20 +185,145 @@ public class OrderStatusMappingIntegrationTests {
 }
 ```
 
-We will be accessing gemfire in client/ server mode.  (make sure that we describe whats going on)
+This test uses `GemfireTemplate`, seen in this test via its API interface `GemfireOperations`.  This follows the same pattern as other Spring Template classes, exposing the most common operations using consistent, simple methods, and also providing access to the low level Gemfire API in a managed way via callbacks.
 
-Start up the cache server and leave it running (TODO, make an embedded version for this)
+You can see the access to the low level Gemfire API in the clear() method.  This accesses the Region instance and clears it of all data.  Region implements the Map interface, as it is also conceptually a Map.  Gemfire provides many features around this core concept, but you can see the map usage in the test method itself 
 
-mention @Transactional, rollback, how it relates to <gfe:transaction-manager id="transactionManager"/>,
-and the integration with the spring transaction stuff
+```java
+    yummyTemplate.put(4L, status);
+```
+GemfireTemplate exposes a Map oriented method to interact with its configured region.
+
+The test inserts a single OrderStatus into the Gemfire Region and then performs a query, using the Gemfire Object Query Language (OQL).  This is a declarative language conceptually similar to the JPA Query Language/ Hibernate Query Language, providing a syntax to query against a set of Objects and their properties and perform selections, ordering, grouping and projections against the results.
+
+Now that a test is in place, implement GemfireConfiguration with the content
+
+```java
+package com.yummynoodlebar.config;
+
+import org.springframework.context.annotation.*;
+import org.springframework.data.gemfire.repository.config.EnableGemfireRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configuration
+@ImportResource({"classpath:gemfire/client.xml"})
+@EnableTransactionManagement
+public class GemfireConfiguration {}
+```
+
+This class is mainly used, at the moment, to allow the consistent use of Spring Java Configuration in tests and other context creation.  It will be extended below and in the next tutorial section.
+Currently, the important line is
+
+```java
+@ImportResource({"classpath:gemfire/client.xml"})
+```
+
+This imports a traditional XML based Spring configuration.  Currently, Spring Data Gemfire is significantly easier to configure using XML, and certain features are not yet fully implemented.  For this reason, XML configuration is still recommended for Spring Data Gemfire.
+
+Create a new file `src/main/resources/gemfire/client.xml`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:gfe="http://www.springframework.org/schema/gemfire"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:gfe-data="http://www.springframework.org/schema/data/gemfire"
+       xsi:schemaLocation="http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/data/gemfire http://www.springframework.org/schema/data/gemfire/spring-data-gemfire.xsd">
+
+    <gfe-data:datasource subscription-enabled="true">
+        <gfe-data:server host="localhost" port="40404" />
+    </gfe-data:datasource>
+
+    <bean id="yummyTemplate" class="org.springframework.data.gemfire.GemfireTemplate">
+        <property name="region" ref="YummyNoodleOrder"/>
+    </bean>
+
+    <tx:annotation-driven/>
+    <gfe:transaction-manager/>
+
+</beans>
+```
+
+This configuration uses the Gemfire Spring configuration namespace.
+
+Firstly, it creates a Gemfire DataSource.  This is a connection to a Gemfire data grid. In this case, connecting to the Gemfire server running on localhost:40404, which the local server configured above will run on.
+
+The bean `yummyTemplate` is the instance of GemfireTemplate that is used in the test above. It is set up to communicate with a specific Gemfire Region, YummyNoodleOrder, which must exist in the server. Again, this is configured in the server above.
+
+The last two configurations that set up the Gemfire transactional behaviour and integrate it with the Spring Transaction management system.
 
 
 ### Implement a CRUD repository
 
-Create a new test `OrderStatusRepositoryIntegrationTests`
+You have seen the creation of two Repository implementations against both MongoDB and JPA.  The process for creating a Spring Data Gemfire Repository is consistent with the others.
 
+First, create a new test `OrderStatusRepositoryIntegrationTests`
 
-Update `OrderStatusRepository` to read
+```java
+package com.yummynoodlebar.persistence.integration;
+
+import com.yummynoodlebar.config.GemfireConfiguration;
+import com.yummynoodlebar.persistence.domain.OrderStatus;
+import com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture;
+import com.yummynoodlebar.persistence.repository.OrderStatusRepository;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.UUID;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {GemfireConfiguration.class})
+public class OrderStatusRepositoryIntegrationTests {
+
+  @Autowired
+  OrderStatusRepository ordersStatusRepository;
+
+  @Before
+  public void setup() {
+    ordersStatusRepository.deleteAll();
+  }
+
+  @After
+  public void teardown() {
+    ordersStatusRepository.deleteAll();
+  }
+
+  @Test
+  public void thatItemIsInsertedIntoRepoWorks() throws Exception {
+
+    UUID key = UUID.randomUUID();
+
+    OrderStatus orderStatus = PersistenceFixture.startedCooking(key);
+
+    ordersStatusRepository.save(orderStatus);
+
+    OrderStatus retrievedOrderStatus = ordersStatusRepository.findOne(key);
+
+    assertNotNull(retrievedOrderStatus);
+    assertEquals(key, retrievedOrderStatus.getId());
+  }
+}
+```
+
+This test generates a new OrderStatus with a known key and passes it to OrderStatusRepository for persisting. It then retrieves the data using the method `findOne`, which will query against the *key* that is passed into the Gemfire Region Map structure.
+
+Note that data is being managed explicitly in the test, rather than using the declarative transaction management that was introduced in the JPA tests.  While Gemfire does integrate with the Spring provided transactions, it only support Isolation.READ_COMMITTED.  This means that once you write data, it cannot be read, by any thread or process, until the surrounding transaction is committed.  Any test that wrote data within a transaction would be unable to read it until the transaction finished.
+
+For this reason, the test is not marked as @Transactional, so all data access will not be transactionally managed within the tests.  At the start and end of the test, the region is purged by using the repository deleteAll method generated by Spring Data.
+
+To implement the Repository, update `OrderStatusRepository` to read
 
 ```java
 package com.yummynoodlebar.persistence.repository;
@@ -202,11 +338,31 @@ public interface OrderStatusRepository extends GemfireRepository<OrderStatus, UU
 }
 ```
 
-Update `OrderStatus` to add @Region and @Id annotations [EXPLAIN]
-ID for the findOne/ generated finders/ save key that we did explicitly for GemfireTemplate
+Update `GemfireConfiguration` to enable Gemfire Repositories
 
-@Region configures the default region that the repository will access.
-This can be overridden in the @Query entries.
+```java
+package com.yummynoodlebar.config;
+
+import org.springframework.context.annotation.*;
+import org.springframework.data.gemfire.repository.config.EnableGemfireRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+@Configuration
+@ImportResource({"classpath:gemfire/client.xml"})
+@EnableTransactionManagement
+@EnableGemfireRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
+    includeFilters = @ComponentScan.Filter(value = {OrderStatusRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
+public class GemfireConfiguration { }
+
+```
+
+As with the other data stores, explicitly choose the Repository interface for Spring Data Gemfire to implement.
+
+As with the other data stores, the Entity/ persistence class, in this case OrderStatus, requires annotating to control how it is persisted into the data store.
+
+Gemfire understand Java objects more thoroughly than either MongoDB or H2 are able to, as its underlying data model is built to do so. This means that OrderStatus requires no additions to persist naturally into Gemfire, as we saw above in `OrderStatusMappingIntegrationTests`.
+
+Two things are necessary, however for Spring Data to be able to generate a Repository implementation, configuring the default Region, and specifying the property to use as the Region key/ ID.
 
 ```java
 import org.springframework.data.annotation.Id;
@@ -220,7 +376,17 @@ public class OrderStatus implements Serializable {
   private UUID id;
 ```
 
+First, run the local gemfire server
+
+    ./gradlew run
+    
+Then run the test `OrderStatusRepositoryIntegrationTests` to check that the OrderStatusRepository is being correctly generated and works as expected.
+
 ### Extend the Repository with a Custom Finder
+
+An Order requires a history of the status updates made to it. A history is a list of OrderStatus in date order.
+
+This requires a more complex query than simply by ID or Order ID. It will also require a sort by date. 
 
 Create a new test `OrderStatusGetHistoryIntegrationTests`
 
@@ -283,6 +449,8 @@ public class OrderStatusGetHistoryIntegrationTests {
 }
 ```
 
+This test creates a sequential history of a single order id, saves that list into Gemfire, and then retrieves it using a new custom method.
+
 Update the repository to read
 
 ```java
@@ -302,13 +470,15 @@ public interface OrderStatusRepository extends GemfireRepository<OrderStatus, UU
 }
 ```
 
-This will pass, with the correct ordering of the history.
+This looks similar to the JPA custom method, and the concept is the same.  Create a new method and annotate it with a @Query, passing a string containing OQL to perform the query with.
+This query selects the distinct elements from the YummyNoodleBar Region where the order is given and then orders by statusDate, which is a property on OrderStatus.
 
+This will pass, with the correct ordering of the history, ordered by status date.
 
 ### Next Steps
 
 Congratulations, Order Status data is safely stored in Gemfire.
 
-Next, you can learn to take advantage of Gemfire Continuous Queries to create a scalable, event driven architecture using your data.
+Next, you can learn to take advantage of Gemfire Continuous Queries to extend the scalable, event driven architecture to include the data store itself.
 
 [Next…  Extending the Persistence Domain to Send Events](../5/)
