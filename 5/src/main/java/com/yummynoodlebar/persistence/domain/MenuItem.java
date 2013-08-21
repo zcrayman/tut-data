@@ -1,17 +1,47 @@
 package com.yummynoodlebar.persistence.domain;
 
 import com.yummynoodlebar.events.menu.MenuItemDetails;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
+@Document(collection = "menu")
 public class MenuItem {
 
+  @Id
   private String id;
+
+  @Field("itemName")
+  @Indexed
   private String name;
+
+  private String description;
+
+  private Set<Ingredient> ingredients;
 
   private BigDecimal cost;
 
   private int minutesToPrepare;
+
+  public String getDescription() {
+    return description;
+  }
+
+  public Set<Ingredient> getIngredients() {
+    return ingredients;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setIngredients(Set<Ingredient> ingredients) {
+    this.ingredients = ingredients;
+  }
 
   public String getId() {
     return id;

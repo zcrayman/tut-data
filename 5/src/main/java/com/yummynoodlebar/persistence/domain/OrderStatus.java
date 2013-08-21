@@ -1,13 +1,18 @@
 package com.yummynoodlebar.persistence.domain;
 
 import com.yummynoodlebar.events.orders.OrderStatusDetails;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
-public class OrderStatus {
+@Region("YummyNoodleOrder")
+public class OrderStatus implements Serializable {
 
   private UUID orderId;
+  @Id
   private UUID id;
   private Date statusDate;
   private String status;
@@ -17,6 +22,10 @@ public class OrderStatus {
     this.id = id;
     this.status = status;
     this.statusDate = date;
+  }
+
+  public OrderStatus() {
+
   }
 
   public Date getStatusDate() {
@@ -33,6 +42,22 @@ public class OrderStatus {
 
   public UUID getId() {
     return id;
+  }
+
+  public void setOrderId(UUID orderId) {
+    this.orderId = orderId;
+  }
+
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
+  public void setStatusDate(Date statusDate) {
+    this.statusDate = statusDate;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
   }
 
   public OrderStatusDetails toStatusDetails() {
