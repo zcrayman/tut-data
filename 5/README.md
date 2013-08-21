@@ -265,6 +265,6 @@ This indicates that events are being generated from OrderStatus instances being 
 
 Congratulations, notifications about changing statuses are now being propogated across the application cluster, using Gemfire.
 
-[Next…  Recap and Where to go Next](../7/)
+[Next…  Recap and Where to go Next](../6/)
 
 
