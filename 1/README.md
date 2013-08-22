@@ -90,7 +90,7 @@ Gemfire is such a store, and allows accessing data via a Map interface, querying
 It is supported by [Spring Data Gemfire](http://www.springsource.org/spring-gemfire)
 
 
-[Next… Storing Menu Data Using MongoDB](../3/)
+[Next… Storing Menu Data Using MongoDB](../2/)
 
 
 
