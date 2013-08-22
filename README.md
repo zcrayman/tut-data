@@ -9,13 +9,17 @@ Adopting the right data model and data store for your application can be a compl
 
 Since you're reading this tutorial, it's likely that you are considering implementing a Repository because:-
 
-TBD
+* You have a data store that you need to access
+* You have an existing Spring Data application that you need to maintain
+* You want to investigate different data stores in the context of Spring Data
+
+This tutorial covers three data stores, MongoDB, a relational database using JPA and Pivotal Gemfire. 
 
 ## What you'll build
 
 Yummy Noodle Bar is going global.  As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
 
-You will extend Yummmy Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire.
+You will extend Yummmy Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire. Spring Data will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
 
 ![Yummy Noodle Bar](images/yummynoodle.jpg)
 
