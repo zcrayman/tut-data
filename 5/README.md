@@ -1,4 +1,4 @@
-## Extending the Persistence Domain to Send Events
+# Extending the Persistence Domain to Send Events
 
 The event handler and the repositories you have made that now make up the persistence domain will react to events and persist or retrieve data on demand.
 
@@ -10,14 +10,14 @@ To support this, you need to extend the persistence domain to provide notificati
 
 To achieve this, you will use the Continuous Query feature of Gemfire to generate update notification events on every application instance when a modification is made.
 
-### Data Grids and Continuous Queries
+## Data Grids and Continuous Queries
 
 In a traditional data store, an application would have to regularly poll to receive updated data.  This is inefficient, as many queries will be executed unecessarily, and also introduces latency in between polls.  More realistically, applications will likely introduce some seperate messaging infrastructure, such as RabbitMQ to distribute notifications.
 
 Gemfire is a distributed data grid, it is naturally clustered and provides a feature called Continuous Querying; this allows you to register a Gemfire Query with the cluster and for a simple POJO to receive events whenever a new piece of data is added that matches this query.
 
  
-### Writing a continuous query
+## Writing a continuous query
 
 The outcome we require is that whenever an OrderStatus instance is saved into Gemfire, 
 the method `com.yummynoodlebar.core.services.OrderStatusUpdateService.setOrderStatus()` is called with the appropriate event.
@@ -211,7 +211,7 @@ public class GemfireConfiguration {
 }
 ```
 
-Now, the Continuous Query itself may be implemented.  This is configured purely in the Spring XML configuration.
+Now the Continuous Query itself may be implemented.  This is configured purely in the Spring XML configuration.
 
 Open `resources/gemfire/client.xml` and alter it to read
 
@@ -249,7 +249,7 @@ Open `resources/gemfire/client.xml` and alter it to read
 </beans>
 ```
 
-This addition creates a new Continuous Query, with the given query being continuously evaluated.  Matching data is passed to the bean named `statusUpdateListener`, which was declared above in GemfireConfiguration 
+This addition creates a new Continuous Query, with the given query being continuously evaluated.  Matching data is passed to the bean named `statusUpdateListener`, which was declared above in GemfireConfiguration.
 
 This will use the datasource created above, using the default name of gemfireCache.  This may be altered if desired.
 
@@ -261,7 +261,7 @@ Then execute `OrderStatusNotificationsIntegrationTests`
 
 This indicates that events are being generated from OrderStatus instances being saved, and correctly transformed into event that are sent to OrderStatusUpdateService correctly.
 
-### Next Steps
+## Summary
 
 Congratulations, notifications about changing statuses are now being propogated across the application cluster, using Gemfire.
 
