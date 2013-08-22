@@ -1,5 +1,5 @@
 
-## Step 2: Storing Menu Data Using MongoDB
+# Step 2: Storing Menu Data Using MongoDB
 
 The Yummy Noodle Bar application core has been implemented, and you are tasked with extending it to
 be able to store data.
@@ -13,7 +13,7 @@ and the repository `MenuItemRepository` whose responsibility is to persist and r
 
 You will implement `MenuItemRepository` using Spring Data MongoDB and integrate this with the `MenuPersistenceEventHandler`
 
-### Aboout MongoDB
+## Aboout MongoDB
 
 MongoDB is a document oriented database that stores data natively in a document format called BSON (Binary JSON). This is similar in structure to JSON, and is ultimately derived from it.
 
@@ -23,7 +23,7 @@ Querying can be performed over the whole document structure, although Joins betw
 
 Large scale data transformation and analysis is a native part of MongoDB, and can be performed either declaratively, or via JavaScript functions as part of a Map Reduce implementation.
 
-### Install MongoDB
+## Install MongoDB
 
 Before continuing, ensure that you have MongoDB installed correctly.
 
@@ -41,7 +41,7 @@ And see the response
     connecting to: test
     >
 
-### Import Spring Data MongoDB
+## Import Spring Data MongoDB
 
 Import spring-data-mongodb into your project, adding to build.gradle
 
@@ -54,7 +54,7 @@ dependencies {
 }
 ```
 
-### Start with a (failing) test, introducing MongoTemplate
+## Start with a (failing) test, introducing MongoTemplate
 
 Before we can implement the Repository, we have to have something to use with it, the Domain, in this case meaning persistence, class.
 
@@ -149,7 +149,7 @@ This alters the collection used to be *menu*, ensures that the field *id* is use
 None of these are annotations are necessary, a bare POJO (Plain old Java Object) can be passed to MongoTemplate and it will apply its default behaviour.  We have chosen to alter that behaviour using these mapping annotations on the persistence entity.
 
 
-### Implement a CRUD repository
+## Implement a CRUD repository
 
 MenuItem is now ready to persist.  We could now write an implementation of `MenuItemRepository` using MongoTemplate,
 many applications do this successfully.
@@ -303,7 +303,7 @@ Congratulations!  You have a working repository, without having to actually impl
 
 It only does CRUD, is that enough?
 
-### Extend the Respository with a Custom Finder
+## Extend the Repository with a Custom Finder
 
 A late breaking requirement has been uncovered!
 
@@ -382,7 +382,7 @@ Try running the test....  it passes, right?
 
 Spring Data has generated an implementation of this method, doing what we wanted. There is a rich vocabulary that you can express using the method names, see more in the [Reference Documentation](http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/mongo.repositories.html#mongodb.repositories.queries)
 
-### Extend the Repository with Map/ Reduce
+## Extend the Repository with Map/ Reduce
 
 A more esoteric requirement.  Users want to know the ingredients used in the most dishes.
 
@@ -575,7 +575,7 @@ The test should now pass successfully.
 
 Congratulations! You have created a custom data analysis task against MongoDB.
 
-### Next Steps
+## Summary
 
 Now that the Menu data is safely stored in Mongo, its time to turn your attention to the core of the system, Orders
 

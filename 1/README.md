@@ -50,17 +50,19 @@ Focussing primarily on Orders, these can be acted upon by a number of events:
 
 For the first version of the Yummy Noodle Bar persistence services, the ability to created, update and remove Orders, MenuItems and OrderStatuses is the focus.
 
-It can be tempting to simply map the core Order domain to the data stores and work from there, but that would ignore the boundary between the Core and the Persistence domain (TODO highlight this boundary on a focus on the Life Preserver).
+It can be tempting to simply map the core Order domain to the data stores and work from there, but that would ignore the boundary between the Core and the Persistence domain.
 
-The data model of your persisted data will need to change at a rate that is manageable and technically feasible given the data store implementation, and the core will need to evolve at whatever rate the Yummy Noodle bar system need to internally evolve at. So there is potentially friction between the two domains as they may need to evolve at different rates.
+(TODO highlight this boundary on a focus on the Life Preserver).
+
+The data model of your persisted data will need to change at a rate that is manageable and technically feasible given the data store implementation, and the core will need to evolve at whatever rate the Yummy Noodle bar system needs to internally evolve at. So there is potentially friction between the two domains as they may need to evolve at different rates.
 
 To manage this friction you need to create concepts and components in the Persistence Service domain that are unique to, and can evolve at the rate needed by, the Persistence domain itself. This may result in similar types of components but since their purpose will be very different the similarities are superficial.
 
 ## Understanding differing data models and their implementations
 
-Modern data stores adopt one or more Data Models, although usually only one.  Based on the Data Model, the way that you can expect to interact with the data store will be different and quite different capabilities and data access patterns will be expressed.
+Modern data stores adopt one or more Data Models, although typically only one per technology. The way that you can expect to interact with a data store, based on the features and limits of its data model, will be different and so different capabilities and data access patterns will be needed.
 
-Some of the most common Data Models currently is use are :-
+Some of the most common Data Models currently is use are:
 
 **Relational**
 
@@ -88,7 +90,6 @@ Data Grid is less well defined than the other models, but mostly commonly means 
 Gemfire is such a store, and allows accessing data via a Map interface, querying using a rich query language, and also writing code that executes on the Gemfire cluster in a distributed fashion.
 
 It is supported by [Spring Data Gemfire](http://www.springsource.org/spring-gemfire)
-
 
 [Next… Storing Menu Data Using MongoDB](../2/)
 

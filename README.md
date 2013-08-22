@@ -14,7 +14,8 @@ TBD
 ## What you'll build
 
 Yummy Noodle Bar is going global.  As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
-You will extend Yumm Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire.
+
+You will extend Yummmy Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire.
 
 ![Yummy Noodle Bar](images/yummynoodle.jpg)
 
@@ -29,21 +30,18 @@ To work through this tutorial you'll need a few things:
 
 ## The Home of Repositories in your Application Architecture
 
+Repositories are an integration between the external, persistent storage engines and your core application. Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the following diagram:
+
 TBD Where Repositories sit in the Life Preserver diagram to be added.
 
-Repositories are an integration between the external, persistent storage engines and your core application. As such Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the above diagram [1]
-
-As an integration between your application core and the outside world, there are a number of concerns that need to be addressed in the design and implementation of the components that make up the Repositories :-
+As an integration between your application core and the outside world there are a number of concerns that need to be addressed in the design and implementation of the components that make up the Repositories:
 
 * The primary purpose of the Repository components is to integrate your application with the data stores in a natural and optimised way.
 * The components that make up your persistence domain will need to evolve at a rate that is appropriate for the data they are managing.
 * Your Repository components should not contain any of the core logic to your application but will collaborate with other components in the Core domains of your application in order to orchestrate the necessary functionality to provide the service interface.
 
 
-That's enough on the design constraints placed on the components that implement your Repositories, let's now look at how to implement those components using Spring.
-
-
-The rest of this tutorial is spread out over the following pages:
+That's enough on the design constraints placed on the components that implement your Repositories, the rest of this tutorial looks at how to implement those components using Spring:
 
 * [Step 1: Understanding your Data Model and Modelling the Persistence Domain](1/)
 * [Step 2: Storing Menu Data Using MongoDB](2/)
