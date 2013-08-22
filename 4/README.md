@@ -1,10 +1,10 @@
  
-## Storing the Order Status in Gemfire using Spring Data Gemfire
+# Storing the Order Status in Gemfire using Spring Data Gemfire
 
 In the Yummy Noodle Bar application, the statuses of Orders will be stored in Gemfire.
 These statuses will be coming into the application from the kitchen and order processing side of the business, as opposed to the orders themselves that will come from the system that accepts orders from clients.
 
-### About Gemfire
+## About Gemfire
 
 Gemfire is a high performance distributed data grid.  It scales from a small embedded cache implementation to large scale wide area network implementations with data residency and access control.
 
@@ -12,7 +12,7 @@ Spring Data allows the creation of both server and client connections, data acce
 
 You will see here the creation of a Spring Data interface to a Gemfire server. The next section of the tutorial shows the extension of this functionality to cover the use of Continuous Queries and how to integrate those into the Yummy Noodle application.
 
-### Import Spring Data Gemfire
+## Import Spring Data Gemfire
 
 In build.gradle, add the following
 
@@ -29,9 +29,9 @@ dependencies {
 }
 ```
 
-The springsource repo is required to access the gemfire libraries, which are not available from maven central.
+This Maven-style repository is required to access the gemfire libraries, which are not available from maven central.
 
-### Run a Gemfire Cache Server
+## Run a Gemfire Cache Server
 
 In order to run the tests and perform Gemfire development, it is necessary to have access to a Gemfire server.
 
@@ -113,7 +113,7 @@ This server will have access to the classpath of the project, most notably the O
 
 This tutorial does not show how to set up an embedded Gemfire node.  While it would be possible to run much of this section of the tutorial using an embedded node, the next section requires the use of a seperate Gemfire server.
 
-### Start with a (failing) test, introducing Gemfire Template
+## Start with a (failing) test, introducing Gemfire Template
 
 In a similar way as with MongoDB and JPA, the first test you will write is to check that OrderStatus can be correctly persisted into Gemfire.
 
@@ -257,7 +257,7 @@ The bean `yummyTemplate` is the instance of GemfireTemplate that is used in the 
 The last two configurations that set up the Gemfire transactional behaviour and integrate it with the Spring Transaction management system.
 
 
-### Implement a CRUD repository
+## Implement a CRUD repository
 
 You have seen the creation of two Repository implementations against both MongoDB and JPA.  The process for creating a Spring Data Gemfire Repository is consistent with the others.
 
@@ -382,7 +382,7 @@ First, run the local gemfire server
     
 Then run the test `OrderStatusRepositoryIntegrationTests` to check that the OrderStatusRepository is being correctly generated and works as expected.
 
-### Extend the Repository with a Custom Finder
+## Extend the Repository with a Custom Finder
 
 An Order requires a history of the status updates made to it. A history is a list of OrderStatus in date order.
 
@@ -475,10 +475,10 @@ This query selects the distinct elements from the YummyNoodleBar Region where th
 
 This will pass, with the correct ordering of the history, ordered by status date.
 
-### Next Steps
+## Summary
 
 Congratulations, Order Status data is safely stored in Gemfire.
 
-Next, you can learn to take advantage of Gemfire Continuous Queries to extend the scalable, event driven architecture to include the data store itself.
+Next, you will learn to take advantage of Gemfire Continuous Queries to extend the scalable, event driven architecture to include the data store itself.
 
 [Next…  Extending the Persistence Domain to Send Events](../5/)
