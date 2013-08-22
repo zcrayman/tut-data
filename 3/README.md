@@ -1,5 +1,5 @@
  
-## Storing Order Data Using Java Persistence API (JPA)
+# Storing Order Data Using Java Persistence API (JPA)
 
 Your next task for the Yummy Noodle Bar persistence project is to store Order data.  Yummy Noodle Bar has decided to use PostgreSQL to store this data, a freely available, robust, relational database.
 
@@ -18,7 +18,7 @@ Since JPA is a standard, there are many implementations, referred to as JPA *Pro
 
 In addition to Spring Data JPA, Hibernate has been chosen as the JPA provider.
 
-### Using H2 as an in memory database for testing
+## Using H2 as an in memory database for testing
 
 PostgreSQL is a fully functional database that is suitable for production. However for testing, a lighter, embedded database is suitable. You will use H2 for development purposes during this tutorial.
 
@@ -26,9 +26,9 @@ This allows the easy creation and destruction of database instances in a lifecyc
 
 The JPA standard and provider will provide enough of an abstraction that we may use different databases in production and development. It is recommended to test application integration with the production database in addition to the interaction tests run against H2. This would be part of the minimal set of acceptance or 'smoke' tests.
     
-### Import Spring Data JPA
+## Import Spring Data JPA
 
-Import Spring Data JPA and the Hibernate JPA Provider into your project, adding to build.gradle
+Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle
 
 ```groovy
 dependencies {
@@ -44,7 +44,7 @@ dependencies {
 
 Also here is the JDBC Driver for H2.
 
-### Start with a (failing) test, introducing JPA
+## Start with a (failing) test, introducing JPA
 
 Following the pattern from the the previous section, you will first create a test to drive your development, first checking that the persistence mapping class correctly (de)serializes.
 
@@ -299,7 +299,7 @@ Finally `@Id` indicates to both JPA and Spring Data that the given field(s) is t
 The tests will now pass, indicating that the mapping is all working as expected.
 
 
-### Implement a CRUD repository
+## Implement a CRUD repository
 
 Now that the JPA Entity works, the Repository can be implemented.
 In the same way as for MongoDB, Spring Data provides a way to automatically create JPA backed Repositories, given only an interface.
@@ -410,7 +410,7 @@ public interface OrdersRepository extends CrudRepository<Order, UUID> {
 ```
 The test will now pass correctly, indicating that an implementation of `OrderRepository` is being created at runtime and works as expected.
 
-### Extend the Repository with a Custom Finder
+## Extend the Repository with a Custom Finder
 
 A requirement that affects the Persistence domain is that users need to be able to find Orders that contain certain menu items, by Menu Item ID.
 
@@ -508,7 +508,7 @@ public interface OrdersRepository extends CrudRepository<Order, String> {
 
 The test will now pass, and the custom query is completed.
 
-### Next Steps
+### Summary
 
 Congratulations, Order data is safely stored in a JPA managed relational database.
 
