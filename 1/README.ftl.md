@@ -62,34 +62,41 @@ To manage this friction you need to create concepts and components in the Persis
 
 Modern data stores adopt one or more Data Models, although typically only one per technology. The way that you can expect to interact with a data store, based on the features and limits of its data model, will be different and so different capabilities and data access patterns will be needed.
 
-Some of the most common Data Models currently is use are:
+Some of the most common Data Models currently in use are:
 
 **Relational**
 
-The relational model of data storage is characterised by the concepts of Tables, with structured Columns made up of Rows.  They are accessed by a dialect of the Structured Query Language (SQL). Columns may define references to Columns in other tables, known as relations. These relations can be enforced by the database.     Relational Databases are highly structured, have an explicit Schema and almost invariably first class support for transactions.
+The relational model of data storage is characterised by the concepts of Tables, with structured Columns made up of Rows.  This is is very analogous to a spreadsheet, where a table is like a worksheet, a row represents one record, and a column contains one specific piece of information. They are accessed by a dialect of the Structured Query Language (SQL). 
+
+What makes this type of data store relational is the way that Columns may define references to Columns in other tables, known as relations. These relations are usually strongly enforced by the database.
+
+Relational Databases are highly structured, have an explicit Schema and almost invariably first class support for transactions.
 
 You will see the H2 Database in use in this tutorial, supported by [Spring Data JPA](http://www.springsource.org/spring-data/jpa)
     
 **Document**
 
-A Data Store following the Document Data Model will have a far looser schema that a relational database, if it has on at all. Documents are structured, rich data structures that can contain nested documents, lists, maps and other constructs internally, all within a single document. Queries can be written against any value in the document structure, leading to very rich querying capabilities and document structures.  The logical collections of documents do not have to conform to a common schema.
+A Data Store following the Document Data Model will have a far looser schema than a relational database, if it has one at all. Documents are structured, rich data structures that can contain nested documents, lists, maps and other constructs internally, all within a single document. Some elements of the documents can be optional, giving huge flexibility to the system designer.
+
+Queries can be written against any value in the document structure, leading to very rich querying capabilities and document structures.  I distinct difference with relational databases is that the logical collections of documents do not have to conform to a common schema. Documents aren't as heavily defined by relationships between columns, but instead more focused on the content of the documents.
 
 You will see MongoDB in use in this tutorial, supported by [Spring Data MongoDB](http://www.springsource.org/spring-data/mongodb)
 
-**Key/ Value**
+**Key/Value**
 
-Key/ Value is one of the simplest forms of Data Model.  It is analogous to a java.util.Map, just a key with an associated value.  They tend to be very fast and easily distributable.
+Key/Value is one of the simplest forms of Data Model.  It is analogous to a Java Map, known in other languages as either a hash table or an associative array. The data entries involve just a key with an associated value. They tend to be very fast and easily distributable. This is sometimes viewed as a caching data solution. Because many critical, high performance systems depend on such simple constructs, Key/Value data stores have risen quickly in popularity.
+
 Some implementations offer a querying capability against the value data.
 
-No implementation of a simple key/ value store is used in this tutorial. Redis is supported by [Spring Data Redis](http://www.springsource.org/spring-data/redis)
+No implementation of a simple key/value store is used in this tutorial. Redis is supported by [Spring Data Redis](http://www.springsource.org/spring-data/redis)
 
 **Data Grid**
 
-Data Grid is less well defined than the other models, but mostly commonly means a Key/ Value store that has advanced replication and server side data processing built in.
+Data Grid is less well defined than the other models, but mostly commonly means a Key/Value store that has advanced replication and server side data processing built in. This is sometimes viewed as a caching data solution.
 
-Gemfire is such a store, and allows accessing data via a Map interface, querying using a rich query language, and also writing code that executes on the Gemfire cluster in a distributed fashion.
+GemFire is such a store, and allows accessing data through either a Map interface, a rich query language, or writing code that executes on the GemFire cluster in a distributed fashion.
 
-It is supported by [Spring Data Gemfire](http://www.springsource.org/spring-gemfire)
+It is supported by [Spring Data GemFire](http://www.springsource.org/spring-gemfire)
 
 [Next… Storing Menu Data Using MongoDB](../2/)
 
