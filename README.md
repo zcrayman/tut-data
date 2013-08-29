@@ -3,23 +3,28 @@ In this tutorial you'll use Spring to store data in multiple data stores.
 
 ## Persistence and Storage
 
-The field of Data Persistence has progressed enormously over the past 20 years and in the present day covers a myriad of data models and data storage implementations.
+The field of Data Persistence has progressed enormously over the past 20 years. In the present day it covers a myriad of data models and data storage implementations.
 
-Adopting the right data model and data store for your application can be a complex process and is often decided on at the start of a project and set in stone from thereon.
+Adopting the right data model and data store for your application can be a complex process and is often decided at the start of a project and set in stone from thereon.
 
-Since you're reading this tutorial, it's likely that you are considering implementing a Repository because:-
+Since you're reading this tutorial, it's likely that you are considering implementing a Repository because:
 
 * You have a data store that you need to access
 * You have an existing Spring Data application that you need to maintain
 * You want to investigate different data stores in the context of Spring Data
 
-This tutorial covers three data stores, MongoDB, a relational database using JPA and Pivotal Gemfire. 
+This tutorial covers three data stores: MongoDB, a relational database using JPA and Pivotal GemFire. 
 
 ## What you'll build
 
 Yummy Noodle Bar is going global.  As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
 
-You will extend Yummmy Noodle Bar's internal application to store Menu data in MongoDB, Order data in a Relational Database and track the Status of an Order using Gemfire. Spring Data will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
+You will extend Yummmy Noodle Bar's internal application to:
+- Store Menu data in MongoDB
+- Store Order data in a Relational Database
+- Track the Status of an Order using GemFire. 
+
+Spring Data will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
 
 ![Yummy Noodle Bar](images/yummynoodle.jpg)
 
@@ -27,10 +32,13 @@ You will extend Yummmy Noodle Bar's internal application to store Menu data in M
 ## What you'll need
 To work through this tutorial you'll need a few things:
 
-* About an hour of your time to complete the tutorial.
-* A copy of the code (TODO - downloadable as Zip and/or git clone).
-* An IDE of your choice; we recommend [SpringSource Tool Suite](http://www.springsource.org/sts) which is available as a [free download](http://www.springsource.org/sts).
+* About an hour.
+* A copy of the code (available either by [git][u-git] or a [downloadable zip file](https://github.com/spring-guides/tut-data/archive/master.zip)).
+* An IDE of your choice. Spring recommends [Spring Tool Suite](http://www.springsource.org/sts), which is a [free download](http://www.springsource.org/sts).
 * An installation of [MongoDB](http://www.mongodb.org/)
+
+[u-git]: /understanding/Git
+[gs-gradle]: /guides/gs/gradle
 
 ## The Home of Repositories in your Application Architecture
 
@@ -50,7 +58,7 @@ That's enough on the design constraints placed on the components that implement 
 * [Step 1: Understanding your Data Model and Modelling the Persistence Domain](1/)
 * [Step 2: Storing Menu Data Using MongoDB](2/)
 * [Step 3: Storing Order Data Using JPA](3/)
-* [Step 4: Storing the Order Status in Gemfire using Spring Data Gemfire](4/)
+* [Step 4: Storing the Order Status in GemFire using Spring Data GemFire](4/)
 * [Step 5: Extending the Persistence Domain to Send Events](5/)
 * [Recap and Where to go Next?](6/)
 
