@@ -8,8 +8,13 @@ find . -type f -name 'README.ftl.md' |sed 's#\(.*\)/.*#\1#' |sort -u
 
 echo "Converting ..."
 
+ORIG=`pwd`
+
 for loc in "${doc_locations[@]}";
 do
   echo " $loc/README.ftl.md -> $loc/README.md"
-  cat $loc/README.ftl.md | fpp > $loc/README.md
+  cd $loc
+  cat README.ftl.md | fpp > README.md
+  cd $ORIG
 done
+
