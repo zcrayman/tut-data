@@ -50,7 +50,9 @@ public class OrderStatusMappingIntegrationTests {
   public void thatItemCustomMappingWorks() throws Exception {
     OrderStatus status = PersistenceFixture.startedCooking(UUID.randomUUID());
 
+    // {!begin yummyTemplatePut}
     yummyTemplate.put(4L, status);
+    // {!end yummyTemplatePut}
 
     OrderStatus results = yummyTemplate.findUnique("SELECT * from /YummyNoodleOrder");
 

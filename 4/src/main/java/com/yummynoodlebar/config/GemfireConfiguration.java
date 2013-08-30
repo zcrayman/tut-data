@@ -9,7 +9,9 @@ import org.springframework.data.gemfire.repository.config.EnableGemfireRepositor
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+// {!begin import}
 @ImportResource({"classpath:gemfire/client.xml"})
+// {!end import}
 @EnableTransactionManagement
 @EnableGemfireRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
     includeFilters = @ComponentScan.Filter(value = {OrderStatusRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
