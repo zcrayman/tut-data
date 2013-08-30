@@ -8,7 +8,7 @@ Complicating matters, the Yummy Noodle Bar application is to be deployed as a cl
 
 To support this, you need to extend the persistence domain to provide notifications across all application instances every time the status of an order is updated.
 
-To achieve this, you will use the Continuous Query feature of Gemfire to generate update notification events on every application instance when a modification is made.
+To achieve this, you will use the Continuous Query feature of GemFire to generate update notification events on every application instance when a modification is made.
 
 ## Data Grids and Continuous Queries
 
@@ -24,8 +24,9 @@ the method `com.yummynoodlebar.core.services.OrderStatusUpdateService.setOrderSt
 
 Approach this in a highly test driven way.  This is quite a complex requirement, so some setup is required for the test before writing it.
 
-Create a stub implementation of `OrderStatusUpdateService`. This stub will receive events and count them off against a `javax.concurrent.CountDownLatch` to ensure that the correct number of events are recieved in the given time.
+Create a stub implementation of `OrderStatusUpdateService`. This stub will receive events and count them off against a `javax.concurrent.CountDownLatch` to ensure that the correct number of events are received in the given time.
 
+`src/test/java/com/yummynoodlebar/persistence/integration/fakecore/CountingOrderStatusService.java`
 ```java
 package com.yummynoodlebar.persistence.integration.fakecore;
 
@@ -56,8 +57,10 @@ public class CountingOrderStatusService implements OrderStatusUpdateService {
   }
 }
 ```
-Next, create a new test only Spring Configuration.  This will stand in the place of the any Core domain Spring configuration.
 
+Next, create a new test-only Spring Configuration.  This will stand in the place of the any Core domain Spring configuration.
+
+`src/test/java/com/yummynoodlebar/persistence/integration/fakecore/FakeCoreConfiguration.java`
 ```java
 package com.yummynoodlebar.persistence.integration.fakecore;
 
@@ -78,6 +81,7 @@ This is a standard `@Configuration`, simply creating a new bean instance of the 
 
 With that infrastructure in place, it is possible to write the test.
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusNotificationsIntegrationTests.java`
 ```java
 package com.yummynoodlebar.persistence.integration;
 
@@ -139,7 +143,7 @@ public class OrderStatusNotificationsIntegrationTests {
 }
 ```
 
-The test is naturally multi threaded.  A Continuous Query will operate in a thread controlled by the Gemfire DataSource, and so we must assume that update events will be asynchronous.  This is the reason why a CountDownLatch is used rather than a more standard stub.  We require a way to synchronise behaviour across multiple threads, and control the timeout of the test to stop it hanging our full test execution.
+The test is naturally multi-threaded.  A Continuous Query will operate in a thread controlled by the GemFire DataSource, and so we must assume that update events will be asynchronous.  This is the reason why a CountDownLatch is used rather than a more standard stub.  We require a way to synchronise behaviour across multiple threads, and control the timeout of the test to stop it hanging our full test execution.
 
 Continuous Queries require a reference to a spring bean that has a standardised method signature, of which there is a selection available.  A good compromise between ease of use and functionality is the signature.
 
@@ -151,6 +155,7 @@ This bean is then called whenever the Query obtains some new data that matches.
 
 Create a new class `com.yummynoodlebar.persistence.services.StatusUpdateGemfireNotificationListener`
 
+`src/main/java/com/yummynoodlebar/persistence/services/StatusUpdateGemfireNotificationListener.java`
 ```java
 package com.yummynoodlebar.persistence.services;
 
@@ -185,10 +190,11 @@ public class StatusUpdateGemfireNotificationListener {
 }
 ```
 
-This class transforms the Gemfire CqEvent into a SetOrderStatusEvent to be consumed by the Core domain, and gains a reference to OrderStatusUpdateService.
+This class transforms the GemFire CqEvent into a SetOrderStatusEvent to be consumed by the Core domain, and gains a reference to OrderStatusUpdateService.
 
-Update GemfireConfiguration to create an instance of this bean
+Update GemfireConfiguration to create an instance of this bean:
 
+`src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java`
 ```java
 package com.yummynoodlebar.config;
 
@@ -208,13 +214,15 @@ public class GemfireConfiguration {
   @Bean public StatusUpdateGemfireNotificationListener statusUpdateListener() {
     return new StatusUpdateGemfireNotificationListener();
   }
+
 }
 ```
 
 Now the Continuous Query itself may be implemented.  This is configured purely in the Spring XML configuration.
 
-Open `resources/gemfire/client.xml` and alter it to read
+Open `resources/gemfire/client.xml` and alter it to read:
 
+`src/main/resources/gemfire/client.xml`
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -253,7 +261,7 @@ This addition creates a new Continuous Query, with the given query being continu
 
 This will use the datasource created above, using the default name of gemfireCache.  This may be altered if desired.
 
-First, run the local Gemfire server
+First, run the local GemFire server
 
     ./gradlew run
     
