@@ -18,3 +18,5 @@ do
   cd $ORIG
 done
 
+echo "SIDEBAR.ftl.md -> SIDEBAR.md"
+cat SIDEBAR.ftl.md | fpp > SIDEBAR.md

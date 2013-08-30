@@ -20,5 +20,5 @@
 
 * [NoSQL][u-nosql]
 
-[u-nosql]: /understanding/NoSQL
-[u-json]: /understanding/JSON
+<@u_nosql/>
+<@u_json/>
