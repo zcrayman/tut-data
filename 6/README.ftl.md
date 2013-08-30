@@ -2,7 +2,7 @@
 
 You have successfully stored all of Yummy Noodle Bars data and made the application more robust and scalable at the same time.
 
-Here's what you covered :-
+Here's what you covered :
 
 * Understood the different Data Models that MongoDB, JPA and Gemfire cover and how they may affect your application.
 * Built a Spring Data MongoDB Repository to store and retrieve Menu data from MongoDB
