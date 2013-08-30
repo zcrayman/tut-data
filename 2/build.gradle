@@ -8,8 +8,10 @@ repositories {
 
 dependencies {
 
+  // {!begin deps}
   compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
   compile 'cglib:cglib:2.2.2'
+  // {!end deps}
 
   compile 'org.springframework:spring-core:3.2.3.RELEASE'
 

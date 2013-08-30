@@ -15,6 +15,7 @@ import static junit.framework.TestCase.assertTrue;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
 //@ContextConfiguration(classes = {CoreConfig.class, MVCConfig.class})
+// {!begin top}
 public class MenuItemMappingIntegrationTests {
 
   MongoOperations mongo;
@@ -49,3 +50,4 @@ public class MenuItemMappingIntegrationTests {
     assertTrue(usingMongo(mongo).collection("menu").first().hasField("itemName"));
   }
 }
+// {!end top}

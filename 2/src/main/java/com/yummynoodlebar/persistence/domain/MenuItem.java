@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import java.math.BigDecimal;
 import java.util.Set;
 
+// {!begin top}
 @Document(collection = "menu")
 public class MenuItem {
 
@@ -18,6 +19,7 @@ public class MenuItem {
   @Field("itemName")
   @Indexed
   private String name;
+// {!end top}
 
   private String description;
 
