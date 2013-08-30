@@ -22,8 +22,10 @@ import static junit.framework.TestCase.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {JPAConfiguration.class})
+// {!begin transactional}
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
+// {!end transactional}
 public class OrdersRepositoryIntegrationTests {
 
   @Autowired

@@ -25,7 +25,9 @@ public class OrderMappingIntegrationTests {
 
   @Test
   public void thatItemCustomMappingWorks() throws Exception {
+	// {!begin assertion}
     assertTableExists(manager, "NOODLE_ORDERS");
+    // {!end assertion}
     assertTableExists(manager, "ORDER_ORDER_ITEMS");
 
     assertTableHasColumn(manager, "NOODLE_ORDERS", "ORDER_ID");

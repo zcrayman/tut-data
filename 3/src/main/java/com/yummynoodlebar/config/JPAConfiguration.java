@@ -20,11 +20,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+// {!begin transactions}
 @Configuration
 @EnableJpaRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
     includeFilters = @ComponentScan.Filter(value = {OrdersRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JPAConfiguration {
+// {!end transactions}
 
   @Bean
   public DataSource dataSource() throws SQLException {

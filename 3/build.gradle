@@ -6,11 +6,13 @@ repositories {
 
 dependencies {
 
+  // {!begin deps}
   compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
   compile 'org.springframework.data:spring-data-jpa:1.3.4.RELEASE'
   compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
   compile 'org.hibernate:hibernate-entitymanager:4.0.1.Final'
   runtime 'com.h2database:h2:1.3.173'
+  // {!end deps}
   compile 'cglib:cglib:2.2.2'
 
   ['spring-core','spring-orm', 'spring-aop', 'spring-beans', 'spring-tx', 'spring-expression', 'spring-context'].each {

@@ -28,18 +28,15 @@ The JPA standard and provider will provide enough of an abstraction that we may 
     
 ## Import Spring Data JPA
 
-Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle
+Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle 's list of dependencies:
 
-```groovy
-dependencies {
-   ...
+`build.gradle`
+```gradle
   compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
   compile 'org.springframework.data:spring-data-jpa:1.3.4.RELEASE'
   compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
   compile 'org.hibernate:hibernate-entitymanager:4.0.1.Final'
   runtime 'com.h2database:h2:1.3.173'
-  ...
-}
 ```
 
 Also here is the JDBC Driver for H2.
@@ -54,8 +51,9 @@ This class will check that the class `com.yummynoodle.persistence.domain.Order` 
 
 Next, create an empty class `com.yummynoodlebar.config.JPAConfiguration`.  This will contain setup necessary to initialise the necessary JPA infrastructure.
 
-Once JPAConfiguration is present, update `OrderMappingIntegrationTests` to read
+Once JPAConfiguration is present, update `OrderMappingIntegrationTests` to read:
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java`
 ```java
 package com.yummynoodlebar.persistence.integration;
 
@@ -87,16 +85,18 @@ public class OrderMappingIntegrationTests {
     assertTableExists(manager, "NOODLE_ORDERS");
     assertTableExists(manager, "ORDER_ORDER_ITEMS");
 
-    assertTableHasColumn(manager, "NOODLE_ORDERS", "ID");
+    assertTableHasColumn(manager, "NOODLE_ORDERS", "ORDER_ID");
     assertTableHasColumn(manager, "NOODLE_ORDERS", "SUBMISSION_DATETIME");
   }
+
 }
 ```
 
 This test is making use of an existing helper class `JPAAssertions` that makes use of the Hibernate JPA Provider and direct JDBC to inspect what has been done to the database schema.
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java`
 ```java
-assertTableExists(manager, "NOODLE_ORDERS");
+    assertTableExists(manager, "NOODLE_ORDERS");
 ```
 
 This line states the expectation that the table NOODLE_ORDERS exists. 
@@ -105,8 +105,9 @@ If required, these tests could be extended to further check the schema definitio
 
 This test will not pass, however, as the JPA infrastructure needed to connect `Order` with the database has not been initialised.
 
-Update `JPAConfiguration` to read
+Update `JPAConfiguration` to read:
 
+`src/main/java/com/yummynoodlebar/config/JPAConfiguration.java`
 ```java
 package com.yummynoodlebar.config;
 
@@ -131,6 +132,8 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Configuration
+@EnableJpaRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
+    includeFilters = @ComponentScan.Filter(value = {OrdersRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JPAConfiguration {
 
@@ -189,8 +192,9 @@ Spring provides a exception translation framework to translate exceptions from m
 
 The test will now run without compilation or runtime errors, but will fail as the JPA entity is not set up.
 
-Update `com.yummynoodle.persistence.domain.Order` to read
+Update `com.yummynoodle.persistence.domain.Order` to read:
 
+`src/main/java/com/yummynoodlebar/persistence/domain/Order.java`
 ```java
 package com.yummynoodlebar.persistence.domain;
 
@@ -306,6 +310,7 @@ In the same way as for MongoDB, Spring Data provides a way to automatically crea
 
 Create a new test class to check the Repository.
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java`
 ```java
 package com.yummynoodlebar.persistence.integration;
 
@@ -364,17 +369,17 @@ public class OrdersRepositoryIntegrationTests {
   }
 
 }
-
 ```
 
-The section 
+The section following section is new:
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java`
 ```java
 @Transactional
 @TransactionConfiguration(defaultRollback = true)
 ```
 
-Is new.  These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class requires a transaction to be started and stopped around it, and that the transaction should be, by default, rolled back on method completion.  
+These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class requires a transaction to be started and stopped around it, and that the transaction should be, by default, rolled back on method completion.  
 
 This gives a natural way to construct tests against a database, as you may update the database through the test, reading and writing at will, and at the end of the test, the transaction will be rolled back and the data discarded, leaving a fresh environment for the next test to exectute within.
 
@@ -382,32 +387,36 @@ This test requires an instance of `OrdersRepository` and saves several Order ins
 
 This will fail, as the implementation of `OrdersRepository` does not yet exist.
 
-To solve this, update `JPAConfiguration` to include enable the JPA Repository system.
+To solve this, update `JPAConfiguration` to enable the JPA Repository system.
 
-Again, the desired repository is selected explicitly as multiple data sources/ Spring Data configurations are being used.
+Again, the desired repository is selected explicitly as multiple data sources/Spring Data configurations are being used.
 
+`src/main/java/com/yummynoodlebar/config/JPAConfiguration.java`
 ```java
-
 @Configuration
 @EnableJpaRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
     includeFilters = @ComponentScan.Filter(value = {OrdersRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
 @EnableTransactionManagement
 public class JPAConfiguration {
-
 ```
+    
+And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`:
 
-And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`
-
+`src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java`
 ```java
 package com.yummynoodlebar.persistence.repository;
 
 import com.yummynoodlebar.persistence.domain.Order;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
-public interface OrdersRepository extends CrudRepository<Order, UUID> {
+import java.util.List;
 
-}
+public interface OrdersRepository extends CrudRepository<Order, String> {
+  Order findById(String key);
 ```
+
 The test will now pass correctly, indicating that an implementation of `OrderRepository` is being created at runtime and works as expected.
 
 ## Extend the Repository with a Custom Finder
@@ -416,8 +425,10 @@ A requirement that affects the Persistence domain is that users need to be able 
 
 As you should be comfortable with now, create a new test `OrdersRepositoryFindOrdersContainingTests` that will ensure this functionality is implemented correctly.
 
+`src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryFindOrdersContainingTests.java`
 ```java
 package com.yummynoodlebar.persistence.integration;
+
 
 import com.yummynoodlebar.config.JPAConfiguration;
 import com.yummynoodlebar.persistence.domain.Order;
@@ -470,6 +481,7 @@ public class OrdersRepositoryFindOrdersContainingTests {
   }
 
 }
+
 ```
 
 Again, this test is a transactional database test, expecting database rollback on test conclusion.  
@@ -477,8 +489,9 @@ It saves a set of orders and performs two queries using a method `findOrdersCont
 
 Now, to implement the method, open the repository and update it with the new method
 
+`src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java`
 ```java
-@Query(value = "select no.* from NOODLE_ORDERS no where no.ORDER_ID in (select ID from ORDER_ORDER_ITEMS where MENU_ID = :menuId)", nativeQuery = true)
+  @Query(value = "select no.* from NOODLE_ORDERS no where no.ORDER_ID in (select ID from ORDER_ORDER_ITEMS where MENU_ID = :menuId)", nativeQuery = true)
   List<Order> findOrdersContaining(@Param("menuId") String menuId);
 ```
 
@@ -486,8 +499,9 @@ This class uses a custom @Query. It passes in a SQL query, for which you have to
 
 Based on our knowledge of the mapping, using this SQL statement is safe, and we can rely on the structure it assumes.
 
-The full listing is.
+The full listing is:
 
+`src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java`
 ```java
 package com.yummynoodlebar.persistence.repository;
 

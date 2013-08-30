@@ -28,19 +28,9 @@ The JPA standard and provider will provide enough of an abstraction that we may 
     
 ## Import Spring Data JPA
 
-Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle
+Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle 's list of dependencies:
 
-```groovy
-dependencies {
-   ...
-  compile 'org.springframework.data:spring-data-mongodb:1.2.3.RELEASE'
-  compile 'org.springframework.data:spring-data-jpa:1.3.4.RELEASE'
-  compile 'org.hibernate.javax.persistence:hibernate-jpa-2.0-api:1.0.1.Final'
-  compile 'org.hibernate:hibernate-entitymanager:4.0.1.Final'
-  runtime 'com.h2database:h2:1.3.173'
-  ...
-}
-```
+    <@snippet "build.gradle" "deps" />
 
 Also here is the JDBC Driver for H2.
 
@@ -54,50 +44,13 @@ This class will check that the class `com.yummynoodle.persistence.domain.Order` 
 
 Next, create an empty class `com.yummynoodlebar.config.JPAConfiguration`.  This will contain setup necessary to initialise the necessary JPA infrastructure.
 
-Once JPAConfiguration is present, update `OrderMappingIntegrationTests` to read
+Once JPAConfiguration is present, update `OrderMappingIntegrationTests` to read:
 
-```java
-package com.yummynoodlebar.persistence.integration;
-
-import com.yummynoodlebar.config.JPAConfiguration;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-
-import static com.yummynoodlebar.persistence.domain.fixture.JPAAssertions.assertTableExists;
-import static com.yummynoodlebar.persistence.domain.fixture.JPAAssertions.assertTableHasColumn;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JPAConfiguration.class})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class OrderMappingIntegrationTests {
-
-  @Autowired
-  EntityManager manager;
-
-  @Test
-  public void thatItemCustomMappingWorks() throws Exception {
-    assertTableExists(manager, "NOODLE_ORDERS");
-    assertTableExists(manager, "ORDER_ORDER_ITEMS");
-
-    assertTableHasColumn(manager, "NOODLE_ORDERS", "ID");
-    assertTableHasColumn(manager, "NOODLE_ORDERS", "SUBMISSION_DATETIME");
-  }
-}
-```
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" />
 
 This test is making use of an existing helper class `JPAAssertions` that makes use of the Hibernate JPA Provider and direct JDBC to inspect what has been done to the database schema.
 
-```java
-assertTableExists(manager, "NOODLE_ORDERS");
-```
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" "assertion" />
 
 This line states the expectation that the table NOODLE_ORDERS exists. 
 This is followed by the checks that assert the column structure.
@@ -105,76 +58,9 @@ If required, these tests could be extended to further check the schema definitio
 
 This test will not pass, however, as the JPA infrastructure needed to connect `Order` with the database has not been initialised.
 
-Update `JPAConfiguration` to read
+Update `JPAConfiguration` to read:
 
-```java
-package com.yummynoodlebar.config;
-
-import com.yummynoodlebar.persistence.repository.OrdersRepository;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
-@Configuration
-@EnableTransactionManagement
-public class JPAConfiguration {
-
-  @Bean
-  public DataSource dataSource() throws SQLException {
-
-    EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-    return builder.setType(EmbeddedDatabaseType.H2).build();
-  }
-
-  @Bean
-  public EntityManagerFactory entityManagerFactory() throws SQLException {
-
-    HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-    vendorAdapter.setGenerateDdl(true);
-
-    LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-    factory.setJpaVendorAdapter(vendorAdapter);
-    factory.setPackagesToScan("com.yummynoodlebar.persistence.domain");
-    factory.setDataSource(dataSource());
-    factory.afterPropertiesSet();
-
-    return factory.getObject();
-  }
-
-  @Bean
-  public EntityManager entityManager(EntityManagerFactory entityManagerFactory) {
-    return entityManagerFactory.createEntityManager();
-  }
-
-  @Bean
-  public PlatformTransactionManager transactionManager() throws SQLException {
-
-    JpaTransactionManager txManager = new JpaTransactionManager();
-    txManager.setEntityManagerFactory(entityManagerFactory());
-    return txManager;
-  }
-
-  @Bean
-  public HibernateExceptionTranslator hibernateExceptionTranslator() {
-    return new HibernateExceptionTranslator();
-  }
-}
-```
+    <@snippet path="src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" />
 
 The method `DataSource dataSource()` creates the embedded H2 database.  This creates a new H2 instance within the same ApplicationContext and provides a DataSource interface to it, usable by JPA.
 
@@ -189,95 +75,9 @@ Spring provides a exception translation framework to translate exceptions from m
 
 The test will now run without compilation or runtime errors, but will fail as the JPA entity is not set up.
 
-Update `com.yummynoodle.persistence.domain.Order` to read
+Update `com.yummynoodle.persistence.domain.Order` to read:
 
-```java
-package com.yummynoodlebar.persistence.domain;
-
-import com.yummynoodlebar.events.orders.OrderDetails;
-
-import javax.persistence.*;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
-
-@Entity(name = "NOODLE_ORDERS")
-public class Order {
-
-  @Column(name = "SUBMISSION_DATETIME")
-  private Date dateTimeOfSubmission;
-
-  @ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
-  @JoinTable(name="ORDER_ORDER_ITEMS", joinColumns=@JoinColumn(name="ID"))
-  @MapKeyColumn(name="MENU_ID")
-  @Column(name="VALUE")
-  private Map<String, Integer> orderItems;
-
-  @Transient
-  private OrderStatus orderStatus;
-
-  @Id
-  @Column(name = "ORDER_ID")
-  private String id;
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  public void setDateTimeOfSubmission(Date dateTimeOfSubmission) {
-    this.dateTimeOfSubmission = dateTimeOfSubmission;
-  }
-
-  public OrderStatus getStatus() {
-    return orderStatus;
-  }
-
-  public void setStatus(OrderStatus orderStatus) {
-    this.orderStatus = orderStatus;
-  }
-
-  public Date getDateTimeOfSubmission() {
-    return dateTimeOfSubmission;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setOrderItems(Map<String, Integer> orderItems) {
-    if (orderItems == null) {
-      this.orderItems = Collections.emptyMap();
-    } else {
-      this.orderItems = Collections.unmodifiableMap(orderItems);
-    }
-  }
-
-  public Map<String, Integer> getOrderItems() {
-    return orderItems;
-  }
-
-  public OrderDetails toOrderDetails() {
-    OrderDetails details = new OrderDetails();
-
-    details.setKey(UUID.fromString(this.id));
-    details.setDateTimeOfSubmission(this.dateTimeOfSubmission);
-    details.setOrderItems(this.getOrderItems());
-
-    return details;
-  }
-
-  public static Order fromOrderDetails(OrderDetails orderDetails) {
-    Order order = new Order();
-
-    order.id = orderDetails.getKey().toString();
-    order.dateTimeOfSubmission = orderDetails.getDateTimeOfSubmission();
-    order.orderItems = orderDetails.getOrderItems();
-
-    return order;
-  }
-}
-```
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/domain/Order.java" />
 
 `@Entity(name = "NOODLE_ORDERS")` declares this class as a JPA *Entity*. This is a class that is mapped to a database and able to be consumed by `EntityManager`.
 
@@ -306,75 +106,13 @@ In the same way as for MongoDB, Spring Data provides a way to automatically crea
 
 Create a new test class to check the Repository.
 
-```java
-package com.yummynoodlebar.persistence.integration;
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" />
 
+The section following section is new:
 
-import com.yummynoodlebar.config.JPAConfiguration;
-import com.yummynoodlebar.persistence.domain.Order;
-import com.yummynoodlebar.persistence.repository.OrdersRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" "transactional" />
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JPAConfiguration.class})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class OrdersRepositoryIntegrationTests {
-
-  @Autowired
-  OrdersRepository ordersRepository;
-
-  @Test
-  public void thatItemIsInsertedIntoRepoWorks() throws Exception {
-    String key = UUID.randomUUID().toString();
-
-    Order order = new Order();
-    order.setDateTimeOfSubmission(new Date());
-    order.setId(key);
-
-    Map<String, Integer> items = new HashMap<String, Integer>();
-
-    items.put("yummy1", 15);
-    items.put("yummy3", 12);
-    items.put("yummy5", 7);
-
-    order.setOrderItems(items);
-
-    ordersRepository.save(order);
-
-    Order retrievedOrder = ordersRepository.findById(key);
-
-    assertNotNull(retrievedOrder);
-    assertEquals(key, retrievedOrder.getId());
-    assertEquals(items.get("yummy1"), retrievedOrder.getOrderItems().get("yummy1"));
-  }
-
-}
-
-```
-
-The section 
-
-```java
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-```
-
-Is new.  These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class requires a transaction to be started and stopped around it, and that the transaction should be, by default, rolled back on method completion.  
+These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class requires a transaction to be started and stopped around it, and that the transaction should be, by default, rolled back on method completion.  
 
 This gives a natural way to construct tests against a database, as you may update the database through the test, reading and writing at will, and at the end of the test, the transaction will be rolled back and the data discarded, leaving a fresh environment for the next test to exectute within.
 
@@ -382,32 +120,16 @@ This test requires an instance of `OrdersRepository` and saves several Order ins
 
 This will fail, as the implementation of `OrdersRepository` does not yet exist.
 
-To solve this, update `JPAConfiguration` to include enable the JPA Repository system.
+To solve this, update `JPAConfiguration` to enable the JPA Repository system.
 
-Again, the desired repository is selected explicitly as multiple data sources/ Spring Data configurations are being used.
+Again, the desired repository is selected explicitly as multiple data sources/Spring Data configurations are being used.
 
-```java
+    <@snippet "src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" "transactions" />
+    
+And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`:
 
-@Configuration
-@EnableJpaRepositories(basePackages = "com.yummynoodlebar.persistence.repository",
-    includeFilters = @ComponentScan.Filter(value = {OrdersRepository.class}, type = FilterType.ASSIGNABLE_TYPE))
-@EnableTransactionManagement
-public class JPAConfiguration {
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "top" />
 
-```
-
-And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`
-
-```java
-package com.yummynoodlebar.persistence.repository;
-
-import com.yummynoodlebar.persistence.domain.Order;
-import org.springframework.data.repository.CrudRepository;
-
-public interface OrdersRepository extends CrudRepository<Order, UUID> {
-
-}
-```
 The test will now pass correctly, indicating that an implementation of `OrderRepository` is being created at runtime and works as expected.
 
 ## Extend the Repository with a Custom Finder
@@ -416,95 +138,22 @@ A requirement that affects the Persistence domain is that users need to be able 
 
 As you should be comfortable with now, create a new test `OrdersRepositoryFindOrdersContainingTests` that will ensure this functionality is implemented correctly.
 
-```java
-package com.yummynoodlebar.persistence.integration;
-
-import com.yummynoodlebar.config.JPAConfiguration;
-import com.yummynoodlebar.persistence.domain.Order;
-import com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture;
-import com.yummynoodlebar.persistence.repository.OrdersRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {JPAConfiguration.class})
-@Transactional
-@TransactionConfiguration(defaultRollback = true)
-public class OrdersRepositoryFindOrdersContainingTests {
-
-  @Autowired
-  OrdersRepository ordersRepository;
-
-  @Autowired
-  EntityManager entityManager;
-
-  @Test
-  public void thatSearchingForOrdesContainingWorks() throws Exception {
-
-    ordersRepository.save(PersistenceFixture.standardOrder());
-    ordersRepository.save(PersistenceFixture.standardOrder());
-    ordersRepository.save(PersistenceFixture.yummy16Order());
-    ordersRepository.save(PersistenceFixture.yummy16Order());
-
-    List<Order> retrievedOrders = ordersRepository.findOrdersContaining("yummy16");
-
-    assertNotNull(retrievedOrders);
-    assertEquals(2, retrievedOrders.size());
-    assertEquals(22, (int) retrievedOrders.get(0).getOrderItems().get("yummy16"));
-
-    retrievedOrders = ordersRepository.findOrdersContaining("yummy3");
-
-    assertNotNull(retrievedOrders);
-    assertEquals(2, retrievedOrders.size());
-  }
-
-}
-```
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryFindOrdersContainingTests.java" />
 
 Again, this test is a transactional database test, expecting database rollback on test conclusion.  
 It saves a set of orders and performs two queries using a method `findOrdersContaining` that will accept a menu item ID.
 
 Now, to implement the method, open the repository and update it with the new method
 
-```java
-@Query(value = "select no.* from NOODLE_ORDERS no where no.ORDER_ID in (select ID from ORDER_ORDER_ITEMS where MENU_ID = :menuId)", nativeQuery = true)
-  List<Order> findOrdersContaining(@Param("menuId") String menuId);
-```
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "query" />
 
 This class uses a custom @Query. It passes in a SQL query, for which you have to set nativeQuery=true.  Without `nativeQuery=true', the string in @Query is assumed to be a JPA Query Language query instead.
 
 Based on our knowledge of the mapping, using this SQL statement is safe, and we can rely on the structure it assumes.
 
-The full listing is.
+The full listing is:
 
-```java
-package com.yummynoodlebar.persistence.repository;
-
-import com.yummynoodlebar.persistence.domain.Order;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
-
-import java.util.List;
-
-public interface OrdersRepository extends CrudRepository<Order, String> {
-  Order findById(String key);
-
-  @Query(value = "select no.* from NOODLE_ORDERS no where no.ORDER_ID in (select ID from ORDER_ORDER_ITEMS where MENU_ID = :menuId)", nativeQuery = true)
-  List<Order> findOrdersContaining(@Param("menuId") String menuId);
-}
-```
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" />
 
 The test will now pass, and the custom query is completed.
 
