@@ -30,7 +30,7 @@ The JPA standard and provider will provide enough of an abstraction that we may 
 
 Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle 's list of dependencies:
 
-    <@snippet "build.gradle" "deps" />
+    <@snippet "build.gradle" "deps" "/complete" />
 
 Also here is the JDBC Driver for H2.
 
@@ -46,11 +46,11 @@ Next, create an empty class `com.yummynoodlebar.config.JPAConfiguration`.  This 
 
 Once JPAConfiguration is present, update `OrderMappingIntegrationTests` to read:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" prefix="complete"/>
 
 This test is making use of an existing helper class `JPAAssertions` that makes use of the Hibernate JPA Provider and direct JDBC to inspect what has been done to the database schema.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" "assertion" />
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" "assertion"  "complete"/>
 
 This line states the expectation that the table NOODLE_ORDERS exists. 
 This is followed by the checks that assert the column structure.
@@ -60,7 +60,7 @@ This test will not pass, however, as the JPA infrastructure needed to connect `O
 
 Update `JPAConfiguration` to read:
 
-    <@snippet path="src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" prefix="complete"/>
 
 The method `DataSource dataSource()` creates the embedded H2 database.  This creates a new H2 instance within the same ApplicationContext and provides a DataSource interface to it, usable by JPA.
 
@@ -77,7 +77,7 @@ The test will now run without compilation or runtime errors, but will fail as th
 
 Update `com.yummynoodle.persistence.domain.Order` to read:
 
-    <@snippet path="src/main/java/com/yummynoodlebar/persistence/domain/Order.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/domain/Order.java" prefix="complete"/>
 
 `@Entity(name = "NOODLE_ORDERS")` declares this class as a JPA *Entity*. This is a class that is mapped to a database and able to be consumed by `EntityManager`.
 
@@ -106,11 +106,11 @@ In the same way as for MongoDB, Spring Data provides a way to automatically crea
 
 Create a new test class to check the Repository.
 
-    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java"  prefix="complete"/>
 
 The section following section is new:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" "transactional" />
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" "transactional" "complete"/>
 
 These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class requires a transaction to be started and stopped around it, and that the transaction should be, by default, rolled back on method completion.  
 
@@ -124,11 +124,11 @@ To solve this, update `JPAConfiguration` to enable the JPA Repository system.
 
 Again, the desired repository is selected explicitly as multiple data sources/Spring Data configurations are being used.
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" "transactions" />
+    <@snippet "src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" "transactions" "complete"/>
     
 And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "top" />
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "top" "complete"/>
 
 The test will now pass correctly, indicating that an implementation of `OrderRepository` is being created at runtime and works as expected.
 
@@ -138,14 +138,14 @@ A requirement that affects the Persistence domain is that users need to be able 
 
 As you should be comfortable with now, create a new test `OrdersRepositoryFindOrdersContainingTests` that will ensure this functionality is implemented correctly.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryFindOrdersContainingTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryFindOrdersContainingTests.java" prefix="complete"/>
 
 Again, this test is a transactional database test, expecting database rollback on test conclusion.  
 It saves a set of orders and performs two queries using a method `findOrdersContaining` that will accept a menu item ID.
 
 Now, to implement the method, open the repository and update it with the new method
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "query" />
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "query"  "complete"/>
 
 This class uses a custom @Query. It passes in a SQL query, for which you have to set nativeQuery=true.  Without `nativeQuery=true', the string in @Query is assumed to be a JPA Query Language query instead.
 
@@ -153,7 +153,7 @@ Based on our knowledge of the mapping, using this SQL statement is safe, and we 
 
 The full listing is:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java"  prefix="complete"/>
 
 The test will now pass, and the custom query is completed.
 

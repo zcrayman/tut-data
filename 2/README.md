@@ -103,10 +103,10 @@ public class MenuItemMappingIntegrationTests {
     mongo.dropCollection("menu");
   }
 
-//  @After
-//  public void teardown() {
-//    mongo.dropCollection("menu");
-//  }
+  @After
+  public void teardown() {
+    mongo.dropCollection("menu");
+  }
 
   @Test
   public void thatItemIsInsertedIntoCollectionHasCorrectIndexes() throws Exception {
@@ -116,7 +116,7 @@ public class MenuItemMappingIntegrationTests {
     assertEquals(1, mongo.getCollection("menu").count());
 
     assertTrue(usingMongo(mongo).collection("menu").hasIndexOn("_id"));
-    assertTrue(usingMongo(mongo).collection("menu").hasIndexOn("name"));
+    assertTrue(usingMongo(mongo).collection("menu").hasIndexOn("itemName"));
   }
 
   @Test

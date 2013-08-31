@@ -60,7 +60,7 @@ connecting to: test
 
 Import spring-data-mongodb into your project by adding it to your `build.gradle` list of dependencies:
 
-    <@snippet "build.gradle" "deps" />
+    <@snippet "build.gradle" "deps" "/complete" />
 
 ## Start with a (failing) test, introducing MongoTemplate
 
@@ -86,7 +86,7 @@ They provide some methods we can use to make our tests a bit more readable.
 
 Update `MenuItemMappingIntegrationTests` to read:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemMappingIntegrationTests.java" "top" />
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemMappingIntegrationTests.java" "top" "/complete" />
 
 This is a simple usage of MongoTemplate, using the persistence.domain.MenuItem class to push data into and out of a Mongo Collection.
 
@@ -102,7 +102,7 @@ Open `com.yummynoodlebar.persistence.domain.MenuItem`.
 
 Add the annotations @Document, @Id and @Indexed to bring the domain into line with the test expectations.
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/domain/MenuItem.java" "top" />
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/domain/MenuItem.java" "top" "/complete"/>
 
 This alters the collection used to be *menu* (instead of *MenuItem*), ensures that the field *id* is used as the Mongo document *_id* and that the field *name* is stored as *itemName* and is also indexed.
 
@@ -120,13 +120,13 @@ Create a new class at `com.yummynoodlebar.config.MongoConfiguration`, leaving it
 
 Then create a test like so:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryIntegrationTests.java" />
+    <@snippet  path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryIntegrationTests.java" prefix="/complete"/>
 
 This will fail.
 
 Open `com.yummynoodlebar.persistence.repository.MenuItemRepository` and make it look like this:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepository.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepository.java" prefix="/complete"/>
 
 CrudRepository is part of the Spring Data repository hierarchy. It acts as both a marker interface and it adds several key methods to provide us with a living, breathing implementations of a repository.
 
@@ -134,7 +134,7 @@ Everything will still compile in the project, however the test will not pass.
 
 Open `MongoConfiguration` again, and alter it to read like so:
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/MongoConfiguration.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/config/MongoConfiguration.java" prefix="/complete"/>
 
 `@Configuration` marks the class as a Spring Configuration/Java Config class, able to generate part of a Spring ApplicationContext.
 `@EnableMongoRepositories` is part of Spring Data, and works to construct the repository implementation discussed earlier. The values passed into the annotation
@@ -181,7 +181,7 @@ This will require querying deep inside the document structure to correctly ident
 
 A test.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryFindByIngredientsIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryFindByIngredientsIntegrationTests.java" prefix="/complete"/>
 
 This assumes a method named `findByIngredientsNameIn` on the repository. How do we implement that? Spring Data does it for us! We already have the method signature in the interface.
 
@@ -201,7 +201,7 @@ To use Map/Reduce, we need to gain access to the MongoTemplate directly and add 
 
 Create a new interface `com.yummynoodlebar.persistence.repository.AnalyseIngredients`:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/AnalyseIngredients.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/AnalyseIngredients.java" prefix="/complete"/>
 
 Next, update `MenuItemRepository` to include the `AnalyseIngredients` interface. This indicates to Spring Data that it should look for an implementation of that interface for extension.
 
@@ -209,21 +209,21 @@ We can now write an implementation of this new interface. Before doing that thou
 
 Create a test class `com.yummynoodlebar.persistence.integration.MenuItemRepositoryAnalyseIngredientsIntegrationTests`
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryAnalyseIngredientsIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryAnalyseIngredientsIntegrationTests.java" prefix="/complete"/>
 
 This sets up some known test data and calls the analysis method, expecting certain ingredients in known relative quantities.
 
 Lastly, create an implementation of this interface `com.yummynoodlebar.persistence.repository.MenuItemRepositoryImpl`. The name of this class `MenuItemRepositoryImpl` is very important! This marks it out as an *extension* of the repository named `MenuItemRepository`, and is automatically component scanned, instantiated and used as a delegate by Spring Data.
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepositoryImpl.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepositoryImpl.java" prefix="/complete"/>
 
 This class references two javascript functions, the mapper and the reducer, respectively.
 
 Create 2 new javascript files, in the src/main/resources directory:
 
-    <@snippet "src/main/resources/ingredientsmap.js" />
+    <@snippet path="src/main/resources/ingredientsmap.js" prefix="/complete"/>
 
-    <@snippet "src/main/resources/ingredientsreduce.js" />
+    <@snippet path="src/main/resources/ingredientsreduce.js" prefix="/complete"/>
 
 The test should now pass successfully.
 

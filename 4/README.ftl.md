@@ -16,11 +16,11 @@ You will see here the creation of a Spring Data interface to a GemFire server. T
 
 In build.gradle, add the following to your list of repositories:
 
-    <@snippet "build.gradle" "libs" />
+    <@snippet "build.gradle" "libs" "complete"/>
 
 Add the following to your list of dependencies:
 
-    <@snippet "build.gradle" "deps" />
+    <@snippet "build.gradle" "deps" "complete"/>
 
 This Maven-style repository is required to access the GemFire libraries, which are not available from maven central.
 
@@ -32,17 +32,17 @@ While it would be possible to download a full distribution, configure and run th
 
 In build.gradle, add this to the end of the file:
 
-    <@snippet "build.gradle" "run" />
+    <@snippet "build.gradle" "run" "complete" />
 
 Create a new XML file in src/main/resources/server:
 
-    <@snippet "src/main/resources/server/cache-config.xml" />
+    <@snippet path="src/main/resources/server/cache-config.xml" prefix="complete"/>
 
 This configures a basic GemFire server, and creates a *Region*, a logical partition within GemFire, that we have named 'YummyNoodleOrder'.
 
 Lastly, create the driving class `com.yummynoodlebar.persistence.services.LocalGemfireServer`:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/services/LocalGemfireServer.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/services/LocalGemfireServer.java"  prefix="complete"/>
 
 You may now start a GemFire server (on port 40404) by running 
 
@@ -60,13 +60,13 @@ First, create a new empty class `com.yummynoodlebar.config.GemfireConfiguration`
 
 Create a new test `com.yummynoodlebar.persistence.integration.OrderStatusMappingIntegrationTests` with the content.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java"  prefix="complete" />
 
 This test uses `GemFireTemplate`, seen in this test via its API interface `GemFireOperations`.  This follows the same pattern as other Spring Template classes, exposing the most common operations using consistent, simple methods, and also providing access to the low level GemFire API in a managed way via callbacks.
 
 You can see the access to the low level GemFire API in the clear() method.  This accesses the Region instance and clears it of all data.  Region implements the Map interface, as it is also conceptually a Map.  GemFire provides many features around this core concept, but you can see the map usage in the test method itself:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java" "yummyTemplatePut" />
+    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java" "yummyTemplatePut"  "complete"/>
 
 GemFireTemplate exposes a Map oriented method to interact with its configured region.
 
@@ -74,19 +74,19 @@ The test inserts a single OrderStatus into the GemFire Region and then performs 
 
 Now that a test is in place, implement GemFireConfiguration with the content:
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" prefix="complete" />
 
 This class is mainly used, at the moment, to allow the consistent use of Spring Java Configuration in tests and other context creation.  It will be extended below and in the next tutorial section.
 
 Currently, the important line is:
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" "import" />
+    <@snippet "src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" "import"  "complete"/>
 
 This imports a traditional XML based Spring configuration.  Currently, Spring Data GemFire is significantly easier to configure using XML, and certain features are not yet fully implemented.  For this reason, XML configuration is still recommended for Spring Data GemFire.
 
 Create a new file `src/main/resources/gemfire/client.xml`:
 
-    <@snippet "src/main/resources/gemfire/client.xml" />
+    <@snippet path="src/main/resources/gemfire/client.xml" prefix="complete"/>
 
 This configuration uses the GemFire Spring configuration namespace.
 
@@ -103,7 +103,7 @@ You have seen the creation of two Repository implementations against both MongoD
 
 First, create a new test `OrderStatusRepositoryIntegrationTests`:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusRepositoryIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusRepositoryIntegrationTests.java"  prefix="complete" />
 
 This test generates a new OrderStatus with a known key and passes it to OrderStatusRepository for persisting. It then retrieves the data using the method `findOne`, which will query against the *key* that is passed into the GemFire Region Map structure.
 
@@ -113,11 +113,11 @@ For this reason, the test is not marked as @Transactional, so all data access wi
 
 To implement the Repository, update `OrderStatusRepository` to read:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java"  prefix="complete" />
 
 Update `GemFireConfiguration` to enable GemFire Repositories:
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" prefix="complete"/>
 
 
 As with the other data stores, explicitly choose the Repository interface for Spring Data GemFire to implement.
@@ -128,7 +128,7 @@ GemFire was built from the beginning to understand Java objects more thoroughly 
 
 Two things are necessary, however for Spring Data to be able to generate a Repository implementation, configuring the default Region, and specifying the property to use as the Region key/ID.
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/domain/OrderStatus.java" "gemfire" />
+    <@snippet "src/main/java/com/yummynoodlebar/persistence/domain/OrderStatus.java" "gemfire"  "complete"/>
 
 First, run the local GemFire server
 
@@ -144,13 +144,13 @@ This requires a more complex query than simply by ID or Order ID. It will also r
 
 Create a new test `OrderStatusGetHistoryIntegrationTests`:
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusGetHistoryIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusGetHistoryIntegrationTests.java" prefix= "complete"/>
 
 This test creates a sequential history of a single order id, saves that list into GemFire, and then retrieves it using a new custom method.
 
 Update the repository to read:
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java"  prefix="complete" />
 
 This looks similar to the JPA custom method, and the concept is the same.  Create a new method and annotate it with a @Query, passing a string containing OQL to perform the query with.
 This query selects the distinct elements from the YummyNoodleBar Region where the order is given and then orders by statusDate, which is a property on OrderStatus.

@@ -1,7 +1,6 @@
 package com.yummynoodlebar.core.domain;
 
 import com.yummynoodlebar.events.orders.OrderDetails;
-import org.springframework.beans.BeanUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -98,9 +97,8 @@ public class Order {
   }
 
   public static Order fromOrderDetails(OrderDetails orderDetails) {
-    Order order = new Order(orderDetails.getDateTimeOfSubmission());
-
-    BeanUtils.copyProperties(orderDetails, order);
+    Order order = new Order(orderDetails.getKey(), 
+        orderDetails.getDateTimeOfSubmission());
 
     return order;
   }

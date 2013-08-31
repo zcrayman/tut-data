@@ -8,7 +8,7 @@ public interface MenuItemRepository {
 
   void delete(String key);
 
-  MenuItem findById(String key);
+  MenuItem findOne(String key);
 
   Iterable<MenuItem> findAll();
 }

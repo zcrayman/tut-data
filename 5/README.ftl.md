@@ -26,17 +26,17 @@ Approach this in a highly test driven way.  This is quite a complex requirement,
 
 Create a stub implementation of `OrderStatusUpdateService`. This stub will receive events and count them off against a `javax.concurrent.CountDownLatch` to ensure that the correct number of events are received in the given time.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/fakecore/CountingOrderStatusService.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/fakecore/CountingOrderStatusService.java" prefix="complete" />
 
 Next, create a new test-only Spring Configuration.  This will stand in the place of the any Core domain Spring configuration.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/fakecore/FakeCoreConfiguration.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/fakecore/FakeCoreConfiguration.java" prefix="complete"/>
 
 This is a standard `@Configuration`, simply creating a new bean instance of the type `OrderStatusUpdateService`.
 
 With that infrastructure in place, it is possible to write the test.
 
-    <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusNotificationsIntegrationTests.java" />
+    <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusNotificationsIntegrationTests.java" prefix="complete" />
 
 The test is naturally multi-threaded.  A Continuous Query will operate in a thread controlled by the GemFire DataSource, and so we must assume that update events will be asynchronous.  This is the reason why a CountDownLatch is used rather than a more standard stub.  We require a way to synchronise behaviour across multiple threads, and control the timeout of the test to stop it hanging our full test execution.
 
@@ -50,19 +50,19 @@ This bean is then called whenever the Query obtains some new data that matches.
 
 Create a new class `com.yummynoodlebar.persistence.services.StatusUpdateGemfireNotificationListener`
 
-    <@snippet "src/main/java/com/yummynoodlebar/persistence/services/StatusUpdateGemfireNotificationListener.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/persistence/services/StatusUpdateGemfireNotificationListener.java"  prefix="complete"/>
 
 This class transforms the GemFire CqEvent into a SetOrderStatusEvent to be consumed by the Core domain, and gains a reference to OrderStatusUpdateService.
 
 Update GemfireConfiguration to create an instance of this bean:
 
-    <@snippet "src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" />
+    <@snippet path="src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" prefix="complete"/>
 
 Now the Continuous Query itself may be implemented.  This is configured purely in the Spring XML configuration.
 
 Open `resources/gemfire/client.xml` and alter it to read:
 
-    <@snippet "src/main/resources/gemfire/client.xml" />
+    <@snippet path="src/main/resources/gemfire/client.xml" prefix="complete"/>
 
 This addition creates a new Continuous Query, with the given query being continuously evaluated.  Matching data is passed to the bean named `statusUpdateListener`, which was declared above in GemfireConfiguration.
 

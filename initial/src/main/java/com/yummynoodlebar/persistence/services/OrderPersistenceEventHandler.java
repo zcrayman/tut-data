@@ -8,6 +8,7 @@ import com.yummynoodlebar.persistence.repository.OrdersRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
@@ -37,7 +38,7 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
     order = orderRepository.save(order);
 
-    return new OrderCreatedEvent(order.getKey(), order.toOrderDetails());
+    return new OrderCreatedEvent(UUID.fromString(order.getId()), order.toOrderDetails());
   }
 
   @Override
@@ -52,7 +53,7 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
   @Override
   public OrderDetailsEvent requestOrderDetails(RequestOrderDetailsEvent requestOrderDetailsEvent) {
 
-    Order order = orderRepository.findById(requestOrderDetailsEvent.getKey());
+    Order order = orderRepository.findOne(requestOrderDetailsEvent.getKey().toString());
 
     if (order == null) {
       return OrderDetailsEvent.notFound(requestOrderDetailsEvent.getKey());
@@ -65,7 +66,7 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
   @Override
   public OrderUpdatedEvent setOrderPayment(SetOrderPaymentEvent setOrderPaymentEvent) {
-    Order order = orderRepository.findById(setOrderPaymentEvent.getKey());
+    Order order = orderRepository.findOne(setOrderPaymentEvent.getKey().toString());
 
     if(order == null) {
       return OrderUpdatedEvent.notFound(setOrderPaymentEvent.getKey());
@@ -73,31 +74,31 @@ public class OrderPersistenceEventHandler implements OrderPersistenceService {
 
     //TODO, handling payment details...
 
-    return new OrderUpdatedEvent(order.getKey(), order.toOrderDetails());
+    return new OrderUpdatedEvent(UUID.fromString(order.getId()), order.toOrderDetails());
   }
 
   @Override
   public OrderDeletedEvent deleteOrder(DeleteOrderEvent deleteOrderEvent) {
 
-    Order order = orderRepository.findById(deleteOrderEvent.getKey());
+    Order order = orderRepository.findOne(deleteOrderEvent.getKey().toString());
 
     if (order == null) {
       return OrderDeletedEvent.notFound(deleteOrderEvent.getKey());
     }
 
-    orderRepository.delete(deleteOrderEvent.getKey());
+    orderRepository.delete(deleteOrderEvent.getKey().toString());
 
     return new OrderDeletedEvent(deleteOrderEvent.getKey(), order.toOrderDetails());
   }
 
   @Override
   public OrderStatusEvent requestOrderStatus(RequestOrderStatusEvent requestOrderDetailsEvent) {
-    Order order = orderRepository.findById(requestOrderDetailsEvent.getKey());
+    OrderStatus status = orderStatusRepository.findLatestById(requestOrderDetailsEvent.getKey());
 
-    if (order == null) {
+    if (status == null) {
       return OrderStatusEvent.notFound(requestOrderDetailsEvent.getKey());
     }
 
-    return new OrderStatusEvent(requestOrderDetailsEvent.getKey(), order.getStatus().toStatusDetails());
+    return new OrderStatusEvent(requestOrderDetailsEvent.getKey(), status.toStatusDetails());
   }
 }
