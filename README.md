@@ -39,6 +39,31 @@ To work through this tutorial you'll need a few things:
 * An IDE of your choice. Spring recommends [Spring Tool Suite](http://www.springsource.org/sts), which is a [free download](http://www.springsource.org/sts).
 * An installation of [MongoDB](http://www.mongodb.org/)
 
+### Downloading and running the code
+
+If you download the code base, you'll discover each section of this tutorial in a separate folder, numbered 1, 2, 3, etc. There are also several code drops: an **initial** one at the root, and a separate **complete** code drop for each section.
+
+The **initial** code set contains:
+- a project layout
+- the core domain & event classes this tutorial starts off creating (the 'Yummy Noodle Bar Application', above)
+- some basic unit tests for some of those classes
+
+The **complete** code set in each section includes the initial code base plus the code developed up to that point in the tutorial.
+
+You can choose to start with the **initial** code set, copy-and-paste your way through the guide, and then run things at the end. Or you can start with the **complete** code set for a given section, open each file, and read the source side-by-side as you walk through the tutorial.
+
+While there are many build systems, this tutorial is built using [Gradle][gs-gradle] and includes the Gradle Wrapper, so you don't have to install anything to run the code.
+
+For example, if you want to check out the initial code set:
+
+```sh
+$ git clone git@github.com:spring-guides/tut-data.git
+$ cd tut-data/initial
+$ ./gradlew clean test
+```
+
+From there, you can inspect `build/reports/tests` and see all the test results.
+
 [u-git]: /understanding/Git
 [gs-gradle]: /guides/gs/gradle
 
