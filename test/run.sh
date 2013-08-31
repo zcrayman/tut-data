@@ -1,41 +1,33 @@
-#!/bin/sh
+#!/bin/bash
 cd $(dirname $0)
 
-cd ../2/complete
+build_locations=($(
+find ../ -type f -name 'build.gradle' |sed 's#\(.*\)/.*#\1#' |sort -u
+));
 
-echo `pwd`
-./gradlew clean build
-ret=$?
-if [ $ret -ne 0 ]; then
-exit $ret
-fi
-rm -rf build
+ORIG=`pwd`
 
-cd ../../3/complete
-echo `pwd`
-./gradlew clean build
-ret=$?
-if [ $ret -ne 0 ]; then
-exit $ret
-fi
-rm -rf build
+echo "Testing projects ..."
 
-cd ../../4/complete
-echo `pwd`
-./gradlew clean build
-ret=$?
-if [ $ret -ne 0 ]; then
-exit $ret
-fi
-rm -rf build
+OPTIONAL_CONTAINER_BUILD_TO_CHECK="task run"
 
-cd ../../5/complete
-echo `pwd`
-./gradlew clean build
-ret=$?
-if [ $ret -ne 0 ]; then
-exit $ret
-fi
-rm -rf build
+for loc in "${build_locations[@]}";
+do
+  cd $loc
+  echo `pwd`
+  if grep -q "$OPTIONAL_CONTAINER_BUILD_TO_CHECK" build.gradle;
+  then
+    echo "Tests rely on a container, skipping for now..."
+    ./gradlew clean classes testClasses
+  else
+    ./gradlew clean build
+  fi
+  ret=$?
+  if [ $ret -ne 0 ]; then
+  exit $ret
+  fi
+  rm -rf build
+  cd $ORIG
+done
 
 exit
