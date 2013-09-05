@@ -56,25 +56,27 @@ This server will have access to the classpath of the project, most importantly t
 
 > *NOTE:* When you create a standalone GemFire grid you need to provide any classes you wish to persist within a jar file on the classpath of every GemFire server.
 
-## Start with a (failing) test, introducing GemFire Template
+## Start with a (failing) test: Introducing GemFireTemplate
 
-In a similar way as with MongoDB and JPA, the first test you will write is to check that OrderStatus can be correctly persisted into GemFire.
+In a similar way as with MongoDB and JPA, the first test you need to write checks that `OrderStatus` can be correctly persisted into GemFire.
 
 Create a new test `OrderStatusMappingIntegrationTests` with the following content:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java"  prefix="complete" />
 
-This test uses `GemFireTemplate`, seen in this test via its API interface `GemFireOperations`.  This follows the same pattern as other Spring Template classes, exposing the most common operations using consistent, simple methods, and also providing access to the low level GemFire API in a managed way via callbacks.
+This test uses `GemFireTemplate`, seen in this test via its API interface `GemFireOperations`.  This follows the same pattern as other Spring Template classes, exposing the most common operations using consistent, simple methods, and also providing access to the low level GemFire API in a managed way through the use of callbacks.
 
-You can see the access to the low level GemFire API in the clear() method.  This accesses the Region instance and clears it of all data.  Region implements the Map interface, as it is also conceptually a Map.  GemFire provides many features around this core concept, but you can see the map usage in the test method itself:
+You can see the access to the low level GemFire API in the `clear()` method. This accesses the Region instance and clears it of all data. Region implements the Map interface as it is also conceptually a Map. GemFire provides many features around this core concept and you can see the map usage in the test method itself:
 
     <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java" "yummyTemplatePut"  "complete"/>
 
-GemFireTemplate exposes a Map oriented method to interact with its configured region.
+`GemFireTemplate` exposes a Map-oriented method to interact with its configured region.
 
-The test inserts a single OrderStatus into the GemFire Region and then performs a query, using the GemFire [Object Query Language (OQL)](http://en.wikipedia.org/wiki/Object_Query_Language).  This is a declarative language conceptually similar to the JPA Query Language/Hibernate Query Language, providing a syntax to query against a set of Objects and their properties and perform selections, ordering, grouping and projections against the results.
+The test inserts a single `OrderStatus` into the GemFire Region and then performs a query, using the GemFire [Object Query Language (OQL)](http://en.wikipedia.org/wiki/Object_Query_Language).  
 
-Now that a test is in place, implement GemFireConfiguration with the content:
+GemFire OQL is a declarative language similar to the JPA Query Language and Hibernate Query Languages and provides a syntax to query against a set of Objects and their properties and perform selections, ordering, grouping and projections against the results.
+
+Now that a test is in place, implement the configuration for your GemFire infrastructure by creating a new component in the Configuration domain called `GemFireConfiguration` with the following content:
 
     <@snippet path="src/main/java/com/yummynoodlebar/config/GemfireConfiguration.java" prefix="complete" />
 
