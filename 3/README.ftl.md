@@ -1,31 +1,32 @@
- 
-# Step 3: Storing Order Data Using Java Persistence API (JPA)
+## Step 3: Storing Order Data Using the Java Persistence API (JPA)
 
-Your next task for the Yummy Noodle Bar persistence project is to store Order data.  Yummy Noodle Bar has decided to use PostgreSQL to store this data, a freely available, robust, relational database.
+Your next task for the Yummy Noodle Bar persistence project is to store Order data. Yummy Noodle Bar has decided to use [PostgreSQL](http://www.postgresql.org) to store this data, a freely available, robust, relational database.
 
-Continuing from the [last section](../2/), we will work within the Persistence domain.
+Continuing from the [last section](../2/), your focus will be on developing components within the Persistence domain.
 
-In that domain we have a representation of an Order, `com.yummynoodle.persistence.domain.Order`, that we can optimise for persistence without affecting the rest of the application.
+In that domain you have a component that represents an Order, `com.yummynoodle.persistence.domain.Order` that you can optimise for persistence without affecting the rest of your application.
 
 There is an event handler, `OrderPersistenceEventHandler`, that exchanges events between the application core and the repository `OrdersRepository`. The repository's responsibility is to persist and retrieve Order data for the rest of the application.
 
-You will implement `OrdersRepository` using Spring Data JPA and integrate this with the `OrderPersistenceEventHandler`
+You will implement `OrdersRepository` using Spring Data JPA and integrate this with the `OrderPersistenceEventHandler`.
 
-JPA is the Java standard for accessing relational databases, including PostgreSQL.  It provides an API to map Java Objects to relational concepts and comes with a rich vocabulary for querying across these objects, transparently translating to SQL (most of the time).
+### A Word on JPA
 
-Since JPA is a standard, there are many implementations, referred to as JPA *Providers*.
+[JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) is the standard Java mechanism for working with relational databases. JPA provides an API to map Java Objects to relational concepts and comes with a rich vocabulary for querying across these objects, transparently translating to SQL (most of the time).
 
-For this tutorial, you will use Spring Data JPA along with Hibernate as the JPA provider.
+Since JPA is a standard there are many implementations referred to as JPA *Providers*.
 
-## Using H2 as an in memory database for testing
+For this tutorial, you will use [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) along with [Hibernate](http://www.hibernate.org) as the JPA provider.
 
-PostgreSQL is a fully functional database that is suitable for production. However for testing, a lighter, embedded database is suitable. You will use H2 for development purposes during this tutorial.
+## Using H2 as an in memory database for Testing
 
-This allows the easy creation and destruction of database instances in a lifecycle controlled by a test.
+PostgreSQL is a fully functional database that is suitable for production. However for testing, a lighter, embedded database is suitable. You will use [H2](http://www.h2database.com) for development purposes during this tutorial. H2 allows the easy creation and destruction of database instances in a lifecycle controlled by a test.
 
-The JPA standard provides enough of an abstraction that you may use different databases in production and development. It is recommended to test application integration with the production database in addition to the interaction tests run against H2. This would be part of the minimal set of acceptance or 'smoke' tests.
+The JPA standard provides enough of an abstraction that you may use different databases in production and development. 
+
+We recommend to test application integration with the production database in addition to the interaction tests run against H2. This would normally be part of your minimal set of acceptance or 'smoke' tests.
     
-## Import Spring Data JPA
+## Importing Spring Data JPA
 
 Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle 's list of dependencies:
 
