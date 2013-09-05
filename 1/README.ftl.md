@@ -1,4 +1,4 @@
-## Step 1: Modelling the Core Domain
+## Step 1: Modelling the Core & Persistence Domains
 
 ![Introducing the Persistence Integration Domain](images/life-preserver-zoom-in-core.png)
 
@@ -8,25 +8,9 @@ Currently the core application internal domain of the Yummy Noodle Bar is made u
 
 * **Domain**. Contains the core domain classes that captures the key concepts of the application in the [ubiquitous language](http://martinfowler.com/bliki/UbiquitousLanguage.html) of the system.
 
-* **Domain**. Contains the core domain classes that captures the key concepts of the application in the [ubiquitous language](http://martinfowler.com/bliki/UbiquitousLanguage.html) of the system.
+* **Services**. Contains the components that exercise the core domain classes to provide the unique functionality for the application.
 
-components:
-
-* **Orders**. A collection of all orders currently in the system, regardless of status. In the terminology of [Domain Driven Design](http://en.wikipedia.org/wiki/Domain-driven_design), Orders is an **Aggregate Root** that ensures consistency across all of the Orders in the system.
-
-* **Order**. An individual order in the system that has an associated status and status history for tracking purposes.
-
-* **OrderStatus**. The current allocated status to an order.
-
-* **OrderStatusHistory**. Associated with an order, this is an ordered collection of the previous status' that the order has transitioned through.
-
-* **PaymentDetails**. Details of a `Payment` that a customer wants to make for a given `Order`.
-* **PaymentStatus**. Current status of a `Payment` that a customer wants to make for a given `Order`.
-* **Menu**
-* **MenuItem**
-* **MenuItemAvailability**
-
-You can look at these various domain objects [here](https://github.com/spring-guides/tut-data/tree/master/initial/src/main/java/com/yummynoodlebar/core/domain).
+Each of these domains map to Java packages. Take a moment to get familiar with the components in each of these domains in the [core domain source code](https://github.com/spring-guides/tut-data/tree/master/initial/src/main/java/com/yummynoodlebar/core/domain) and the [core services domain source code](https://github.com/spring-guides/tut-data/tree/master/initial/src/main/java/com/yummynoodlebar/core/services).
 
 Focusing primarily on Orders, these can be acted upon by a number of events:
 
@@ -40,7 +24,7 @@ Focusing primarily on Orders, these can be acted upon by a number of events:
 
 ## Modelling the Persistence Domain
 
-As you dive into building Yummy Noodle Bar's persistence services, the ability to create, update and remove Orders, MenuItems and OrderStatuses is the focus.
+First up, the ability to create, update and remove Orders, MenuItems and OrderStatuses is your first task.
 
 It can be tempting to simply map the core Order domain to the data stores and work from there, but that would ignore the boundary between the Core and the Persistence domain.
 
