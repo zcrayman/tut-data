@@ -97,19 +97,21 @@ Run your tests again and they will now pass, indicating that the mapping is all 
 
 ## Implement a CRUD repository
 
-Now that the JPA Entity works, the Repository can be implemented. In the same way as for MongoDB, Spring Data provides a way to automatically create JPA backed Repositories and full fledged queries, given only an interface.
+Now that your JPA Order entity is working properly, you can now implement a repository to work with your entity. 
 
-Create a new test class to check the Repository:
+Taking the same approach that you applied earlier for MongoDB, Spring Data provides a way to automatically create JPA backed repositories and fully fledged queries given only an interface as a starting point.
+
+Create a new test class to test the repository that you've not written yet:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java"  prefix="complete"/>
 
-The section following section is new:
+The following section is new:
 
     <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryIntegrationTests.java" "transactional" "complete"/>
 
-These annotations integrate with the Spring declarative transaction management mentioned above.  These state that every method on this class must be wrapped with a transaction, and that the transaction should be, by default, rolled back on method completion. 
+These annotations integrate with the Spring declarative transaction management. The annotations state that every method on this class must be wrapped with a transaction and that the transaction should be, by default, rolled back on method completion. 
 
-> **Note:** If you aren't familiar with database transactions, they are a means to combine multiple database operations into a single, atomic action. This means either all the steps inside the transaction succeed, or upon any failure, it rolls back to the state before the transaction was started.
+> **Note:** If you aren't familiar with database transactions they are a means to combine multiple database operations into a single, logical and atomic action. Either all the steps inside the transaction succeed or, upon any failure, are rolled back to the state before the transaction was started.
 
 Spring transactions provide an incredibly convenient way to construct tests against a database by letting you automatically wrap a test method inside a transaction. Inside the test method, you update the database, reading and writing at will. At the end of the test, the transaction will be rolled back and the data discarded, leaving a fresh environment for the next test to execute.
 
