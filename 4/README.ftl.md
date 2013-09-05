@@ -1,6 +1,10 @@
 # Step 4: Storing the Order Status in GemFire using Spring Data GemFire
 
-In the Yummy Noodle Bar application, the statuses of Orders will be stored in GemFire.
+So far you are storing `MenuItem` data in MongoDB and `Order` data in PostgreSQL using Spring Data JPA as shown in the Life Preserver below:
+
+![Life Preserver Recap](../images/life-preserver-zoom-out-on-persistence-domain-with-orders-and-jpa.png)
+
+Now it's time to look at how the status of your various orders will be stored, and for that task you're going to use GemFire.
 
 These statuses will be coming into the application from the kitchen and order processing side of the business as opposed to the orders themselves that will come from the system that accepts orders from clients.
 
