@@ -28,11 +28,11 @@ First up, the ability to create, update and remove Orders, MenuItems and OrderSt
 
 It can be tempting to simply map the core Order domain to the data stores and work from there, but that would ignore the boundary between the Core and the Persistence domain.
 
-(TODO highlight this boundary on a focus on the Life Preserver).
+![The Boundary between Core and Persistence](images/life-preserver-zoom-in-on-boundary.png)
 
-The data model of your persisted data will need to change at a rate that is manageable and technically feasible given the data store implementation. The core will need to evolve at whatever rate the Yummy Noodle bar system needs to internally evolve at. So there is potentially friction between the two domains as they may need to evolve at different rates.
+The data model of your persisted data will need to change at a rate that is manageable and technically feasible given the data store implementation. The core will need to evolve at the rate the Yummy Noodle bar system needs to internally evolve at. There is potentially friction between the two domains as they evolve at different rates.
 
-To manage this friction, you need to create concepts and components in the Persistence Service domain that are unique to, and can evolve at the rate needed by, the Persistence domain itself. This may result in similar types of components, but since their purpose will be very different, the similarities are superficial.
+To manage this friction you need to create concepts and components in the Persistence domain that are unique to, and can evolve at the rate needed by, the Persistence domain itself. This may result in similar types of components, but since their purpose will be very different the similarities are superficial.
 
 ## Understanding differing data models and their implementations
 
