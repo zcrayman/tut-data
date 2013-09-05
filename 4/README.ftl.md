@@ -14,23 +14,23 @@ In this step you will create a Spring Data interface to a GemFire server and the
 
 ## Import Spring Data GemFire
 
-In build.gradle, add the following to your list of repositories:
+Add the following to your list of repositories in your build.gradle:
 
     <@snippet "build.gradle" "libs" "complete"/>
 
-Add the following to your list of dependencies:
+The following to your list of dependencies:
 
     <@snippet "build.gradle" "deps" "complete"/>
 
-This Maven-style repository is required to access the GemFire libraries, which are not available from maven central.
+This Maven-style repository is required to access the GemFire libraries, which are not available from Maven Central.
 
 ## Run a GemFire Cache Server
 
-In order to run the tests and perform GemFire development, it is necessary to have access to a GemFire server.
+In order to run the tests and perform GemFire development you need to have access to a GemFire server.
 
-While it would be possible to download a full distribution, configure and run that, for the purposes of this tutorial, it is preferable to set up a server within this project.
+While it would be possible to download a full distribution for the purposes of this tutorial, instead you're going to set up a server within this project.
 
-In build.gradle, add this to the end of the file:
+In build.gradle, add the following to the end of the file:
 
     <@snippet "build.gradle" "run" "complete" />
 
@@ -38,9 +38,9 @@ Create a new XML file in src/main/resources/server:
 
     <@snippet path="src/main/resources/server/cache-config.xml" prefix="complete"/>
 
-This configures a basic GemFire server, and creates a *Region*, a logical partition within GemFire, that we have named 'YummyNoodleOrder'.
+This configures a basic GemFire server and creates a *Region*, a logical partition within GemFire, that we have named 'YummyNoodleOrder'.
 
-Lastly, create the driving class `com.yummynoodlebar.persistence.services.LocalGemfireServer`:
+Lastly create the component that will drive your local GemFire server  `com.yummynoodlebar.persistence.services.LocalGemfireServer`:
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/services/LocalGemfireServer.java"  prefix="complete"/>
 
@@ -48,9 +48,9 @@ You may now start a GemFire server (on port 40404) by running
 
     ./gradlew run
 
-This server will have access to the classpath of the project, most notably the OrderStatus class.  It is necessary for the GemFire server to have access to this class if we want to persist it within the grid.  When you create a standalone GemFire grid, you will need to provide any classes you wish to persist within a jar file on the classpath of every GemFire server.
+This server will have access to the classpath of the project, most importantly the OrderStatus class. It is necessary for the GemFire server to have access to this class if we want to persist it within the grid.  
 
-This tutorial does not show how to set up an embedded GemFire node.  While it would be possible to run much of this section of the tutorial using an embedded node, the next section requires the use of a separate GemFire server.
+> *NOTE:* When you create a standalone GemFire grid you need to provide any classes you wish to persist within a jar file on the classpath of every GemFire server.
 
 ## Start with a (failing) test, introducing GemFire Template
 
