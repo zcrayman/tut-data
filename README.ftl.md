@@ -10,26 +10,27 @@ Today there are much richer options, and Data Persistence now covers a myriad of
 Since you're reading this tutorial, it's likely that you are considering implementing a data storage using a component referred to as a [Repository], a pattern from [Domain Driven Design](http://en.wikipedia.org/wiki/Domain-driven_design), because:
 
 * You have a data store where you need to access and potentially modify the data that's stored.
-* You have an existing Spring Data application that you need to maintain.
+* You have an existing [Spring Data](http://projects.spring.io/spring-data/) application that you need to maintain.
 * You want to investigate different data stores in the context of Spring Data.
 
 This tutorial covers three data stores: the [MongoDB](http://www.mongodb.org) document store, a relational database using [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) and [Pivotal GemFire](http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire).
 
 ## What you'll build
 
-The context for this tutorial is the Yummy Noodle Bar. As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
+The context for this tutorial is the Yummy Noodle Bar. As part of its planned expansion it needs to be able to store and update its Menu and store Orders.
 
-You will extend Yummmy Noodle Bar's internal application to:
-- Store Menu data in MongoDB
-- Store Order data in a Relational Database
+You will extend the Yummmy Noodle Bar's internal application to:
+
+- Store Menu data in MongoDB.
+- Store Order data in a Relational Database.
 - Track the Status of an Order using GemFire. 
 
-Spring Data will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
+[Spring Data](http://projects.spring.io/spring-data/) will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
 
 ![Yummy Noodle Bar](images/yummynoodle.jpg)
 
-
 ## What you'll need
+
 To work through this tutorial you'll need a few things:
 
 * About a half hour for each section. You might finish it in a week during your lunch break (or during the weekend!)
@@ -48,9 +49,9 @@ The **initial** code set contains:
 
 The **complete** code set in each section includes the initial code base plus the code developed up to that point in the tutorial.
 
-You can choose to start with the **initial** code set. Or you can start with the **complete** code set for a given section. Not every code file is displayed in the tutorial, because that would slow things down too much. But important ones are such as writing tests, creating data oriented interfaces services, and looking at some key domain objects.
+You can choose to start with the **initial** code set or you can start with the **complete** code set for a given section. Important files from each of the steps are shown in the tutorial, such as writing tests, creating data oriented interfaces services, and looking at some key domain objects.
 
-While there are many build systems, this tutorial is built using [Gradle][gs-gradle] and includes the Gradle Wrapper, so you don't have to install anything to run the code.
+This tutorial is built using [Gradle][gs-gradle] and includes the Gradle Wrapper, so you don't have to install anything to run the code.
 
 For example, if you want to check out the initial code set:
 
@@ -67,7 +68,7 @@ From there, you can inspect `build/reports/tests` and see all the test results.
 
 ## The Home of Repositories in your Application Architecture
 
-Repositories are an integration between the external, persistent storage engines and your core application. Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the following diagram:
+Repositories are an integration between your core application and external, persistent storage engines. Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the following diagram:
 
 TBD Where Repositories sit in the Life Preserver diagram to be added.
 
