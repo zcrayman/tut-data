@@ -1,7 +1,5 @@
 
-In this tutorial you'll use Spring to store data in multiple data stores.
-
-> **Note:** Are you just joining the **Yummy Noodle Bar** tutorial series? This tutorial is a follow up to [Designing and Implementing RESTful Web Services with Spring](/guides/tutorial/rest). It has the same concepts and many of the same domain objects. You can continue and see how to add data storage in this tutorial, or if you prefer, go visit that tutorial first.
+In this tutorial you'll use Spring to store and retrieve data from multiple data stores.
 
 ## Persistence and Storage
 
