@@ -34,21 +34,23 @@ The data model of your persisted data will need to change at a rate that is mana
 
 To manage this friction you need to create concepts and components in the Persistence domain that are unique to, and can evolve at the rate needed by, the Persistence domain itself. This may result in similar types of components, but since their purpose will be very different the similarities are superficial.
 
-## Understanding differing data models and their implementations
+## Understanding the Different Data Models and their Implementations
 
-Modern data stores adopt one or more Data Models, although typically only one per technology. The way that you can expect to interact with a data store, based on the features and limits of its data model, will be different and so different capabilities and data access patterns will be needed.
+Modern data stores adopt one or more Data Models, typically only one per technology. 
+
+Your interactions with a data store, based on the features and limitations of its data model, will vary and so different capabilities and data access patterns are applied.
 
 Some of the most common Data Models currently in use are:
 
-### Relational
+* **Relational**
 
-The relational model of data storage is characterised by the concepts of Tables, with structured Columns made up of Rows.  This is is very analogous to a spreadsheet, where a table is like a worksheet, a row represents one record, and a column contains one specific piece of information. They are accessed by a dialect of the Structured Query Language (SQL). 
+	The relational model of data storage is characterised by the concepts of Tables, with structured Columns made up of Rows.  This is is very analogous to a spreadsheet, where a table is like a worksheet, a row represents one record, and a column contains one specific piece of information. They are accessed by a dialect of the Structured Query Language (SQL). 
 
-What makes this type of data store relational is the way that Columns may define references to Columns in other tables, known as relations. These relations are usually strongly enforced by the database.
+	What makes this type of data store relational is the way that Columns may define references to Columns in other tables, known as relations. These relations are usually strongly enforced by the database.
 
-Relational Databases are highly structured, have an explicit Schema and almost invariably first class support for transactions.
+	Relational Databases are highly structured, have an explicit Schema and almost invariably first class support for transactions.
 
-You will see the H2 Database in use in this tutorial, supported by [Spring Data JPA](http://projects.spring.io/spring-data-jpa/)
+	You will see the H2 Database in use in this tutorial, supported by [Spring Data JPA](http://projects.spring.io/spring-data-jpa/)
     
 ### Document
 
