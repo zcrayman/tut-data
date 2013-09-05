@@ -19,6 +19,8 @@ This tutorial covers three data stores: the [MongoDB](http://www.mongodb.org) do
 
 The context for this tutorial is the Yummy Noodle Bar. As part of its planned expansion it needs to be able to store and update its Menu and store Orders.
 
+![Yummy Noodle Bar](images/yummynoodle.jpg)
+
 You will extend the Yummmy Noodle Bar's internal application to:
 
 - Store Menu data in MongoDB.
@@ -26,8 +28,6 @@ You will extend the Yummmy Noodle Bar's internal application to:
 - Track the Status of an Order using GemFire. 
 
 [Spring Data](http://projects.spring.io/spring-data/) will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
-
-![Yummy Noodle Bar](images/yummynoodle.jpg)
 
 ## What you'll need
 
