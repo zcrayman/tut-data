@@ -21,7 +21,7 @@ The context for this tutorial is the Yummy Noodle Bar. As part of its planned ex
 
 ![Yummy Noodle Bar](images/yummynoodle.jpg)
 
-You will extend the Yummmy Noodle Bar's internal application to:
+You will extend the Yummmy Noodle Bar's application to:
 
 - Store Menu data in MongoDB.
 - Store Order data in a Relational Database.

@@ -1,10 +1,16 @@
- 
-
 ## Step 1: Modelling the Core Domain
 
-TODO Zoomed in on the core components of the system in the Life Preserver.
+![Introducing the Persistence Integration Domain](images/life-preserver-zoom-in-core.png)
 
-Currently the core, application internal domain of the Yummy Noodle Bar is made up of the following components:
+> **Note:** For those who have already encountered the **Yummy Noodle Bar** in another tutorial in the series the following section is an introductory recap of the Yummy Noodle Bar core domain. If you're already familiar with the core domain you can skip down to **Modelling the Persistence Domain**.
+
+Currently the core application internal domain of the Yummy Noodle Bar is made up of the following sub-domains:
+
+* **Domain**. Contains the core domain classes that captures the key concepts of the application in the [ubiquitous language](http://martinfowler.com/bliki/UbiquitousLanguage.html) of the system.
+
+* **Domain**. Contains the core domain classes that captures the key concepts of the application in the [ubiquitous language](http://martinfowler.com/bliki/UbiquitousLanguage.html) of the system.
+
+components:
 
 * **Orders**. A collection of all orders currently in the system, regardless of status. In the terminology of [Domain Driven Design](http://en.wikipedia.org/wiki/Domain-driven_design), Orders is an **Aggregate Root** that ensures consistency across all of the Orders in the system.
 
