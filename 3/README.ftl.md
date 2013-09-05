@@ -28,13 +28,13 @@ We recommend to test application integration with the production database in add
     
 ## Importing Spring Data JPA
 
-Import Spring Data JPA and the Hibernate JPA Provider into your project, adding it to the build.gradle 's list of dependencies:
+Import Spring Data JPA and the Hibernate JPA Provider into your project by adding it to the build.gradle 's list of dependencies:
 
     <@snippet "build.gradle" "deps" "/complete" />
 
-You can also see the dependencies for H2.
+In the above code you can also see the dependencies for H2.
 
-## Start with a (failing) test, introducing JPA
+## Start with a (failing) test: Introducing JPA
 
 Following the pattern from the previous section, first create a test to drive your development, checking that the persistence mapping class correctly stores and retrieves records.
 
