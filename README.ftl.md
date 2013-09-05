@@ -82,7 +82,7 @@ As an integration between your application core and the outside world there are 
 
 That's enough on the design constraints placed on the components that implement your Repositories, the rest of this tutorial looks at how to implement those components using Spring:
 
-* [Step 1: Modelling the Core & Persistence Domains](1/)
+* [Step 1: Understanding the Core & Persistence Domains and the Relationships between them](1/)
 * [Step 2: Storing Menu Data Using MongoDB](2/)
 * [Step 3: Storing Order Data Using JPA](3/)
 * [Step 4: Storing the Order Status in GemFire using Spring Data GemFire](4/)
