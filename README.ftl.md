@@ -27,6 +27,8 @@ You will extend the Yummmy Noodle Bar's application to:
 - Store Order data in a Relational Database.
 - Track the Status of an Order using GemFire. 
 
+> **Note:** More detail on the Yummy Noodle Bar's application is available in the next section of this tutorial.
+
 [Spring Data](http://projects.spring.io/spring-data/) will provide the bedrock of your persistence project, and you will discover how it makes your data access simpler, more consistent and more robust.
 
 ## What you'll need
