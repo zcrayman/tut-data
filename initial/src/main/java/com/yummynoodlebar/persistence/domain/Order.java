@@ -1,11 +1,9 @@
 package com.yummynoodlebar.persistence.domain;
 
 import com.yummynoodlebar.events.orders.OrderDetails;
+import org.springframework.beans.BeanUtils;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class Order {
 
@@ -63,3 +61,4 @@ public class Order {
     return order;
   }
 }
+

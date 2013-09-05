@@ -3,15 +3,37 @@ package com.yummynoodlebar.persistence.domain;
 import com.yummynoodlebar.events.menu.MenuItemDetails;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 public class MenuItem {
 
   private String id;
+
   private String name;
+
+  private String description;
+
+  private Set<Ingredient> ingredients;
 
   private BigDecimal cost;
 
   private int minutesToPrepare;
+
+  public String getDescription() {
+    return description;
+  }
+
+  public Set<Ingredient> getIngredients() {
+    return ingredients;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setIngredients(Set<Ingredient> ingredients) {
+    this.ingredients = ingredients;
+  }
 
   public String getId() {
     return id;

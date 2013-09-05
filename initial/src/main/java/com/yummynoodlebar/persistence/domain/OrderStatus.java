@@ -41,7 +41,7 @@ public class OrderStatus {
 
   public static OrderStatus fromStatusDetails(OrderStatusDetails orderStatusDetails) {
     return new OrderStatus(
-        orderStatusDetails.getOrderId(), orderStatusDetails.getId(),
-        orderStatusDetails.getStatusDate(), orderStatusDetails.getStatus());
+            orderStatusDetails.getOrderId(), orderStatusDetails.getId(),
+            orderStatusDetails.getStatusDate(), orderStatusDetails.getStatus());
   }
 }
