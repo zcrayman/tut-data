@@ -8,9 +8,9 @@ For this section, you will work within the Persistence domain to add this functi
 
 ![The Persistence Domain](../images/life-preserver-zoom-in-on-empty-persistence-domain.png)
 
-In that domain you have a representation of MenuItem optimised for persistence that is contained in the Domain sub-domain:
+In that domain you have a representation of 'MenuItem' optimised for persistence that is contained in the Domain sub-domain:
 
-TODO Another Life Preserver
+![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-empty-persistence-domain.png)
 
 In order for the Core Domain to send events to the Persistence Domain, you have a Services sub-domain also provided in the Persistence domain:
 
