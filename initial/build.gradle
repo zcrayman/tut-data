@@ -6,6 +6,8 @@ repositories {
 
 dependencies {
     runtime 'org.springframework:spring-core:3.2.3.RELEASE'
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    runtime 'org.slf4j:slf4j-jdk14:1.7.5'
 
     testCompile 'junit:junit:4.+'
     testCompile "org.mockito:mockito-all:1.9.5"
