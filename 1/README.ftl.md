@@ -50,7 +50,7 @@ Some of the most common Data Models currently in use are:
 
 	Relational Databases are highly structured, have an explicit Schema and almost invariably first class support for transactions.
 
-	You will see the H2 Database in use in this tutorial, supported by [Spring Data JPA](http://projects.spring.io/spring-data-jpa/)
+	You will see the H2 Database in use in this tutorial, supported by [Spring Data JPA](http://projects.spring.io/spring-data-jpa/).
     
 * **Document**
 
@@ -58,7 +58,7 @@ Some of the most common Data Models currently in use are:
 
 	Queries can be written against any value in the document structure, leading to very rich querying capabilities and document structures.  A distinct difference with relational databases is that the logical collections of documents do not have to conform to a common schema. Documents aren't as heavily defined by relationships between columns, but instead more focused on the content of the documents.
 
-	You will see MongoDB in use in this tutorial, supported by [Spring Data MongoDB](http://www.springsource.org/spring-data/mongodb)
+	You will see MongoDB in use in this tutorial, supported by [Spring Data MongoDB](http://www.springsource.org/spring-data/mongodb).
 
 * **Data Grid**
 
@@ -66,7 +66,7 @@ Some of the most common Data Models currently in use are:
 
 	GemFire is such a store, and allows accessing data through either a Map interface, a rich query language, or writing code that executes on the GemFire cluster in a distributed fashion.
 
-	It is supported by [Spring Data GemFire](http://www.springsource.org/spring-gemfire)
+	It is supported by [Spring Data GemFire](http://www.springsource.org/spring-gemfire).
 
 * **Key/Value**
 
