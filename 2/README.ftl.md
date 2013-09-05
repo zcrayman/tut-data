@@ -38,25 +38,23 @@ If you don't have it installed already, visit the [Mongo DB Project](http://www.
 
 > **Note:** Do not set up any authentication.
 
-After you have installed it, launch it:
+After you have installed MongoDB, launch the MongoDB database daemon using the following command:
 
 ```sh
 $ mongod
 ```
-
-You should see something like this:
+You should then see an output that is something like the following:
 
 ```
 all output going to: /usr/local/var/log/mongodb/mongo.log
 ```
-
-Now launch the command line client:
+Now launch the command-line client with:
 
 ```sh
 $ mongo
 ```
- 
-And see the response:
+
+You should then see a prompt that contains something like the following:
 
 ```
 MongoDB shell version: 2.0.8
@@ -64,7 +62,7 @@ connecting to: test
 >
 ```
 
-You are now all set up to proceed with this part of the tutorial.
+Congratulations, MongoDB seems to be alive and healthy! You are now all set to develop your Mongo-centric Persistence Domain components.
 
 ## Import Spring Data MongoDB
 
