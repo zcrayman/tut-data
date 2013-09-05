@@ -114,40 +114,41 @@ You first need to update `MenuItemRepository` into something that Spring Data ca
 
 Before you do that though, you need a (failing) test again!
 
-Create a new class at `com.yummynoodlebar.config.MongoConfiguration`, leaving it empty for now.
+Create a new component in the application'c Config Domain called `com.yummynoodlebar.config.MongoConfiguration`, leaving it empty for now.
 
 Then create a test that contains the following:
 
     <@snippet  path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryIntegrationTests.java" prefix="/complete"/>
 
-This will fail.
+The test will now fail, and so it's time to implement your repository.
 
-Open `com.yummynoodlebar.persistence.repository.MenuItemRepository` and make it look like this:
+Open `com.yummynoodlebar.persistence.repository.MenuItemRepository` and make it contain the following:
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepository.java" prefix="/complete"/>
 
-CrudRepository is part of the Spring Data repository hierarchy. It acts as both a marker interface and it adds several key methods to provide us with a living, breathing implementations of a repository.
+`CrudRepository` is part of the Spring Data repository hierarchy. It acts as both a marker interface and it adds several key methods to provide us with a living, breathing implementation of a repository, with almost zero code.
 
-Everything will still compile in the project, however the test will not pass.
+Everything will still compile in the project, however the test will still not pass.
 
-Open `MongoConfiguration` again, and alter it to read like so:
+Open `MongoConfiguration` again, and alter it to read like the following:
 
     <@snippet path="src/main/java/com/yummynoodlebar/config/MongoConfiguration.java" prefix="/complete"/>
 
 `@Configuration` marks the class as a Spring Configuration/Java Config class, able to generate part of a Spring ApplicationContext.
 
-`@EnableMongoRepositories` is part of Spring Data Mongo, and works to construct the repository implementation discussed earlier. The values passed into the annotation
-select the class(es) that we want to be considered.  In this case, only `MenuItemRepository` is to be considered, and so it is referred to explicitly.
+`@EnableMongoRepositories` is part of Spring Data Mongo, and works to construct the repository implementation. 
 
-The guts of the configuration deal with connecting to MongoDB. It creates a Mongo driver connection and a MongoTemplate to wrap it.
+The values passed into the annotation select the class(es) that we want to be considered as repositories. In this case, only `MenuItemRepository` is to be considered and so it is referred to explicitly.
 
-The auto generated Repositories use the MongoTemplate created here to connect to MongoDB.
+The guts of the configuration deal with connecting to MongoDB. It creates a Mongo driver connection and a `MongoTemplate` to wrap it.
 
-Run the test again, it should pass cleanly.
+The auto generated Repositories use the `MongoTemplate` created here to connect to MongoDB.
 
-Congratulations!  You have a working repository, without having to actually implement it yourself.
+Run the test again and now it should pass cleanly.
 
-It only does [CRUD](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Is that enough?
+Congratulations!  You have a working Repository, without having to explicitly implement it yourself.
+
+At this point your repository only implements [CRUD (Create, Read, Update, Delete) operations](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Is that enough?
 
 ## Extend the Repository with a Custom Finder
 
