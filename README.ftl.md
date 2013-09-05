@@ -68,15 +68,15 @@ From there, you can inspect `build/reports/tests` and see all the test results.
 
 ## The Home of Repositories in your Application Architecture
 
-Repositories are an integration between your core application and external, persistent storage engines. Repositories can be seen as living in their own integration domain on the periphery of your applications core as shown in the following diagram:
+Repositories are an integration between your core application and external, persistent storage engines. Repositories can be seen as living in their own Persistence integration domain on the periphery of your applications core as shown in the following diagram:
 
 TBD Where Repositories sit in the Life Preserver diagram to be added.
 
-As an integration between your application core and the outside world there are a number of concerns that need to be addressed in the design and implementation of the components that make up the Repositories:
+As an integration between your application core and the outside world there are a number of concerns that need to be addressed in the design and implementation of the components that make up your Repositories:
 
-* Primary purpose of Repository components is to integrate your application with the data stores in a natural and optimised way.
+* The primary purpose of a Repository component is to integrate your application with the data stores in a natural and optimised  (for data storage and retrieval) way.
 * Components of your persistence domain will need to evolve at a rate that is appropriate for the data they are managing.
-* Your Repository components should not contain any core logic. They should instead focus on collaborating with other components in the core domain of your application in order to support needed functionality for the service layer.
+* Your Repository components should not contain any core logic. They should instead focus on collaborating with other components in the core domain of your application in order to support their core functionality.
 
 That's enough on the design constraints placed on the components that implement your Repositories, the rest of this tutorial looks at how to implement those components using Spring:
 
