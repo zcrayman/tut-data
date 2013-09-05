@@ -36,21 +36,25 @@ In the above code you can also see the dependencies for H2.
 
 ## Start with a (failing) test: Introducing JPA
 
-Following the pattern from the previous section, first create a test to drive your development, checking that the persistence mapping class correctly stores and retrieves records.
+Following the pattern from the previous section, first create a test to drive your development that checks that the persistence mapping class correctly stores and retrieves records.
 
-Create a new test class `OrderMappingIntegrationTests` like this:
+Create a new test class `OrderMappingIntegrationTests`:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" prefix="complete"/>
 
-This test checks that `com.yummynoodle.persistence.domain.Order` correctly maps to the JPA wrapped database (H2).  It is important to understand how your object is being mapped against the database, and test that it meets your expectations.  If you know how and why the mapping is occurring, you can create indexes and other optimisations, safe in the knowledge that the data is where you expect it to be.  You may also access the data outside of the JPA provider, directly querying the database.
+This test checks that `com.yummynoodle.persistence.domain.Order` correctly maps to the JPA wrapped database (H2).  
 
-This test is making use of an existing helper class `JPAAssertions` which taps both Hibernate and JDBC to inspect what has been done to the database schema.
+It is important to have an understanding of how your object is being mapped against the database and test that it meets your expectations. If you know how and why the mapping is occurring you can create indexes and other optimisations and be safe in the knowledge that the data is where you expect it to be. You may also access the data outside of the JPA provider, directly querying the database.
+
+This test is making use of an existing helper class `JPAAssertions` which uses both Hibernate and JDBC to inspect what has been done to the database schema.
 
     <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java" "assertion"  "complete"/>
 
-This line states the expectation that the table NOODLE_ORDERS exists. This is followed by the checks that assert the column structure. If required, these tests could be extended to further check the schema definition to ensure that the data is being mapped as expected.
+This line captures the expectation that the table `NOODLE_ORDERS` exists. This is followed by the checks that assert the appropriate column structure. 
 
-This test will not pass, however, as the JPA infrastructure needed to connect `Order` with the database has not been initialised. To handle that, create `JPAConfiguration` with these settings:
+If required, these tests could be extended to further check the schema definition to ensure that the data is being mapped as expected.
+
+This test will not pass yet as the JPA infrastructure needed to connect `Order` with the database has not been set up. To handle that, create a new configuration component in your application's Config domain called`JPAConfiguration` with the following settings:
 
     <@snippet path="src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" prefix="complete"/>
 

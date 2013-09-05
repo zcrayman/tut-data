@@ -233,7 +233,9 @@ $ ./gradlew test
 
 ## Summary
 
-You have created a custom data analysis task against MongoDB. Interacting with MongoDB didn't require a whole lot of effort, thanks to Spring Data Mongo. 
+You have created a custom data analysis task against MongoDB. Interacting with MongoDB didn't require a whole lot of effort, thanks to Spring Data Mongo.
+
+You've also added configuration to drive the MongoDB infrastructure by adding a new configuration component into your Configuration domain.
 
 You now have your first repository that is contained in your new Repository sub-domain in your Persistence domain that houses the repository components responsible for storing and retrieving data. The new Repository sub-domain is shown in the Life Preserver below:
 
