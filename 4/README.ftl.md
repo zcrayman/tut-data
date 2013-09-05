@@ -1,16 +1,16 @@
- 
 # Step 4: Storing the Order Status in GemFire using Spring Data GemFire
 
 In the Yummy Noodle Bar application, the statuses of Orders will be stored in GemFire.
-These statuses will be coming into the application from the kitchen and order processing side of the business, as opposed to the orders themselves that will come from the system that accepts orders from clients.
 
-## About GemFire
+These statuses will be coming into the application from the kitchen and order processing side of the business as opposed to the orders themselves that will come from the system that accepts orders from clients.
 
-GemFire is a high performance distributed data grid.  It scales from a small embedded cache implementation to large scale wide area network implementations with data residency and access control.
+## A Word on GemFire
 
-Spring Data GemFire allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
+[Pivotal GemFire](http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire) is a high-performance distributed data grid. It scales from a small embedded cache implementation to large-scale wide area network implementations with data residency and access control.
 
-You will see here the creation of a Spring Data interface to a GemFire server. The next section of the tutorial shows the extension of this functionality to cover the use of Continuous Queries and how to integrate those into the Yummy Noodle application.
+[Spring Data GemFire](http://projects.spring.io/spring-data-gemfire/) allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
+
+In this step you will create a Spring Data interface to a GemFire server and then extend this our to use Continuous Queries.
 
 ## Import Spring Data GemFire
 
