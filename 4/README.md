@@ -52,7 +52,7 @@ task run(type: JavaExec) {
 }
 ```
 
-Create a new XML file in src/main/resources/server:
+Create a new XML file `cache-config.xml`:
 
 `src/main/resources/server/cache-config.xml`
 ```xml
@@ -87,7 +87,7 @@ Create a new XML file in src/main/resources/server:
 
 This configures a basic GemFire server and creates a *Region*, a logical partition within GemFire, that we have named 'YummyNoodleOrder'.
 
-Lastly create the component that will drive your local GemFire server  `com.yummynoodlebar.persistence.services.LocalGemfireServer`:
+Lastly create the component that will drive your local GemFire server `LocalGemfireServer`:
 
 `src/main/java/com/yummynoodlebar/persistence/services/LocalGemfireServer.java`
 ```java
@@ -122,7 +122,7 @@ You may now start a GemFire server (on port 40404) by running
 
 This server will have access to the classpath of the project, most importantly the OrderStatus class. It is necessary for the GemFire server to have access to this class if we want to persist it within the grid.  
 
-> *NOTE:* When you create a standalone GemFire grid you need to provide any classes you wish to persist within a jar file on the classpath of every GemFire server.
+> **Note:** When you create a standalone GemFire grid you need to provide any classes you wish to persist within a jar file on the classpath of every GemFire server.
 
 ## Start with a (failing) test: Introducing GemFireTemplate
 
