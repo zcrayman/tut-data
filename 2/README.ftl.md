@@ -1,4 +1,4 @@
-## Step 2: Storing Menu Data Using MongoDB
+# Step 2: Storing Menu Data Using MongoDB
 
 As you dive into writing code in this tutorial, the assumption is that The Yummy Noodle Bar application core has been implemented. You are now tackling the task of extending it to store data.
 

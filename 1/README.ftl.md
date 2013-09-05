@@ -1,4 +1,4 @@
-## Step 1: Understanding the Core & Persistence Domains and the Relationships between them
+# Step 1: Understanding the Core & Persistence Domains and the Relationships between them
 
 ![Introducing the Persistence Integration Domain](../images/life-preserver-zoom-in-core.png)
 

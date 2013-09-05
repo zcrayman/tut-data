@@ -1,4 +1,4 @@
-## Step 3: Storing Order Data Using the Java Persistence API (JPA)
+# Step 3: Storing Order Data Using the Java Persistence API (JPA)
 
 Your next task for the Yummy Noodle Bar persistence project is to store Order data. Yummy Noodle Bar has decided to use [PostgreSQL](http://www.postgresql.org) to store this data, a freely available, robust, relational database.
 
@@ -10,7 +10,7 @@ There is an event handler, `OrderPersistenceEventHandler`, that exchanges events
 
 You will implement `OrdersRepository` using Spring Data JPA and integrate this with the `OrderPersistenceEventHandler`.
 
-### A Word on JPA
+## A Word on JPA
 
 [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) is the standard Java mechanism for working with relational databases. JPA provides an API to map Java Objects to relational concepts and comes with a rich vocabulary for querying across these objects, transparently translating to SQL (most of the time).
 
@@ -131,34 +131,30 @@ The test will now pass correctly indicating that an implementation of `OrderRepo
 
 Users need to be able to find Orders that contain certain menu items by Menu Item ID.
 
-As you should be comfortable with now, create a new test `OrdersRepositoryFindOrdersContainingTests` that will ensure this functionality is implemented correctly.
+Create a new test `OrdersRepositoryFindOrdersContainingTests` to look for this new functionality:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrdersRepositoryFindOrdersContainingTests.java" prefix="complete"/>
 
-Again, this test is a transactional database test, expecting the database to rollback on test conclusion. It saves a set of orders and performs two queries using a method `findOrdersContaining` that will accept a menu item ID.
+Once again, this test is a transactional database test that indicates that the database will roll back any changes on test conclusion. The test saves a set of orders and performs two queries using a method `findOrdersContaining` that will accept a menu item ID.
 
-Now, to implement the method, open the repository and update it with the new method
+Open the repository and update it with the new search method:
 
     <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "query"  "complete"/>
 
-This class uses a custom @Query. The annotation contains a SQL query, for which you have to set nativeQuery=true.  Without `nativeQuery=true', the string in @Query is assumed to be a [JPA Query Language](http://en.wikipedia.org/wiki/Java_Persistence_Query_Language) query instead.
+This class uses a custom @Query. The annotation contains a SQL query, for which you have to set nativeQuery=true. Without `nativeQuery=true', the string in @Query is assumed to be a [JPA Query Language](http://en.wikipedia.org/wiki/Java_Persistence_Query_Language) query instead.
 
-Based on your knowledge of the mapping, using this SQL statement is safe, and you can rely on the structure it assumes.
-
-The full listing is:
+The full `OrdersRepository` class should now contain:
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java"  prefix="complete"/>
 
-The test will now pass, and the custom query is completed. You can run the entire test suite this way:
+Finally your test will now pass and the custom query is completed. You can run the entire test suite using Gradle:
 
 ```sh
 $ ./gradlew test
 ```
 
-### Summary
+## Summary
 
-Congratulations, Order data is safely stored in a JPA managed relational database.
-
-Next, you can see how to store OrderStatus data in the GemFire distributed data grid.
+Order data is safely stored and retrievable using a JPA managed relational database. Next, you can see how to store OrderStatus data in the GemFire distributed data grid.
 
 [Next…  Storing the Order Status in Gemfire using Spring Data GemFire](../4/)
