@@ -10,11 +10,11 @@ For this section, you will work within the Persistence domain to add this functi
 
 In that domain you have a representation of `MenuItem` optimised for persistence that is contained in the Domain sub-domain:
 
-![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-empty-persistence-domain.png)
+![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-persistence-domain-with-domain-sub.png)
 
 In order for the Core Domain to send events to the Persistence Domain, you also have a Services sub-domain provided in the Persistence domain:
 
-TODO Another Life Preserver.
+![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-persistence-domain-with-services-sub.png)
 
 Inside the Persistence Domain's Service sub-domain, there is an event handler `MenuPersistenceEventHandler`, exchanging events with the application core, and the repository `MenuItemRepository` whose responsibility is to persist and retrieve MenuItem data for the rest of the application.
 
