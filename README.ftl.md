@@ -3,21 +3,21 @@ In this tutorial you'll use Spring to store and retrieve data from multiple data
 
 ## Persistence and Storage
 
-The field of Data Persistence has progressed enormously over the past 20 years. In the present day it covers a myriad of data models and data storage implementations.
+The field of Data Persistence has progressed enormously over the past 20 years. Not so long ago, if you were considering data storage and retrieval you were fairly limited to thinking in terms of a relational data store, or perhaps simple file storage. 
 
-Adopting the right data model and data store for your application can be a complex process and is often decided at the start of a project and set in stone from thereon.
+Today there are much richer options, and Data Persistence now covers a myriad of different data models and data storage implementations.
 
-Since you're reading this tutorial, it's likely that you are considering implementing a Repository because:
+Since you're reading this tutorial, it's likely that you are considering implementing a data storage using a component referred to as a [Repository], a pattern from [Domain Driven Design](http://en.wikipedia.org/wiki/Domain-driven_design), because:
 
-* You have a data store that you need to access
-* You have an existing Spring Data application that you need to maintain
-* You want to investigate different data stores in the context of Spring Data
+* You have a data store where you need to access and potentially modify the data that's stored.
+* You have an existing Spring Data application that you need to maintain.
+* You want to investigate different data stores in the context of Spring Data.
 
-This tutorial covers three data stores: MongoDB, a relational database using JPA and Pivotal GemFire. 
+This tutorial covers three data stores: the [MongoDB](http://www.mongodb.org) document store, a relational database using [JPA](http://www.oracle.com/technetwork/java/javaee/tech/persistence-jsp-140049.html) and [Pivotal GemFire](http://gopivotal.com/pivotal-products/pivotal-data-fabric/pivotal-gemfire).
 
 ## What you'll build
 
-Yummy Noodle Bar is going global.  As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
+The context for this tutorial is the Yummy Noodle Bar. As part of its planned expansion, it needs to be able to store and update its Menu, and store Orders in the appropriate database(s).
 
 You will extend Yummmy Noodle Bar's internal application to:
 - Store Menu data in MongoDB
