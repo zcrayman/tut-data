@@ -22,17 +22,17 @@ In this step you will implement `MenuItemRepository` using Spring Data MongoDB a
 
 ## About MongoDB
 
-MongoDB is a document oriented database that stores data natively in a document format called BSON (Binary JSON). This is similar in structure to JSON, and is ultimately derived from it.
+[MongoDB](http://www.mongodb.org) is a document-oriented database that stores data natively in a document format called [BSON (Binary JSON)](http://en.wikipedia.org/wiki/BSON). This is similar in structure to [JSON](http://en.wikipedia.org/wiki/JSON), and is ultimately derived from it.
 
-It does not enforce a schema or document structure beyond the concept of the *Collection*, which contains a set of documents.
+MongoDB does not enforce a schema or document structure beyond the concept of a *Collection*, which contains a set of documents.
 
 Querying can be performed over the whole document structure, although Joins between Collections is not part of the document model.
 
-Large scale data transformation and analysis is a native part of MongoDB, and can be performed either declaratively, or via JavaScript functions as part of a Map Reduce implementation.
+Large scale data transformation and analysis is a native part of MongoDB, and can be performed either declaratively or with JavaScript functions as part of a [MapReduce](http://en.wikipedia.org/wiki/MapReduce) implementation.
 
 ## Install MongoDB
 
-Before continuing, ensure that you have MongoDB installed correctly.
+Before continuing it's worthwhile ensuring that you have MongoDB installed correctly.
 
 If you don't have it installed already, visit the [Mongo DB Project](http://www.mongodb.org) and follow the instructions to install MongoDB.  
 
