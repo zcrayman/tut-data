@@ -1,17 +1,24 @@
-
-# Step 2: Storing Menu Data Using MongoDB
+## Step 2: Storing Menu Data Using MongoDB
 
 As you dive into writing code in this tutorial, the assumption is that The Yummy Noodle Bar application core has been implemented. You are now tackling the task of extending it to store data.
 
 > **Note:** The implemented application core is what can be found in the **initial** code drop as mentioned at the [beginning of this tutorial](../#downloading-and-running-the-code).
 
-For this section, you will work within the Persistence domain to add this functionality. (life preserver pic).
+For this section, you will work within the Persistence domain to add this functionality:
 
-In that domain you have a representation of MenuItem optimised for persistence.
+![The Persistence Domain](../images/life-preserver-zoom-in-on-empty-persistence-domain.png)
 
-There is an event handler `MenuPersistenceEventHandler`, exchanging events with the application core, and the repository `MenuItemRepository` whose responsibility is to persist and retrieve MenuItem data for the rest of the application.
+In that domain you have a representation of MenuItem optimised for persistence that is contained in the Domain sub-domain:
 
-You will implement `MenuItemRepository` using Spring Data MongoDB and integrate this with the `MenuPersistenceEventHandler`
+TODO Another Life Preserver
+
+In order for the Core Domain to send events to the Persistence Domain, you have a Services sub-domain also provided in the Persistence domain:
+
+TODO Another Life Preserver.
+
+Inside the Persistence Domain's Service sub-domain, there is an event handler `MenuPersistenceEventHandler`, exchanging events with the application core, and the repository `MenuItemRepository` whose responsibility is to persist and retrieve MenuItem data for the rest of the application.
+
+In this step you will implement `MenuItemRepository` using Spring Data MongoDB and integrate this with the `MenuPersistenceEventHandler`.
 
 ## About MongoDB
 
