@@ -150,13 +150,13 @@ Congratulations!  You have a working Repository, without having to explicitly im
 
 At this point your repository only implements [CRUD (Create, Read, Update, Delete) operations](http://en.wikipedia.org/wiki/Create,_read,_update_and_delete). Is that enough?
 
-## Extend the Repository with a Custom Finder
+## Extend your Repository with a Custom Finder
 
-A late breaking requirement has been uncovered! (Ever deal with that?)
+A late breaking requirement has been uncovered! Does that sound familiar...
 
 Users are going to be given the opportunity to select dishes by the names of the ingredients that they contain.
 
-Looking at MenuItem, the document that is stored in MongoDB will look similar to this:
+Looking at MenuItem, the document that is stored in MongoDB will look similar to the following:
 
 ```json
 {
@@ -177,27 +177,27 @@ Looking at MenuItem, the document that is stored in MongoDB will look similar to
 }
 ```
 
-To search based on ingredients will require querying deep inside the document structure to correctly identify the matching documents.
+A search based on ingredients will require querying deep inside the document structure to correctly identify the matching documents.
 
-First thing to do? Write a test!
+Before you do anything else, let's write a test that attempts to do this type of search:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryFindByIngredientsIntegrationTests.java" prefix="/complete"/>
 
-This assumes a method named `findByIngredientsNameIn` on the repository. How do we implement that? Spring Data does it for us! We already have the method signature in the interface.
+This assumes a method named `findByIngredientsNameIn` in your repository. 
+
+How do you implement that method? Spring Data does it for you! You already have the method signature in the interface.
 
 `standardItem()` has peanuts, `eggFriedRice()` doesn't.  So we should see just two documents come back from the query.
 
 Try running the test....  it passes, right?
 
-Spring Data has generated an implementation of this method, doing what we wanted. There is a rich vocabulary that you can express using the method names, see more in the [Reference Documentation](http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/mongo.repositories.html#mongodb.repositories.queries)
+Spring Data has generated an implementation of this method, doing what you wanted. Spring Data relies on a rich vocabulary that you can express using method names in order to trigger auto-generation of these search methods on your repositories, see more in the [reference documentation](http://static.springsource.org/spring-data/data-mongodb/docs/current/reference/html/mongo.repositories.html#mongodb.repositories.queries).
 
 ## Extend the Repository with Map/Reduce
 
-A more esoteric requirement would be helping user look up the ingredients used in the most dishes.
+A more interesting requirement would be helping the user look up the ingredients used in the most dishes. MongoDB provides a system to perform this kind of analysis, MapReduce.
 
-MongoDB provides a system to perform this kind of analysis, Map/Reduce(/Filter).
-
-To use Map/Reduce, we need to gain access to the MongoTemplate directly and add this into the Repository that Spring Data is currently managing.
+To use MapReduce, you need to gain access to the `MongoTemplate` directly and add this into the Repository that Spring Data is currently managing for you.
 
 Create a new interface `com.yummynoodlebar.persistence.repository.AnalyseIngredients`:
 
@@ -205,36 +205,44 @@ Create a new interface `com.yummynoodlebar.persistence.repository.AnalyseIngredi
 
 Next, update `MenuItemRepository` to include the `AnalyseIngredients` interface. This indicates to Spring Data that it should look for an implementation of that interface for extension.
 
-We can now write an implementation of this new interface. Before doing that though, you must write a test for the new behaviour.
-
-Create a test class `MenuItemRepositoryAnalyseIngredientsIntegrationTests`:
+Next, create a test class that looks for this new functionality called `MenuItemRepositoryAnalyseIngredientsIntegrationTests`:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryAnalyseIngredientsIntegrationTests.java" prefix="/complete"/>
 
 This sets up some known test data and calls the analysis method, expecting certain ingredients in known relative quantities.
 
-Lastly, create an implementation of this interface `com.yummynoodlebar.persistence.repository.MenuItemRepositoryImpl`. The name of this class `MenuItemRepositoryImpl` is very important! This marks it out as an *extension* of the repository named `MenuItemRepository`, and is automatically component scanned, instantiated and used as a delegate by Spring Data.
+We can now write an implementation of this new interface. Create an implementation of this interface `com.yummynoodlebar.persistence.repository.MenuItemRepositoryImpl`. 
+
+The name of this class `MenuItemRepositoryImpl` is very important! This marks it out as an *extension* of the repository named `MenuItemRepository`, and is automatically component scanned, instantiated and used as a delegate by Spring Data.
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/MenuItemRepositoryImpl.java" prefix="/complete"/>
 
-This class references two javascript functions, the mapper and the reducer, respectively.
+This class references two JavaScript functions, the mapper and the reducer, respectively.
 
-Create 2 new javascript files, in the src/main/resources directory:
+Create 2 new JavaScript files, in the src/main/resources directory:
 
     <@snippet path="src/main/resources/ingredientsmap.js" prefix="/complete"/>
 
     <@snippet path="src/main/resources/ingredientsreduce.js" prefix="/complete"/>
 
-The test should now pass successfully. You can them directly by typing:
+The test should now pass successfully. You can run all the tests by typing the following at the command line:
 
 ```sh
 $ ./gradlew test
 ```
 
-Congratulations! You have created a custom data analysis task against MongoDB. It took a bit of effort, especially with writing all the tests, but we have strong confidence in the solution. And interacting with MongoDB didn't require a whole lot of effort, thanks to Spring Data Mongo.
-
 ## Summary
 
-Now that the Menu data is safely stored in Mongo, its time to turn your attention to the core of the system, Orders
+You have created a custom data analysis task against MongoDB. Interacting with MongoDB didn't require a whole lot of effort, thanks to Spring Data Mongo. 
+
+You now have your first repository that is contained in your new Repository sub-domain in your Persistence domain that houses the repository components responsible for storing and retrieving data. The new Repository sub-domain is shown in the Life Preserver below:
+
+![The Persistence Domain](../images/life-preserver-zoom-in-on-persistence-domain-with-repository-sub.png)
+
+Your full Life Preserver diagram should look like the following now:
+
+![The Persistence Domain](../images/life-preserver-zoom-out-on-persistence-domain-with-repository-sub.png)
+
+Now that the Menu data is safely stored in Mongo its time to turn your attention to storing and retrieving Orders using a whole different data model and data storage technology … JPA.
 
 [Next… Storing Order Data using JPA](../3/)
