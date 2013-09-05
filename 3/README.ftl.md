@@ -113,27 +113,23 @@ These annotations integrate with the Spring declarative transaction management. 
 
 > **Note:** If you aren't familiar with database transactions they are a means to combine multiple database operations into a single, logical and atomic action. Either all the steps inside the transaction succeed or, upon any failure, are rolled back to the state before the transaction was started.
 
-Spring transactions provide an incredibly convenient way to construct tests against a database by letting you automatically wrap a test method inside a transaction. Inside the test method, you update the database, reading and writing at will. At the end of the test, the transaction will be rolled back and the data discarded, leaving a fresh environment for the next test to execute.
+Spring transactions provide an incredibly convenient way to construct tests against a database by letting you automatically wrap a test method inside a transaction. Inside the test method, you update the database, reading and writing as your test requires. At the end of the test the transaction will be rolled back and the data discarded leaving a fresh environment for the next test to execute.
 
-This test requires an instance of `OrdersRepository` and saves several Order instances to it before calling a findById method
+Your test requires an instance of `OrdersRepository` and saves several Order instances to it before calling a `findById` method. This will fail, as the implementation of `OrdersRepository` does not yet exist.
 
-This will fail, as the implementation of `OrdersRepository` does not yet exist.
-
-To solve this, update `JPAConfiguration` to enable the JPA Repository system.
-
-Again, the desired repository is selected explicitly as multiple data sources/Spring Data configurations are being used.
+To solve this, update `JPAConfiguration` to enable the JPA Repository system. The desired repository is selected explicitly as multiple data sources/Spring Data configurations are being used.
 
     <@snippet "src/main/java/com/yummynoodlebar/config/JPAConfiguration.java" "transactions" "complete"/>
     
-And replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`:
+Then replace the contents of `OrdersRepository` to extend the Spring Data `CrudRepository`:
 
     <@snippet "src/main/java/com/yummynoodlebar/persistence/repository/OrdersRepository.java" "top" "complete"/>
 
-The test will now pass correctly, indicating that an implementation of `OrderRepository` is being created at runtime and works as expected.
+The test will now pass correctly indicating that an implementation of `OrderRepository` is being created at runtime by Spring Data JPA and works as expected.
 
 ## Extend the Repository with a Custom Finder
 
-A requirement that affects the Persistence domain is that users need to be able to find Orders that contain certain menu items, by Menu Item ID.
+Users need to be able to find Orders that contain certain menu items by Menu Item ID.
 
 As you should be comfortable with now, create a new test `OrdersRepositoryFindOrdersContainingTests` that will ensure this functionality is implemented correctly.
 
