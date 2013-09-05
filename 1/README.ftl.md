@@ -68,7 +68,7 @@ Some of the most common Data Models currently in use are:
 
 	It is supported by [Spring Data GemFire](http://www.springsource.org/spring-gemfire)
 
-* **Key/Value**
+* **KeyValue**
 
 	Key/Value is one of the simplest forms of Data Model.  It is analogous to a Java Map, known in other languages as either a hash table, hash map, or an associative array. The data entries comprise a key with an associated value. They tend to be very fast and easily distributable. This is sometimes used as a caching data solution. Because many critical, high performance systems depend on such simple constructs, Key/Value data stores have risen quickly in popularity.
 
