@@ -61,17 +61,18 @@ This test will not pass yet as the JPA infrastructure needed to connect `Order` 
 The method `DataSource dataSource()` creates the embedded H2 database.  This creates a new H2 instance within the same ApplicationContext and provides a DataSource interface to it, usable by JPA.
 
 The method `EntityManagerFactory entityManagerFactory()` creates the `EntityManagerFactory`.  This class is responsible for creating the `EntityManager`, and is *JPA Provider specific*. In this case, this shows the creation and setup of a Hibernate JPA Provider, including the provision of the datasource `dataSource()`.
-Note that the EntityManagerFactory is responsible for identifying the JPA Entities to be made available, the classes to be treated as database mapping/ persistence beans.
+
+The EntityManagerFactory is responsible for identifying the JPA Entities to be made available, the classes to be treated as database mapping/ persistence beans.
 
 The method `EntityManager entityManager()` creates the core class of JPA.  `EntityManager` is the public interface of JPA, providing methods to persist, delete, update and query, and is used in the tests below for this purpose.
 
 `transactionManager()` initialises the JPA transaction manager. This integrates with the declarative Transaction Management features of Spring, permitting the use of @Transactional and associated classes and configuration, for more information, [click here](http://static.springsource.org/spring/docs/3.2.4.RELEASE/spring-framework-reference/html/transaction.html)
 
-Spring provides an exception translation framework to translate exceptions from many different sources into a consistent set that your application can use. In this case, the JPA Configuration setup expects a bean that provides these translations, which is provided by `hibernateExceptionTranslator()`
+Spring provides an exception translation framework to translate exceptions from many different sources into a consistent set that your application can use. In this case, the JPA Configuration expects a bean that provides these translations, which is provided by `hibernateExceptionTranslator()`
 
-The test will now run without compilation or runtime errors, but will fail as the JPA entity is not set up.
+The test will now run without compilation or runtime errors but will fail as the JPA entity is not set up.
 
-Update `com.yummynoodle.persistence.domain.Order` to read:
+Update `com.yummynoodle.persistence.domain.Order` to contain the following:
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/domain/Order.java" prefix="complete"/>
 
@@ -86,14 +87,13 @@ Update `com.yummynoodle.persistence.domain.Order` to read:
   @Column(name="VALUE")
 ```
 
-This complex mapping is used to create a joined table, ORDER_ORDER_ITEMS, that contains the data stored in the java.util.Map.
+This mapping is used to create a joined table, ORDER_ORDER_ITEMS, that contains the data stored in the java.util.Map.
 
 `@Transient` informs JPA that the given field should not be stored in the database, and is analogous to the Java *transient* keyword 
 
 Finally `@Id` indicates to both JPA and Spring Data that the given field(s) is the Primary Key, and should be used to both index and provide the default access method for the Entity.
 
-The tests will now pass, indicating that the mapping is all working as expected.
-
+Run your tests again and they will now pass, indicating that the mapping is all working as expected.
 
 ## Implement a CRUD repository
 
