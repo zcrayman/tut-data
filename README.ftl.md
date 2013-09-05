@@ -34,7 +34,7 @@ Spring Data will provide the bedrock of your persistence project, and you will d
 ## What you'll need
 To work through this tutorial you'll need a few things:
 
-* About an hour.
+* About a half hour for each section. You might finish it in a week during your lunch break (or during the weekend!)
 * A copy of the code (available either by [git][u-git] or a [downloadable zip file](https://github.com/spring-guides/tut-data/archive/master.zip)).
 * An IDE of your choice. Spring recommends [Spring Tool Suite](http://www.springsource.org/sts), which is a [free download](http://www.springsource.org/sts).
 * An installation of [MongoDB](http://www.mongodb.org/)
@@ -50,7 +50,7 @@ The **initial** code set contains:
 
 The **complete** code set in each section includes the initial code base plus the code developed up to that point in the tutorial.
 
-You can choose to start with the **initial** code set, copy-and-paste your way through the guide, and then run things at the end. Or you can start with the **complete** code set for a given section, open each file, and read the source side-by-side as you walk through the tutorial.
+You can choose to start with the **initial** code set. Or you can start with the **complete** code set for a given section. Not every code file is displayed in the tutorial, because that would slow things down too much. But important ones are such as writing tests, creating data oriented interfaces services, and looking at some key domain objects.
 
 While there are many build systems, this tutorial is built using [Gradle][gs-gradle] and includes the Gradle Wrapper, so you don't have to install anything to run the code.
 
@@ -75,10 +75,9 @@ TBD Where Repositories sit in the Life Preserver diagram to be added.
 
 As an integration between your application core and the outside world there are a number of concerns that need to be addressed in the design and implementation of the components that make up the Repositories:
 
-* The primary purpose of the Repository components is to integrate your application with the data stores in a natural and optimised way.
-* The components that make up your persistence domain will need to evolve at a rate that is appropriate for the data they are managing.
-* Your Repository components should not contain any of the core logic to your application but will collaborate with other components in the Core domains of your application in order to orchestrate the necessary functionality to provide the service interface.
-
+* Primary purpose of Repository components is to integrate your application with the data stores in a natural and optimised way.
+* Components of your persistence domain will need to evolve at a rate that is appropriate for the data they are managing.
+* Your Repository components should not contain any core logic. They should instead focus on collaborating with other components in the core domain of your application in order to support needed functionality for the service layer.
 
 That's enough on the design constraints placed on the components that implement your Repositories, the rest of this tutorial looks at how to implement those components using Spring:
 

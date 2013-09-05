@@ -1,5 +1,5 @@
  
-# Storing the Order Status in GemFire using Spring Data GemFire
+# Step 4: Storing the Order Status in GemFire using Spring Data GemFire
 
 In the Yummy Noodle Bar application, the statuses of Orders will be stored in GemFire.
 These statuses will be coming into the application from the kitchen and order processing side of the business, as opposed to the orders themselves that will come from the system that accepts orders from clients.
@@ -8,7 +8,7 @@ These statuses will be coming into the application from the kitchen and order pr
 
 GemFire is a high performance distributed data grid.  It scales from a small embedded cache implementation to large scale wide area network implementations with data residency and access control.
 
-Spring Data allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
+Spring Data GemFire allows the creation of both server and client connections, data access, caching and deep integration with the Spring Application Context.
 
 You will see here the creation of a Spring Data interface to a GemFire server. The next section of the tutorial shows the extension of this functionality to cover the use of Continuous Queries and how to integrate those into the Yummy Noodle application.
 
@@ -56,9 +56,7 @@ This tutorial does not show how to set up an embedded GemFire node.  While it wo
 
 In a similar way as with MongoDB and JPA, the first test you will write is to check that OrderStatus can be correctly persisted into GemFire.
 
-First, create a new empty class `com.yummynoodlebar.config.GemfireConfiguration`. This is a placeholder for the configuration until we have written a test.
-
-Create a new test `com.yummynoodlebar.persistence.integration.OrderStatusMappingIntegrationTests` with the content.
+Create a new test `OrderStatusMappingIntegrationTests` with the following content:
 
     <@snippet path="src/test/java/com/yummynoodlebar/persistence/integration/OrderStatusMappingIntegrationTests.java"  prefix="complete" />
 
@@ -70,7 +68,7 @@ You can see the access to the low level GemFire API in the clear() method.  This
 
 GemFireTemplate exposes a Map oriented method to interact with its configured region.
 
-The test inserts a single OrderStatus into the GemFire Region and then performs a query, using the GemFire Object Query Language (OQL).  This is a declarative language conceptually similar to the JPA Query Language/ Hibernate Query Language, providing a syntax to query against a set of Objects and their properties and perform selections, ordering, grouping and projections against the results.
+The test inserts a single OrderStatus into the GemFire Region and then performs a query, using the GemFire [Object Query Language (OQL)](http://en.wikipedia.org/wiki/Object_Query_Language).  This is a declarative language conceptually similar to the JPA Query Language/Hibernate Query Language, providing a syntax to query against a set of Objects and their properties and perform selections, ordering, grouping and projections against the results.
 
 Now that a test is in place, implement GemFireConfiguration with the content:
 
@@ -84,13 +82,13 @@ Currently, the important line is:
 
 This imports a traditional XML based Spring configuration.  Currently, Spring Data GemFire is significantly easier to configure using XML, and certain features are not yet fully implemented.  For this reason, XML configuration is still recommended for Spring Data GemFire.
 
-Create a new file `src/main/resources/gemfire/client.xml`:
+Create a GemFire client configuration file:
 
     <@snippet path="src/main/resources/gemfire/client.xml" prefix="complete"/>
 
 This configuration uses the GemFire Spring configuration namespace.
 
-Firstly, it creates a GemFire DataSource.  This is a connection to a GemFire data grid. In this case, connecting to the GemFire server running on localhost:40404, which the local server configured above will run on.
+It creates a GemFire DataSource.  This is a connection to a GemFire data grid. In this case, connecting to the GemFire server running on localhost:40404, which the local server configured above will run on.
 
 The bean `yummyTemplate` is the instance of GemFireTemplate that is used in the test above. It is set up to communicate with a specific GemFire Region, YummyNoodleOrder, which must exist in the server. Again, this is configured in the server above.
 
@@ -107,7 +105,7 @@ First, create a new test `OrderStatusRepositoryIntegrationTests`:
 
 This test generates a new OrderStatus with a known key and passes it to OrderStatusRepository for persisting. It then retrieves the data using the method `findOne`, which will query against the *key* that is passed into the GemFire Region Map structure.
 
-Note that data is being managed explicitly in the test, rather than using the declarative transaction management that was introduced in the JPA tests.  While GemFire does integrate with the Spring provided transactions, it only support Isolation.READ_COMMITTED.  This means that once you write data, it cannot be read, by any thread or process, until the surrounding transaction is committed.  Any test that wrote data within a transaction would be unable to read it until the transaction finished.
+Note that data is being managed explicitly in the test, rather than using the declarative transaction management that was introduced in the JPA tests.  While GemFire does integrate with the Spring provided transactions, it only supports **Isolation.READ_COMMITTED**.  This means that once you write data, it cannot be read, by any thread or process, until the surrounding transaction is committed.  Any test that wrote data within a transaction would be unable to read it until the transaction finished.
 
 For this reason, the test is not marked as @Transactional, so all data access will not be transactionally managed within the tests.  At the start and end of the test, the region is purged by using the repository deleteAll method generated by Spring Data.
 
@@ -126,15 +124,21 @@ As with the other data stores, the Entity/persistence class, in this case OrderS
 
 GemFire was built from the beginning to understand Java objects more thoroughly than either MongoDB or H2. This means that OrderStatus requires no additions to persist naturally into GemFire, as we saw above in `OrderStatusMappingIntegrationTests`.
 
-Two things are necessary, however for Spring Data to be able to generate a Repository implementation, configuring the default Region, and specifying the property to use as the Region key/ID.
+Two things are necessary, however, for Spring Data to be able to generate a Repository implementation, configuring the default Region, and specifying the property to use as the Region key/ID.
 
     <@snippet "src/main/java/com/yummynoodlebar/persistence/domain/OrderStatus.java" "gemfire"  "complete"/>
 
 First, run the local GemFire server
 
-    ./gradlew run
+```sh
+$ ./gradlew run
+```
     
-Then run the test `OrderStatusRepositoryIntegrationTests` to check that the OrderStatusRepository is being correctly generated and works as expected.
+Then run the test `OrderStatusRepositoryIntegrationTests` to check that the OrderStatusRepository is being correctly generated and works as expected. You can run this test inside your IDE, or run the entire test suite from another shell by typing:
+
+```sh
+$ ./gradlew test
+```
 
 ## Extend the Repository with a Custom Finder
 
@@ -153,13 +157,22 @@ Update the repository to read:
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java"  prefix="complete" />
 
 This looks similar to the JPA custom method, and the concept is the same.  Create a new method and annotate it with a @Query, passing a string containing OQL to perform the query with.
+
 This query selects the distinct elements from the YummyNoodleBar Region where the order is given and then orders by statusDate, which is a property on OrderStatus.
 
 This will pass, with the correct ordering of the history, ordered by status date.
 
+You can check it by again running:
+
+```sh
+$ ./gradlew test
+```
+
+> **Note:** You must be running GemFire in another console with `./gradlew run` for the tests to pass.
+
 ## Summary
 
-Congratulations, Order Status data is safely stored in GemFire.
+Congratulations, OrderStatus data is safely stored in GemFire.
 
 Next, you will learn to take advantage of GemFire Continuous Queries to extend the scalable, event driven architecture to include the data store itself.
 
