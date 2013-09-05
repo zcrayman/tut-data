@@ -70,32 +70,33 @@ Import **spring-data-mongodb** into your project by adding it to your `build.gra
 
     <@snippet "build.gradle" "deps" "/complete" />
 
-## Start with a (failing) test, introducing MongoTemplate
+## Start with a (failing) test: Introducing MongoTemplate
 
-Before you can implement the Repository, you have to build something that will use it. In this case, you will start by writing a simple test case that attempts to store a `MenuItem`.
+Before you can implement the Repository, you have to build something that will use it. In this case, you will start by writing a simple test case that attempts to store a `MenuItem` using `MongoTemplate`.
 
-Before you do that, however, you need some tools to test with.
+`MongoTemplate` is one of the core classes provided by [Spring Data Mongo](http://www.springsource.org/spring-data/mongodb).  It follows the familiar [Template Method pattern](http://en.wikipedia.org/wiki/Template_method_pattern) that is used extensively in other parts of Spring, such as `JmsTemplate`, `JdbcTemplate` and `RestTemplate`. 
 
-`MongoTemplate` is one of the core classes provided by Spring Data Mongo.  It follows the familiar template pattern that is used extensively in other parts of Spring, such as `JmsTemplate`, `JdbcTemplate` and `RestTemplate`. With respect to MongoDB, MongoTemplate does the leg work of connecting to a MongoDB server while also exposing a large amount of functionality.
+With respect to MongoDB, MongoTemplate does the leg work of connecting to a MongoDB server and managing the necessary resources involved, while also exposing a simple API that provides a large amount of functionality.
 
 Test Driven Development guides you to test the smallest piece of the system you can, and then build your tests outwards from that. This builds confidence in the system as a whole.
 
-The smallest piece in this case is the domain class, MenuItem.  It will contain mapping and configuration information describing how it should be persisted into the database.
+The smallest piece in this case is the Persistence domain class, `MenuItem`.  It will contain mapping and configuration information describing how it should be persisted into the database.
 
 There are two existing helper classes, `com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture` and `com.yummynoodlebar.persistence.domain.fixture.MongoAssertions`
 They provide some methods we can use to make our tests a bit more readable.
 
-Create `MenuItemMappingIntegrationTests` as follows:
+Create a test called `MenuItemMappingIntegrationTests` that contains the following:
 
     <@snippet "src/test/java/com/yummynoodlebar/persistence/integration/MenuItemMappingIntegrationTests.java" "top" "/complete" />
 
-This is a simple usage of MongoTemplate, using the persistence.domain.MenuItem class to push data into and out of a Mongo Collection. This test class will verify that MenuItem works as expected against a real, running MongoDB instance.
+This is a simple usage of `MongoTemplate` that uses the `persistence.domain.MenuItem` class to push data into and out of a Mongo Collection. This test class will verify that `MenuItem` works as expected against a real, running MongoDB instance.
 
-Here, the test ensures that the mapping works as expected, and the document appears in the expected shape in the collection.  It also tests that the indexes that we expect
+The test ensures that the mapping works as expected and the document appears in the expected shape in the collection. It also tests that the indexes that you expect
 have also been initialised.
 
-Run this test, it will fail, as the mapping is not as expected, the collection being used is wrong, and the indexes are not being fully created
-We can now move onto altering our domain class to ensure it persists correctly.
+Run this test and it will fail as the mapping is not as expected, the collection being used is wrong, and the indexes are not being fully created.
+
+It's now time to alter your domain class to ensure it persists correctly.
 
 Open `com.yummynoodlebar.persistence.domain.MenuItem`, and add the annotations @Document, @Id and @Indexed to bring the domain into line with the test expectations.
 
@@ -103,19 +104,19 @@ Open `com.yummynoodlebar.persistence.domain.MenuItem`, and add the annotations @
 
 This alters the collection name to be *menu* (instead of *MenuItem*), ensures that the field *id* is used as the Mongo document *_id* and that the field *name* is stored as *itemName* and is also indexed.
 
-None of these annotations are necessary. A bare [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object) can be passed to MongoTemplate and it will apply its default behaviour.  We have chosen to alter that behaviour using these mapping annotations on the persistence entity.
+None of these annotations are necessary. A bare [POJO](http://en.wikipedia.org/wiki/Plain_Old_Java_Object) can be passed to `MongoTemplate` and it will apply its default behaviour.  Here you've altered that default behaviour using the mapping annotations on the persistence entity to make your test pass.
 
 ## Implement a CRUD repository
 
-MenuItem is now ready to persist.  We could write an implementation of `MenuItemRepository` using MongoTemplate. Many applications do this successfully. But Spring Data gives us a better option.  It can create an implementation of the Repository interface for us at runtime.
+`MenuItem` is now ready to be persisted.  We could write an implementation of `MenuItemRepository` using `MongoTemplate` but Spring Data gives us a better option: It can create an implementation of the Repository interface for us at runtime.
 
-To take advantage of this, we first need to update `MenuItemRepository` into something that Spring Data can handle.
+You first need to update `MenuItemRepository` into something that Spring Data can handle.
 
-Before we do that though, a test!
+Before you do that though, you need a (failing) test again!
 
 Create a new class at `com.yummynoodlebar.config.MongoConfiguration`, leaving it empty for now.
 
-Then create a test like so:
+Then create a test that contains the following:
 
     <@snippet  path="src/test/java/com/yummynoodlebar/persistence/integration/MenuItemRepositoryIntegrationTests.java" prefix="/complete"/>
 
