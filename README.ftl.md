@@ -66,7 +66,7 @@ From there, you can inspect `build/reports/tests` and see all the test results.
 <@u_git/>
 [gs-gradle]: /guides/gs/gradle
 
-## The Home of Repositories in your Application Architecture
+## The Home of Persistence in your Application Architecture
 
 Repositories are an integration between your core application and external, persistent storage engines. Repositories can be seen as living in their own Persistence integration domain on the periphery of your applications core as shown in the following diagram:
 
