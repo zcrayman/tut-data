@@ -1,16 +1,30 @@
 package com.yummynoodlebar.persistence.domain;
 
 import com.yummynoodlebar.events.orders.OrderDetails;
-import org.springframework.beans.BeanUtils;
 
-import java.util.*;
+import javax.persistence.*;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
 
+@Entity(name = "NOODLE_ORDERS")
 public class Order {
 
+  @Column(name = "SUBMISSION_DATETIME")
   private Date dateTimeOfSubmission;
 
+  @ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.Integer.class)
+  @JoinTable(name="ORDER_ORDER_ITEMS", joinColumns=@JoinColumn(name="ID"))
+  @MapKeyColumn(name="MENU_ID")
+  @Column(name="VALUE")
   private Map<String, Integer> orderItems;
 
+  @Transient
+  private OrderStatus orderStatus;
+
+  @Id
+  @Column(name = "ORDER_ID")
   private String id;
 
   public void setId(String id) {
@@ -19,6 +33,14 @@ public class Order {
 
   public void setDateTimeOfSubmission(Date dateTimeOfSubmission) {
     this.dateTimeOfSubmission = dateTimeOfSubmission;
+  }
+
+  public OrderStatus getStatus() {
+    return orderStatus;
+  }
+
+  public void setStatus(OrderStatus orderStatus) {
+    this.orderStatus = orderStatus;
   }
 
   public Date getDateTimeOfSubmission() {
@@ -61,4 +83,3 @@ public class Order {
     return order;
   }
 }
-

@@ -145,9 +145,9 @@ $ ./gradlew test
 
 ## Extend the Repository with a Custom Finder
 
-An Order requires a history of the status updates made to it. A history is a list of OrderStatus in date order.
+An Order has a history of the status updates made to it. A history is a list of `OrderStatus` objects in date order.
 
-This requires a more complex query than simply by ID or Order ID. It will also require a sort by date. 
+You now need a more complex query than simply by ID or Order ID. You'll also need to sort by date. 
 
 Create a new test `OrderStatusGetHistoryIntegrationTests`:
 

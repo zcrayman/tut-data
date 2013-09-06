@@ -49,7 +49,79 @@ In the above code you can also see the dependencies for H2.
 
 Following the pattern from the previous section, first create a test to drive your development that checks that the persistence mapping class correctly stores and retrieves records.
 
-Create a new test class `OrderMappingIntegrationTests`:
+First, create a placeholder configuration class `com.yummynoodlebar.config.JPAConfiguration`.
+
+Next, create a helper class `com.yummynoodlebar.persistence.domain.fixture.JPAAssertions`, similar to the `MongoAssertions` in the previous section; This uses both Hibernate and JDBC to inspect what has been done to the database schema. It does this to provide a set of test methods that make your tests to more readable and show their intent that much more clearly.
+
+`src/test/java/com/yummynoodlebar/persistence/domain/fixture/JPAAssertions.java`
+```java
+package com.yummynoodlebar.persistence.domain.fixture;
+
+
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+import org.hibernate.jdbc.Work;
+
+import javax.persistence.EntityManager;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import static junit.framework.TestCase.fail;
+
+public class JPAAssertions {
+
+  public static void assertTableHasColumn(EntityManager manager, final String tableName, final String columnName) {
+    SessionImpl session = (SessionImpl) manager.unwrap(Session.class);
+
+    final ResultCollector rc = new ResultCollector();
+
+    session.doWork(new Work() {
+      @Override
+      public void execute(Connection connection) throws SQLException {
+        ResultSet columns = connection.getMetaData().getColumns(null, null, tableName.toUpperCase(), null);
+        while(columns.next()) {
+          if (columns.getString(4).toUpperCase().equals(columnName.toUpperCase())) {
+            rc.found=true;
+          }
+        }
+      }
+    });
+
+    if (!rc.found) {
+      fail("Column [" + columnName + "] not found on table : " + tableName);
+    }
+  }
+  public static void assertTableExists(EntityManager manager, final String name) {
+    SessionImpl session = (SessionImpl) manager.unwrap(Session.class);
+
+    final ResultCollector rc = new ResultCollector();
+
+    session.doWork(new Work() {
+      @Override
+      public void execute(Connection connection) throws SQLException {
+        ResultSet tables = connection.getMetaData().getTables(null, null, "%", null);
+        while(tables.next()) {
+          if (tables.getString(3).toUpperCase().equals(name.toUpperCase())) {
+            rc.found=true;
+          }
+        }
+      }
+    });
+
+    if (!rc.found) {
+      fail("Table not found in schema : " + name);
+    }
+  }
+
+  static class ResultCollector {
+    public boolean found = false;
+  }
+
+}
+```
+
+Finally, create the new test class `OrderMappingIntegrationTests`:
 
 `src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java`
 ```java
@@ -94,7 +166,7 @@ This test checks that `com.yummynoodle.persistence.domain.Order` correctly maps 
 
 It is important to have an understanding of how your object is being mapped against the database and test that it meets your expectations. If you know how and why the mapping is occurring you can create indexes and other optimisations and be safe in the knowledge that the data is where you expect it to be. You may also access the data outside of the JPA provider, directly querying the database.
 
-This test is making use of an existing helper class `JPAAssertions` which uses both Hibernate and JDBC to inspect what has been done to the database schema.
+This test is making use of an existing helper class `JPAAssertions` .
 
 `src/test/java/com/yummynoodlebar/persistence/integration/OrderMappingIntegrationTests.java`
 ```java

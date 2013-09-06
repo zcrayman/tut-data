@@ -1,14 +1,22 @@
 package com.yummynoodlebar.persistence.domain;
 
 import com.yummynoodlebar.events.menu.MenuItemDetails;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
+@Document(collection = "menu")
 public class MenuItem {
 
+  @Id
   private String id;
 
+  @Field("itemName")
+  @Indexed
   private String name;
 
   private String description;

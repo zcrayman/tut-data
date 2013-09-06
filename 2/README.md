@@ -80,16 +80,91 @@ Before you can implement the Repository, you have to build something that will u
 
 `MongoTemplate` is one of the core classes provided by [Spring Data Mongo](http://www.springsource.org/spring-data/mongodb).  It follows the familiar [Template Method pattern](http://en.wikipedia.org/wiki/Template_method_pattern) that is used extensively in other parts of Spring, such as `JmsTemplate`, `JdbcTemplate` and `RestTemplate`. 
 
+
+
 With respect to MongoDB, MongoTemplate does the leg work of connecting to a MongoDB server and managing the necessary resources involved, while also exposing a simple API that provides a large amount of functionality.
 
 Test Driven Development guides you to test the smallest piece of the system you can, and then build your tests outwards from that. This builds confidence in the system as a whole.
 
 The smallest piece in this case is the Persistence domain class, `MenuItem`.  It will contain mapping and configuration information describing how it should be persisted into the database.
 
-There are two existing helper classes, `com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture` and `com.yummynoodlebar.persistence.domain.fixture.MongoAssertions`
+There is an existing helper class, `com.yummynoodlebar.persistence.domain.fixture.PersistenceFixture`, and now that you have imported Spring Data Mongo, you can create another `com.yummynoodlebar.persistence.domain.fixture.MongoAssertions`
+
 They provide some methods we can use to make our tests a bit more readable.
 
-Create a test called `MenuItemMappingIntegrationTests` that contains the following:
+Create the class `com.yummynoodlebar.persistence.domain.fixture.MongoAssertions` with the content 
+
+`src/test/java/com/yummynoodlebar/persistence/domain/fixture/MongoAssertions.java`
+```java
+package com.yummynoodlebar.persistence.domain.fixture;
+
+import com.mongodb.DBObject;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.index.IndexInfo;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Simple implementation of a fluent interface builder around MongoTemplate and Mongo.
+ * Providing some assertions on collections, indexes and document structure.
+ */
+public class MongoAssertions {
+
+  private MongoOperations ops;
+
+  public static MongoAssertions usingMongo(MongoOperations ops) {
+    MongoAssertions assertions = new MongoAssertions();
+    assertions.ops = ops;
+    return assertions;
+  }
+
+  public CollectionAssertions collection(String name) {
+    return new CollectionAssertions(name);
+  }
+
+  public class CollectionAssertions {
+
+    private String collection;
+
+    CollectionAssertions(String name) {
+      this.collection = name;
+    }
+
+    public boolean hasIndexOn(String ... fields) {
+      List<IndexInfo> indexes = ops.indexOps(collection).getIndexInfo();
+      for (IndexInfo info : indexes) {
+        if (info.isIndexForFields(Arrays.asList(fields))) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public DocumentAssertions first() {
+      return new DocumentAssertions(ops.getCollection(collection).findOne());
+    }
+
+    public class DocumentAssertions {
+
+      DBObject document;
+
+      public DocumentAssertions(DBObject document) {
+        this.document = document;
+      }
+
+      public boolean hasField(String name) {
+        return document.containsField(name);
+      }
+      public Object fieldContent(String name) {
+        return document.get(name);
+      }
+    }
+  }
+}
+```
+
+Next, create a test called `MenuItemMappingIntegrationTests` that contains the following:
 
 `src/test/java/com/yummynoodlebar/persistence/integration/MenuItemMappingIntegrationTests.java`
 ```java
@@ -166,6 +241,13 @@ You first need to update `MenuItemRepository` into something that Spring Data ca
 Before you do that though, you need a (failing) test again!
 
 Create a new component in the application'c Config Domain called `com.yummynoodlebar.config.MongoConfiguration`, leaving it empty for now.
+
+Next, you need Spring Test support, add into your `build.gradle` dependencies :
+
+`build.gradle`
+```gradle
+  testCompile 'org.springframework:spring-test:3.2.3.RELEASE'
+```
 
 Then create a test that contains the following:
 
@@ -398,7 +480,7 @@ A more interesting requirement would be helping the user look up the ingredients
 
 To use MapReduce, you need to gain access to the `MongoTemplate` directly and add this into the Repository that Spring Data is currently managing for you.
 
-Create a new interface `com.yummynoodlebar.persistence.repository.AnalyseIngredients`:
+Open the interface `com.yummynoodlebar.persistence.repository.AnalyseIngredients`:
 
 `src/main/java/com/yummynoodlebar/persistence/repository/AnalyseIngredients.java`
 ```java
@@ -566,6 +648,8 @@ function(name, current) {
     return red;
 }
 ```
+
+> **Note:** If you are using an IDE to run the tests, such as STS, you may need to update its compilation configuration to include *.js files.
 
 The test should now pass successfully. You can run all the tests by typing the following at the command line:
 
