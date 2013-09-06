@@ -1,14 +1,16 @@
 # Step 5: Extending the Persistence Domain to Send Events
 
-The event handler and the repositories you have made that now make up the persistence domain will react to events and persist or retrieve data on demand.
+The event handler and the repositories you have made that now make up the Persistence domain, as shown in the following Life Preserver diagram, will react to events and persist or retrieve data on demand.
 
-Another team in the The Yummy Noodle Bar project is building a system to provide real time notifications to clients (for example, to a user on the website) while an order is being processed and cooked.
+TODO Updated Life Preserver with improved legibility applied.
 
-Complicating matters, the Yummy Noodle Bar application is to be deployed as a cluster for high availability and scalability.  This means that a status update could be delivered on one application instance, while a client that should be notified is being managed by another instance.
+Another team in the The Yummy Noodle Bar project is building a system to provide real-time notifications to clients (for example to a user on the website) while an order is being processed and cooked.
 
-To support this, you need to extend the persistence domain to provide notifications across all application instances every time the status of an order is updated.
+Complicating matters a bit further, the Yummy Noodle Bar application is to be deployed as a cluster for high availability and scalability. This means that a status update could be delivered on one application instance, while a client that should be notified is being managed by another instance.
 
-To achieve this, you will use the Continuous Query feature of GemFire to generate update notification events on every application instance when a modification is made.
+To support this, you need to extend the Persistence domain to provide notifications across all application instances every time the status of an order is updated.
+
+It's time to use the Continuous Query feature of GemFire to generate update notification events on every application instance when a modification is made.
 
 ## Data Grids and Continuous Queries
 
