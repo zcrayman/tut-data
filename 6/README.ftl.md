@@ -1,8 +1,8 @@
 ## Recap and where to go next?
 
-You have successfully stored all of Yummy Noodle Bars data and made the application more robust and scalable at the same time.
+You have successfully stored all of the Yummy Noodle Bar's data and made the application more robust and scalable at the same time.
 
-Here's what you covered:
+Here's how far you've come, you've:
 
 * Understood the different Data Models that MongoDB, JPA and GemFire cover and how they may affect your application.
 * Built a Spring Data Mongo Repository to store and retrieve Menu data from MongoDB
@@ -11,7 +11,9 @@ Here's what you covered:
 * Configured and used JPA in a test to understand transactions and how a class is mapped to a JPA database.
 * Built a Spring Data GemFire Repository to store and retrieve OrderStatus data from a GemFire CacheServer.
 * Used GemfireTemplate to test the Repository and understand GemFire transaction handling.
-* You created a GemFire Continuous Query to generate events across the application cluster
+* Created a GemFire Continuous Query to generate events across the application cluster
+
+Your final Life Preserver shows all the components you've added within the Configuration and Persistence domains:
 
 ![Life Preserver showing all Domains completed in this Tutorial](../images/life-preserver-complete.png)
 
