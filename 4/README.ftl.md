@@ -159,13 +159,13 @@ Update the repository to read:
 
     <@snippet path="src/main/java/com/yummynoodlebar/persistence/repository/OrderStatusRepository.java"  prefix="complete" />
 
-This looks similar to the JPA custom method, and the concept is the same.  Create a new method and annotate it with a @Query, passing a string containing OQL to perform the query with.
+This looks similar to the JPA custom method, and the concept is the same. Create a new method and annotate it with a @Query, passing a string containing OQL to perform the query with.
 
 This query selects the distinct elements from the YummyNoodleBar Region where the order is given and then orders by statusDate, which is a property on OrderStatus.
 
-This will pass, with the correct ordering of the history, ordered by status date.
+This test will now pass with the correct ordering of the history ordered by status date.
 
-You can check it by again running:
+You can check it by running:
 
 ```sh
 $ ./gradlew test
@@ -175,8 +175,10 @@ $ ./gradlew test
 
 ## Summary
 
-Congratulations, OrderStatus data is safely stored in GemFire.
+In this step you've added the functionality to store `OrderStatus` data using GemFire. 
 
-Next, you will learn to take advantage of GemFire Continuous Queries to extend the scalable, event driven architecture to include the data store itself.
+TODO Updated Life Preserver coming as all Life Preserver diagrams are undergoing a re-write for legibility.
+
+Now it's time to take advantage of GemFire Continuous Queries to extend your scalable, event-driven architecture to include the data store itself.
 
 [Next…  Extending the Persistence Domain to Send Events](../5/)
