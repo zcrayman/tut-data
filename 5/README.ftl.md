@@ -14,10 +14,11 @@ It's time to use the Continuous Query feature of GemFire to generate update noti
 
 ## Data Grids and Continuous Queries
 
-In a traditional data store, an application would have to regularly poll to receive updated data.  This is inefficient, as many queries will be executed unnecessarily, and also introduces latency in between polls.  More realistically, applications will likely introduce some separate messaging infrastructure, such as [RabbitMQ](http://rabbitmq.com), to distribute notifications.
+Usually an application would have to regularly poll to receive updated data from a data store. This is inefficient as many queries will be executed unnecessarily and also introduces latency in between polls. More often than not applications will likely introduce some separate messaging infrastructure, such as [RabbitMQ](http://rabbitmq.com), to distribute notifications.
 
-GemFire is a distributed data grid. It is naturally clustered and provides a feature called Continuous Querying; this allows you to register a GemFire Query with the cluster and for a simple POJO to receive events whenever a new piece of data is added that matches this query.
+GemFire is a distributed data grid. It can be clustered and provides a feature called Continuous Querying for just this circumstance.
 
+Continuous Querying allows you to register a GemFire Query with the cluster and then for a simple POJO to receive events whenever a new piece of data is added that matches your query.
  
 ## Writing a continuous query
 
