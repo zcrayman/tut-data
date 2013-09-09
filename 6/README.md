@@ -15,6 +15,6 @@ Here's how far you've come, you've:
 
 Your final Life Preserver shows all the components you've added within the Configuration and Persistence domains:
 
-![Life Preserver showing all Domains completed in this Tutorial](../images/life-preserver-complete.png)
+![Life Preserver showing all Domains completed in this Tutorial](../images/life-preserver-11.png)
 
 We hope you've enjoyed this tutorial! Check out the next steps in the navigation bar for what you might want to explore next.

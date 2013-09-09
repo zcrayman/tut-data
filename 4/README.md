@@ -2,7 +2,7 @@
 
 So far you are storing `MenuItem` data in MongoDB and `Order` data in PostgreSQL using Spring Data JPA as shown in the Life Preserver below:
 
-![Life Preserver Recap](../images/life-preserver-zoom-out-on-persistence-domain-with-orders-and-jpa.png)
+![Life Preserver Recap](../images/life-preserver-9.png)
 
 Now it's time to look at how the status of your various orders will be stored, and for that task you're going to use GemFire.
 
@@ -552,7 +552,7 @@ $ ./gradlew test
 
 In this step you've added the functionality to store `OrderStatus` data using GemFire. 
 
-TODO Updated Life Preserver coming as all Life Preserver diagrams are undergoing a re-write for legibility.
+![Life Preserver with Gemfire Configuration and repository](../images/life-preserver-10.png)
 
 Now it's time to take advantage of GemFire Continuous Queries to extend your scalable, event-driven architecture to include the data store itself.
 

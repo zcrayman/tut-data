@@ -2,7 +2,7 @@
 
 You're already happily storing `MenuItem` data with the components shown on the following diagram:
 
-![The Persistence Domain](../images/life-preserver-zoom-out-on-persistence-domain-with-repository-sub.png)
+![The Persistence Domain](../images/life-preserver-8.png)
 
 Your next task for the Yummy Noodle Bar persistence project is to store Order data. Yummy Noodle Bar has decided to use [PostgreSQL](http://www.postgresql.org) to store this data, a freely available, robust, relational database.
 
@@ -598,8 +598,8 @@ $ ./gradlew test
 
 Order data is safely stored and retrievable using a JPA managed relational database. You've added an `OrdersRepository` component and a `JPAConfiguration` component to your application, as shown by the following Life Preserver diagram:
 
-![Components to store Order data using JPA](../images/life-preserver-zoom-out-on-persistence-domain-with-orders-and-jpa.png)
+![Components to store Order data using JPA](../images/life-preserver-9.png)
 
-Next, you can see how to store OrderStatus data in the GemFire distributed data grid.
+Next, you can see how to store `OrderStatus` data in the GemFire distributed data grid.
 
 [Next…  Storing the Order Status in Gemfire using Spring Data GemFire](../4/)

@@ -72,7 +72,7 @@ From there, you can inspect `build/reports/tests` and see all the test results.
 
 Repositories are an integration between your core application and external, persistent storage engines. Repositories can be seen as living in their own Persistence integration domain on the periphery of your applications core as shown in the following diagram:
 
-![Introducing the Persistence Integration Domain](images/life-preserver-empty-persistence-domain-zoom-out.png)
+![Introducing the Persistence Integration Domain](images/life-preserver-1.png)
 
 As an integration between your application core and the outside world there are a number of concerns that need to be addressed in the design and implementation of the components that make up your Repositories:
 
