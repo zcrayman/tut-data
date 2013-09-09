@@ -2,7 +2,7 @@
 
 The event handler and the repositories you have made that now make up the Persistence domain, as shown in the following Life Preserver diagram, will react to events and persist or retrieve data on demand.
 
-TODO Updated Life Preserver with improved legibility applied.
+![Life Preserver with Gemfire Configuration and repository](../images/life-preserver-10.png)
 
 Another team in the The Yummy Noodle Bar project is building a system to provide real-time notifications to clients (for example to a user on the website) while an order is being processed and cooked.
 
@@ -93,7 +93,7 @@ Congratulations, notifications about changing statuses are now being propagated 
 
 You now have a complete and functional Persistence domain, along with configuration provided in your Configuration domain and your final Life Preserver diagram will look like the following:
 
-TODO Life Preserver re-write underway.
+![Life Preserver with event listener services](../images/life-preserver-11.png)
 
 [Next…  Recap and Where to go Next](../6/)
 
