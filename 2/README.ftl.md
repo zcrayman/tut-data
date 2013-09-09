@@ -6,15 +6,15 @@ As you dive into writing code in this tutorial, the assumption is that The Yummy
 
 For this section, you will work within the Persistence domain to add this functionality:
 
-![The Persistence Domain](../images/life-preserver-zoom-in-on-empty-persistence-domain.png)
+![The Persistence Domain](../images/life-preserver-3.png)
 
 In that domain you have a representation of `MenuItem` optimised for persistence that is contained in the Domain sub-domain:
 
-![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-persistence-domain-with-domain-sub.png)
+![The Persistence Domain's Domain sub-domain](../images/life-preserver-5.png)
 
 In order for the Core Domain to send events to the Persistence Domain, you also have a Services sub-domain provided in the Persistence domain:
 
-![The Persistence Domain's Domain sub-domain](../images/life-preserver-zoom-in-on-persistence-domain-with-services-sub.png)
+![The Persistence Domain's Services sub-domain](../images/life-preserver-6.png)
 
 Inside the Persistence Domain's Service sub-domain, there is an event handler `MenuPersistenceEventHandler`, exchanging events with the application core, and the repository `MenuItemRepository` whose responsibility is to persist and retrieve MenuItem data for the rest of the application.
 
@@ -252,11 +252,11 @@ You've also added configuration to drive the MongoDB infrastructure by adding a 
 
 You now have your first repository that is contained in your new Repository sub-domain in your Persistence domain that houses the repository components responsible for storing and retrieving data. The new Repository sub-domain is shown in the Life Preserver below:
 
-![The Persistence Domain](../images/life-preserver-zoom-in-on-persistence-domain-with-repository-sub.png)
+![The Persistence Domain](../images/life-preserver-7.png)
 
 Your full Life Preserver diagram should look like the following now:
 
-![The Persistence Domain](../images/life-preserver-zoom-out-on-persistence-domain-with-repository-sub.png)
+![The Persistence Domain](../images/life-preserver-8.png)
 
 Now that the Menu data is safely stored in Mongo its time to turn your attention to storing and retrieving Orders using a whole different data model and data storage technology … JPA.
 
