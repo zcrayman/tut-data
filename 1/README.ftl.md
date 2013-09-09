@@ -1,6 +1,6 @@
 # Step 1: Understanding the Core & Persistence Domains and the Relationships between them
 
-![Introducing the Persistence Integration Domain](../images/life-preserver-zoom-in-core.png)
+![Introducing the Persistence Integration Domain](../images/life-preserver-2.png)
 
 > **Note:** For those who have already encountered the **Yummy Noodle Bar** in another tutorial in the series the following section is an introductory recap of the Yummy Noodle Bar core domain. If you're already familiar with the core domain you can skip down to **Modelling the Persistence Domain**.
 
@@ -28,7 +28,7 @@ First up, the ability to create, update and remove Orders, MenuItems and OrderSt
 
 It can be tempting to simply map the core Order domain to the data stores and work from there, but that would ignore the boundary between the Core and the Persistence domain.
 
-![The Boundary between Core and Persistence](../images/life-preserver-zoom-in-on-boundary.png)
+![The Boundary between Core and Persistence](../images/life-preserver-3.png)
 
 The data model of your persisted data will need to change at a rate that is manageable and technically feasible given the data store implementation. The core will need to evolve at the rate the Yummy Noodle bar system needs to internally evolve at. There is potentially friction between the two domains as they evolve at different rates.
 
