@@ -169,6 +169,6 @@ Order data is safely stored and retrievable using a JPA managed relational datab
 
 ![Components to store Order data using JPA](../images/life-preserver-9.png)
 
-Next, you can see how to store OrderStatus data in the GemFire distributed data grid.
+Next, you can see how to store `OrderStatus` data in the GemFire distributed data grid.
 
 [Next…  Storing the Order Status in Gemfire using Spring Data GemFire](../4/)
