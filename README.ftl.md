@@ -58,7 +58,7 @@ This tutorial is built using [Gradle][gs-gradle] and includes the Gradle Wrapper
 For example, if you want to check out the initial code set:
 
 ```sh
-$ git clone git@github.com:spring-guides/tut-data.git
+$ git clone https://github.com/spring-guides/tut-data.git
 $ cd tut-data/initial
 $ ./gradlew clean test
 ```
